@@ -60,3 +60,4 @@ Para una comprensión completa del proyecto, consulta los siguientes documentos:
 - [Plan de Trabajo](04_Plan_de_Trabajo.md): Incluye el cronograma.
 - [Stack Tecnológico](05_Stack_Tecnologico.md): Especifica las tecnologías utilizadas.
 - [Metodología de Desarrollo](07_Metodologia_de_Desarrollo.md): Cubre el flujo de trabajo y pruebas.
+- [CodeCanyon Checklist](09_CodeCanyon_Checklist.md): Requisitos de calidad y packaging para la publicación en CodeCanyon.

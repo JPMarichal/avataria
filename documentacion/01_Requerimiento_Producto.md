@@ -102,6 +102,10 @@ La siguiente lista define lo que se considerará “listo” para la entrega del
 
 ---
 
+## Requisitos de Publicación (CodeCanyon)
+
+El producto debe cumplir los requisitos de calidad y packaging para CodeCanyon. Consulta el checklist adaptado en: `09_CodeCanyon_Checklist.md`.
+
 ## Documentos Relacionados
 
 Para una comprensión completa del proyecto, consulta los siguientes documentos:

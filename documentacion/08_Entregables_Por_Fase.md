@@ -89,3 +89,7 @@ Sign-off final: Product Owner y Responsable de Operaciones.
 ---
 
 Archivo mantenido en el repo y referenciado desde el PRD, Plan de Trabajo y Metodología.
+
+## Preparación para publicación en CodeCanyon
+
+Antes de crear el paquete final para CodeCanyon, completa la checklist en `09_CodeCanyon_Checklist.md`. Esta checklist cubre documentación, packaging, seguridad, licencias y demo reproducible.

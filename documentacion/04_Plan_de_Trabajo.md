@@ -29,11 +29,9 @@
 
 ## Fase 4: Pruebas y Lanzamiento (2 Semanas)
 
-- [ ] Tarea 4.1: Realizar pruebas de compatibilidad con temas y plugins populares.
-- [ ] Tarea 4.2: Escribir la documentación para el usuario final y para CodeCanyon.
-- [ ] Tarea 4.3: Preparar todo el material de marketing (imágenes, textos, video).
-- [ ] Tarea 4.4: Enviar la versión gratuita al repositorio de WordPress.org.
-- [ ] Tarea 4.5: Enviar la versión Pro a CodeCanyon para su revisión.
+## Requisitos de Publicación
+
+Antes de preparar el paquete para CodeCanyon, revisa `09_CodeCanyon_Checklist.md` y asegura que todos los puntos de la checklist pre-subida están completados.
 * **Tarea 4.6:** Ejecutar el plan de marketing de lanzamiento.
 
 ---
