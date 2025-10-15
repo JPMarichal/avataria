@@ -56,3 +56,9 @@ Para una comprensión completa del proyecto, consulta los siguientes documentos:
 - [Plan de Trabajo](04_Plan_de_Trabajo.md): Incluye el cronograma de desarrollo.
 - [Stack Tecnológico](05_Stack_Tecnologico.md): Especifica las tecnologías y entornos.
 - [Guía de Desarrollo](06_Guia_de_Desarrollo.md): Define principios y estándares de codificación.
+ - [Entregables y Criterios de Aceptación por Fase](08_Entregables_Por_Fase.md): Checklist operativo y criterios de aceptación detallados por fase.
+
+## Checklist Rápido de Entregables
+
+- Consulta `08_Entregables_Por_Fase.md` para ver los entregables exactos y los criterios de aceptación por fase.
+- Antes de abrir un PR, asegúrate de que: tests relevantes pasan, documentación actualizada, y `docker-compose.dev.yml` permite reproducir el smoke test local.

@@ -44,6 +44,64 @@ WordPress depende de Gravatar, un servicio externo, para la gestión de avatares
 
 ---
 
+## 5. Riesgos
+
+Listado de riesgos identificados, su probabilidad y mitigación propuesta.
+
+- **Riesgo R-01 (Competencia / Copia):** Un competidor podría replicar características Pro rápidamente.
+	- Probabilidad: Media. Impacto: Medio.
+	- Mitigación: Lanzamiento rápido, documentación clara, roadmap público y atención al soporte y la comunidad.
+
+- **Riesgo R-02 (Compatibilidad con temas/plugins):** Conflictos con temas o plugins populares (ej. filtros de avatar personalizados).
+	- Probabilidad: Media. Impacto: Alto.
+	- Mitigación: Pruebas automatizadas y manuales con temas y plugins populares, mecanismos de degradado elegante y hooks/filtros bien documentados.
+
+- **Riesgo R-03 (Vulnerabilidades en subidas):** Riesgo de ejecución remota o subida de archivos maliciosos.
+	- Probabilidad: Baja. Impacto: Muy Alto.
+	- Mitigación: Validación/escaneo de archivos, uso de `wp_check_filetype()`, restricciones MIME, sandboxing, y pruebas de seguridad (SAST/DAST).
+
+- **Riesgo R-04 (Rendimiento en sitios grandes):** Multitud de consultas o redimensionamientos simultáneos que afecten el rendimiento.
+	- Probabilidad: Media. Impacto: Alto.
+	- Mitigación: Uso de transients, generación diferida (lazy) de thumbnails y almacenamiento en caché, colas para procesamiento de imágenes en masa.
+
+## 6. Restricciones
+
+- **Restricción C-01 (Compatibilidad de versiones):** Soportar PHP >= 7.4 y WordPress >= 5.8. No se garantizará soporte para versiones anteriores.
+- **Restricción C-02 (Dependencias de producción):** El plugin debe evitar dependencias externas en tiempo de ejecución (solo devDependencies permitidas).
+- **Restricción C-03 (Tamaño del plugin):** El plugin empaquetado no debe exceder 5 MB en la versión gratuita para facilitar la instalación desde el repositorio.
+- **Restricción C-04 (Licenciamiento):** La versión Pro seguirá la política de licencias de CodeCanyon (licencia regular de pago único).
+
+## 7. Suposiciones
+
+- **S-01:** Los sitios de producción tendrán al menos una de las extensiones PHP requeridas (`gd` o `imagick`).
+- **S-02:** Los administradores de sitio tienen permisos para configurar contenedores y despliegues en VPS (Ionos) o contenedores en producción.
+- **S-03:** La mayoría de usuarios usan navegadores modernos que soportan formatos de imagen comunes (PNG, JPEG, WebP).
+
+## 8. Criterios de Aceptación
+
+La siguiente lista define lo que se considerará “listo” para la entrega del MVP (versión gratuita):
+
+- Usuarios pueden subir un avatar desde el perfil y éste se muestra en todas las ubicaciones donde `get_avatar()` es llamado.
+- Las llamadas a Gravatar se reemplazan en una instalación típica sin intervención manual.
+- El generador de iniciales produce imágenes legibles y con colores consistentes configurables.
+- Las subidas tienen validación básica (tipo MIME, tamaño máximo configurable) y no permiten la ejecución de código.
+- Documentación mínima en `README.md` y sección de ayuda en el plugin.
+
+## 9. Dependencias
+
+- **Infraestructura:** Docker para entornos de desarrollo y despliegue; VPS en Ionos con Ubuntu para producción.
+- **Tecnológicas:** WordPress >= 5.8, PHP >= 7.4, MySQL/MariaDB, extensiones `gd`/`imagick`.
+- **Herramientas de desarrollo:** Composer, NPM, Webpack, PHPUnit para pruebas.
+
+## 10. Métricas y Monitoreo
+
+- **Métricas de Rendimiento:** Tiempo adicional en TTFB/CLS después de activar el plugin (objetivo: < 50ms overhead).
+- **Métricas de Uso:** Número de avatares subidos por día, ratio de selección de avatares de la biblioteca vs. subida propia.
+- **Errores y Seguridad:** Número de intentos de subida bloqueados por validación, reportes de errores críticos.
+- **Conversión (a futuro):** Tasa de conversión de usuarios Free → Pro (objetivo inicial 0.5%).
+
+---
+
 ## Documentos Relacionados
 
 Para una comprensión completa del proyecto, consulta los siguientes documentos:
