@@ -34,4 +34,17 @@
 - [ ] Tarea 4.3: Preparar todo el material de marketing (imágenes, textos, video).
 - [ ] Tarea 4.4: Enviar la versión gratuita al repositorio de WordPress.org.
 - [ ] Tarea 4.5: Enviar la versión Pro a CodeCanyon para su revisión.
-- [ ] Tarea 4.6: Ejecutar el plan de marketing de lanzamiento.
+* **Tarea 4.6:** Ejecutar el plan de marketing de lanzamiento.
+
+---
+
+## Documentos Relacionados
+
+Para una comprensión completa del proyecto, consulta los siguientes documentos:
+
+- [Documento de Requerimientos del Producto](01_Documento_Requerimientos_Producto.md): Define los requerimientos funcionales.
+- [Estrategia de Negocio](02_Estrategia_de_Negocio.md): Detalla el modelo de negocio.
+- [Estrategia de Marketing](03_Estrategia_de_Marketing.md): Describe las fases de marketing.
+- [Stack Tecnológico](05_Stack_Tecnologico.md): Especifica las tecnologías y entornos.
+- [Guía de Desarrollo](06_Guia_de_Desarrollo.md): Define principios de desarrollo.
+- [Metodología de Desarrollo](07_Metodologia_de_Desarrollo.md): Cubre el flujo de trabajo Agile y Git.

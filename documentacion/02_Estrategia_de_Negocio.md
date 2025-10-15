@@ -29,3 +29,16 @@
 * **Oportunidades:** Creciente preocupación por la privacidad de datos (GDPR), demanda de optimización de velocidad del sitio (Core Web Vitals), insatisfacción general con Gravatar.
 * **Debilidades:** El mercado de plugins es competitivo. Requiere esfuerzo de marketing para destacar. El precio único limita los ingresos recurrentes.
 * **Amenazas:** WordPress podría desarrollar una solución nativa en el futuro (poco probable a corto plazo). Un competidor podría copiar las características Pro.
+
+---
+
+## Documentos Relacionados
+
+Para una comprensión completa del proyecto, consulta los siguientes documentos:
+
+- [Documento de Requerimientos del Producto](01_Documento_Requerimientos_Producto.md): Define las características funcionales y no funcionales.
+- [Estrategia de Marketing](03_Estrategia_de_Marketing.md): Detalla las fases de lanzamiento y promoción.
+- [Plan de Trabajo](04_Plan_de_Trabajo.md): Incluye el cronograma y fases de desarrollo.
+- [Stack Tecnológico](05_Stack_Tecnologico.md): Especifica las tecnologías y entornos.
+- [Guía de Desarrollo](06_Guia_de_Desarrollo.md): Define principios y estándares de codificación.
+- [Metodología de Desarrollo](07_Metodologia_de_Desarrollo.md): Cubre el flujo de trabajo y pruebas.

@@ -49,3 +49,16 @@ El objetivo es tener **cero dependencias de producción** en el plugin final par
 * **WordPress:** **Versión >= 5.8**. Esto asegura la disponibilidad de APIs modernas como las del `theme.json` y un editor de bloques estable.
 * **PHP:** **Versión >= 7.4**. Se requiere por el uso de sintaxis moderna y mejoras de rendimiento. Se recomendará PHP 8.0+.
 * **Extensiones PHP Requeridas:** `gd` o `imagick` para el procesamiento de imágenes (generación de avatares, redimensionamiento).
+
+---
+
+## Documentos Relacionados
+
+Para una comprensión completa del proyecto, consulta los siguientes documentos:
+
+- [Documento de Requerimientos del Producto](01_Documento_Requerimientos_Producto.md): Define los requerimientos técnicos.
+- [Estrategia de Negocio](02_Estrategia_de_Negocio.md): Detalla el modelo de negocio.
+- [Estrategia de Marketing](03_Estrategia_de_Marketing.md): Describe la estrategia de lanzamiento.
+- [Plan de Trabajo](04_Plan_de_Trabajo.md): Incluye el cronograma de desarrollo.
+- [Guía de Desarrollo](06_Guia_de_Desarrollo.md): Define estándares de codificación y arquitectura.
+- [Metodología de Desarrollo](07_Metodologia_de_Desarrollo.md): Cubre el flujo de trabajo y pruebas.

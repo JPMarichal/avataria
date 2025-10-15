@@ -28,3 +28,16 @@
 * **SEO:** Optimizar estos artículos para posicionarse en búsquedas relevantes.
 * **Relaciones Públicas:** Contactar a bloggers y YouTubers del nicho de WordPress para que hagan reseñas del plugin. Ofrecerles una licencia gratuita de la versión Pro.
 * **Marketing dentro del Plugin:** Añadir notificaciones discretas y enlaces en la versión gratuita que informen sobre las ventajas de la versión Pro.
+
+---
+
+## Documentos Relacionados
+
+Para una comprensión completa del proyecto, consulta los siguientes documentos:
+
+- [Documento de Requerimientos del Producto](01_Documento_Requerimientos_Producto.md): Define las características del producto.
+- [Estrategia de Negocio](02_Estrategia_de_Negocio.md): Detalla el modelo de monetización y mercado.
+- [Plan de Trabajo](04_Plan_de_Trabajo.md): Incluye el cronograma de lanzamiento.
+- [Stack Tecnológico](05_Stack_Tecnologico.md): Especifica las tecnologías utilizadas.
+- [Guía de Desarrollo](06_Guia_de_Desarrollo.md): Define estándares de calidad.
+- [Metodología de Desarrollo](07_Metodologia_de_Desarrollo.md): Cubre el flujo de trabajo.

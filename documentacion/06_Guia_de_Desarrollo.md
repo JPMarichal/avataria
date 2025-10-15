@@ -47,3 +47,16 @@ Se adoptará una arquitectura orientada a objetos clara y desacoplada, aplicando
 
 * Todos los ganchos (`add_action`, `add_filter`) se registrarán en una clase o método de inicialización centralizado, no de forma dispersa por el código.
 * Las funciones de callback serán métodos públicos de clases bien definidas, no funciones globales, para evitar la contaminación del espacio de nombres global.
+
+---
+
+## Documentos Relacionados
+
+Para una comprensión completa del proyecto, consulta los siguientes documentos:
+
+- [Documento de Requerimientos del Producto](01_Documento_Requerimientos_Producto.md): Define los requerimientos funcionales.
+- [Estrategia de Negocio](02_Estrategia_de_Negocio.md): Detalla el modelo de negocio.
+- [Estrategia de Marketing](03_Estrategia_de_Marketing.md): Describe la estrategia de marketing.
+- [Plan de Trabajo](04_Plan_de_Trabajo.md): Incluye el cronograma.
+- [Stack Tecnológico](05_Stack_Tecnologico.md): Especifica las tecnologías utilizadas.
+- [Metodología de Desarrollo](07_Metodologia_de_Desarrollo.md): Cubre el flujo de trabajo y pruebas.

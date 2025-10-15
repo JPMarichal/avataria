@@ -41,3 +41,16 @@ WordPress depende de Gravatar, un servicio externo, para la gestión de avatares
 * **RFN-02 (Seguridad):** Todas las subidas de archivos deben ser sanitizadas y validadas para prevenir vulnerabilidades.
 * **RFN-03 (Compatibilidad):** El plugin debe ser compatible con las 3 últimas versiones mayores de WordPress y PHP 7.4+.
 * **RFN-04 (Usabilidad):** La interfaz, tanto para el usuario como para el administrador, debe ser intuitiva y estar integrada de forma nativa en el escritorio de WordPress.
+
+---
+
+## Documentos Relacionados
+
+Para una comprensión completa del proyecto, consulta los siguientes documentos:
+
+- [Estrategia de Negocio](02_Estrategia_de_Negocio.md): Detalla el modelo de monetización y mercado objetivo.
+- [Estrategia de Marketing](03_Estrategia_de_Marketing.md): Describe las fases de lanzamiento y objetivos de marketing.
+- [Plan de Trabajo](04_Plan_de_Trabajo.md): Incluye el cronograma de desarrollo y tareas específicas.
+- [Stack Tecnológico](05_Stack_Tecnologico.md): Especifica las tecnologías y entornos utilizados.
+- [Guía de Desarrollo](06_Guia_de_Desarrollo.md): Define principios, estándares y arquitectura del código.
+- [Metodología de Desarrollo](07_Metodologia_de_Desarrollo.md): Cubre el flujo de trabajo Agile y Git Flow.
