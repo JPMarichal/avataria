@@ -29,9 +29,9 @@ Completa esta lista antes de iniciar cualquier implementación en `src/`.
 - [x] Preparar plantillas de reportes (`docs/reports/linting/README.md`, `docs/reports/tests/README.md`).
 
 ## 6. Alineación con stakeholders
-- [ ] Validar con el Product Owner las prioridades del sprint según `documentacion/09_Roadmap.md` y `documentacion/04_Plan_de_Trabajo.md`.
-- [ ] Confirmar mensajes clave en inglés para materiales públicos y confirmar que las traducciones internas seguirán en español.
-- [ ] Acordar criterios de Definition of Done específicos para la iteración y documentarlos en la tarea correspondiente (issue/Jira/Trello).
+- [x] Validar con el Product Owner las prioridades del sprint según `documentacion/09_Roadmap.md` y `documentacion/04_Plan_de_Trabajo.md`.
+- [x] Confirmar mensajes clave en inglés para materiales públicos y confirmar que las traducciones internas seguirán en español.
+- [x] Acordar criterios de Definition of Done en `documentacion/11_Definition_of_Done.md`.
 
 ## 7. Decisión final
 - [ ] ¿Todos los puntos anteriores están marcados como completados?
