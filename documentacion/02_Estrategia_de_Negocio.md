@@ -13,6 +13,16 @@
 * **Canal de Ventas (Premium):** La versión Pro se venderá en **CodeCanyon**. El modelo será un **pago único por licencia**, que incluye 1 año de soporte y actualizaciones. Este modelo es el estándar en CodeCanyon y reduce la fricción de compra en comparación con las suscripciones.
 * **Precio Sugerido:** $29 USD por licencia regular.
 
+### Punto de partida y ventaja competitiva
+
+Avatar Pro parte como un **fork** del plugin [Simple Local Avatars](https://wordpress.org/plugins/simple-local-avatars/), aprovechando su código GPL liviano y probado en producción. Sobre esa base, el roadmap introduce mejoras que el plugin original no cubre:
+
+- Generador de avatares por iniciales con personalización de colores (versión gratuita).
+- Moderación avanzada, biblioteca de avatares y múltiples avatares por usuario (versión Pro).
+- Integraciones con redes sociales para importar avatares y pipeline de soporte/licenciamiento comercial.
+
+Esta estrategia posiciona al producto como la **evolución natural** para comunidades que ya usan Simple Local Avatars pero necesitan controles de privacidad, branding y gobernanza de activos.
+
 ## 3. Mercado Objetivo
 
 * **Primario:** Administradores de sitios con comunidades activas (foros, eLearning, membresías).

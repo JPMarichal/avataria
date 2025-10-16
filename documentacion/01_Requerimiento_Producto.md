@@ -10,6 +10,27 @@
 
 WordPress depende de Gravatar, un servicio externo, para la gestión de avatares de usuario. Esto presenta problemas de privacidad (filtrado de datos a terceros), rendimiento (llamadas HTTP externas) y falta de control de marca. "Avatar Pro" solucionará esto al ofrecer una suite completa, ligera y auto-alojada para la gestión de avatares, dando el control total al administrador del sitio y a los usuarios.
 
+### Origen y punto de partida
+
+Avatar Pro nace como un **fork directo** del plugin existente [Simple Local Avatars](https://wordpress.org/plugins/simple-local-avatars/). Ese proyecto base aporta:
+
+- Código GPL ligero y probado en producción.
+- Funcionalidad mínima de subida de avatar local.
+
+El objetivo del fork es evolucionarlo hacia una **suite integral de gestión de avatares** que cubra necesidades avanzadas de privacidad, rendimiento y branding que el plugin original no aborda (generación de avatares por iniciales, moderación, biblioteca, integraciones sociales, licenciamiento Pro, etc.).
+
+### Evaluación inicial del proyecto
+
+Un análisis preliminar mediante investigación exploratoria arrojó las siguientes calificaciones (escala 1-10):
+
+- **Demanda: 7/10** — Nicho pero con necesidad aguda en comunidades preocupadas por privacidad y performance.
+- **Facilidad de desarrollo: 9/10** — El plugin base es pequeño; un MVP con generador de iniciales puede completarse en un fin de semana.
+- **Licenciamiento: 10/10** — GPL puro, sin restricciones para el fork.
+- **Prospección comercial: 6/10** — Ticket medio más bajo, pero las features Pro justifican compra en sitios de membresía/foros.
+- **Viabilidad: 10/10** — Riesgo bajo; excelente proyecto para dominar el ciclo completo de producto premium.
+
+Estas métricas justifican la elección del fork como base para construir una suite premium sostenible.
+
 ## 2. Perfiles de Usuario (User Personas)
 
 * **Administrador de Sitio (Ej. Alex):** Quiere un sitio rápido, seguro y con una marca consistente. Le preocupa la privacidad de sus usuarios y desea moderar el contenido subido.
