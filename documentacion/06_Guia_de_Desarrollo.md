@@ -48,7 +48,12 @@ Se adoptará una arquitectura orientada a objetos clara y desacoplada, aplicando
 * Todos los ganchos (`add_action`, `add_filter`) se registrarán en una clase o método de inicialización centralizado, no de forma dispersa por el código.
 * Las funciones de callback serán métodos públicos de clases bien definidas, no funciones globales, para evitar la contaminación del espacio de nombres global.
 
----
+## 5. Cumplimiento Continuo con CodeCanyon ✅
+
+* Desde el MVP, toda funcionalidad debe incluir actualización de `README.md`, `CHANGELOG.md` y documentación de usuario correspondiente en `docs/`.
+* Cada PR debe adjuntar resultados de linting (`phpcs`, ESLint) y pruebas automatizadas (PHPUnit) como evidencia en `docs/reports/`.
+* Los assets (capturas, video demo) y licencias asociadas se mantienen versionados y auditables; cualquier recurso nuevo debe registrar su licencia en `docs/licensing.md`.
+* Antes de fusionar a `develop`, se revisa la checklist relevante de `09_CodeCanyon_Checklist.md` y se documentan los gaps o acciones tomadas.
 
 ## Documentos Relacionados
 

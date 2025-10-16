@@ -26,6 +26,13 @@ Este documento define el conjunto de tecnologías y herramientas que se utilizar
 * **Empaquetador/Bundler:** **Webpack**. Se utilizará para compilar, minificar y empaquetar los archivos SASS y JavaScript en archivos optimizados para producción.
 * **Control de Versiones:** **Git**. El proyecto se gestionará en un repositorio Git (ej. en GitHub o GitLab).
 * **Entorno Local:** Se recomienda el uso de **Docker** (`wp-env`) o herramientas similares como LocalWP para replicar el entorno de producción de forma consistente.
+* **Integración Continua:** A partir del MVP, toda rama debe ejecutar `composer lint`, `composer test`, `npm run lint` y cualquier script documentado en `09_CodeCanyon_Checklist.md` para garantizar el cumplimiento continuo.
+
+### **1.4. Calidad y Compliance**
+* Las herramientas de calidad (`phpcs.xml`, `phpunit.xml.dist`, configuración de ESLint/SASS`) se mantienen versionadas desde el MVP y se documentan en `README.md`.
+* El empaquetado reproducible (`plugin/`, `assets/`, `docs/`, `examples/`) se valida en cada release candidate. No se incluyen dependencias de desarrollo ni archivos temporales.
+* Los pipelines de CI generan reportes en `docs/reports/` (lint, tests, cobertura) que sirven como evidencia para la checklist de CodeCanyon.
+* Las capturas y material demo se guardan en `assets/` con metadatos de licencias en `docs/licensing.md`.
 
 ## 4. Entorno de Desarrollo y Producción 🐳
 
@@ -42,13 +49,14 @@ Este documento define el conjunto de tecnologías y herramientas que se utilizar
 El objetivo es tener **cero dependencias de producción** en el plugin final para garantizar la máxima compatibilidad y ligereza.
 
 * **Dependencias de PHP (vía Composer):** Ninguna en el producto final. Se puede usar `PHP_CodeSniffer` con los estándares de codificación de WordPress como dependencia de desarrollo.
-* **Dependencias de JavaScript (vía NPM):** Ninguna en el producto final. Todas las dependencias (ej. `sass`, `webpack`, `eslint`) serán `devDependencies`.
+* **Dependencias de JavaScript (vía NPM):** Ninguna en el producto final. Todas las dependencias (ej. `sass`, `webpack`, `eslint`) serán `devDependencies` y se documentará el comando de build en el `README.md` para el revisor de CodeCanyon.
 
 ## 3. Requerimientos del Sistema 📋
 
 * **WordPress:** **Versión >= 5.8**. Esto asegura la disponibilidad de APIs modernas como las del `theme.json` y un editor de bloques estable.
 * **PHP:** **Versión >= 7.4**. Se requiere por el uso de sintaxis moderna y mejoras de rendimiento. Se recomendará PHP 8.0+.
 * **Extensiones PHP Requeridas:** `gd` o `imagick` para el procesamiento de imágenes (generación de avatares, redimensionamiento).
+* **Docker:** Archivos `docker-compose.dev.yml` y `docker-compose.demo.yml` deben iniciar sin intervención manual como criterio de aceptación previo al envío a CodeCanyon.
 
 ---
 
@@ -60,5 +68,6 @@ Para una comprensión completa del proyecto, consulta los siguientes documentos:
 - [Estrategia de Negocio](02_Estrategia_de_Negocio.md): Detalla el modelo de negocio.
 - [Estrategia de Marketing](03_Estrategia_de_Marketing.md): Describe la estrategia de lanzamiento.
 - [Plan de Trabajo](04_Plan_de_Trabajo.md): Incluye el cronograma de desarrollo.
-- [Guía de Desarrollo](06_Guia_de_Desarrollo.md): Define estándares de codificación y arquitectura.
+- [Guía de Desarrollo](06_Guia_de_Desarrollo.md): Define principios de desarrollo.
 - [Metodología de Desarrollo](07_Metodologia_de_Desarrollo.md): Cubre el flujo de trabajo y pruebas.
+- [CodeCanyon Checklist](09_CodeCanyon_Checklist.md): Detalla los requisitos de cumplimiento continuo para Envato.

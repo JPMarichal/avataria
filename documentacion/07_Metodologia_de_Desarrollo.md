@@ -30,7 +30,7 @@ Se utilizará un flujo de trabajo simplificado pero robusto para garantizar la e
 * **Revisión de Código:** Todo PR debe ser revisado antes de ser fusionado. Esto es crucial para mantener la calidad del código, incluso si lo revisa el mismo desarrollador después de un tiempo.
 * **Ramas de Corrección (`hotfix/`):** Si se encuentra un error crítico en producción (`main`), se crea una rama `hotfix/` a partir de `main`, se corrige el error, y se fusiona tanto en `main` como en `develop`.
 
-## 3. Pruebas y Calidad (QA) ✅
+## 3. Pruebas y Calidad (QA) 
 
 * **Pruebas Unitarias:** Se fomentará la escritura de pruebas unitarias con **PHPUnit** para las clases que contienen lógica de negocio crítica y pura (ej. la clase que genera los avatares a partir de iniciales). Esto es más fácil gracias a la Inversión de Dependencias.
 * **Pruebas Manuales:** Antes de finalizar un Sprint, se debe ejecutar una batería de pruebas manuales en un entorno limpio de WordPress, verificando:
@@ -39,7 +39,14 @@ Se utilizará un flujo de trabajo simplificado pero robusto para garantizar la e
     * Funcionamiento en diferentes versiones de PHP.
     * Ausencia de errores en la consola del navegador y en el `debug.log` de WordPress.
 
-## 4. Documentación 📚
+## 4. Cumplimiento con CodeCanyon en Agile 
+
+* Cada Sprint incluye la revisión de la checklist correspondiente en `09_CodeCanyon_Checklist.md` y la actualización de un registro en `docs/reports/codecanyon-compliance.md`.
+* Definition of Done extendida: `README.md`, `CHANGELOG.md`, documentación en `docs/`, scripts de linting/tests y evidencia de ejecución deben estar actualizados.
+* Los recursos nuevos (assets, librerías) se validan por licencias y se agrega la información en `docs/licensing.md` antes de cerrar el Sprint.
+* Se planifican demos internas con `docker-compose.demo.yml` al final de cada Sprint para garantizar la reproducibilidad exigida por Envato.
+
+## 5. Documentación 
 
 * **Documentación en Código:** Todo el código (clases, métodos, funciones) debe estar documentado siguiendo los estándares de **WordPress-Docs**.
 * **Documentación de Usuario:** Se mantendrá un archivo `README.md` detallado y una documentación de usuario para la versión Pro, explicando cómo configurar y utilizar cada característica.
