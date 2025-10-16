@@ -34,6 +34,6 @@ Completa esta lista antes de iniciar cualquier implementación en `src/`.
 - [x] Acordar criterios de Definition of Done en `documentacion/11_Definition_of_Done.md`.
 
 ## 7. Decisión final
-- [ ] ¿Todos los puntos anteriores están marcados como completados?
-  - [ ] **Sí** → Proceder con el desarrollo.
+- [x] ¿Todos los puntos anteriores están marcados como completados?
+  - [x] **Sí** → Proceder con el desarrollo.
   - [ ] **No** → Registrar bloqueos y reprogramar el inicio.
