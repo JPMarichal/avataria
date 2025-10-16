@@ -25,13 +25,13 @@
 **Fase 3: Crecimiento (Continuo)**
 
 * **Marketing de Contenidos:** Escribir artículos en inglés en el blog de la landing page sobre temas como: "How Gravatar slows down your WordPress site", "The ultimate guide to user privacy in WordPress", "Avatar Steward vs. Gravatar".
-* **SEO:** Optimizar estos artículos para posicionarse en búsquedas relevantes.
-* **Relaciones Públicas:** Contactar a bloggers y YouTubers del nicho de WordPress (habla inglesa) para obtener reseñas del plugin. Ofrecerles una licencia gratuita de la versión Pro.
-* **Marketing dentro del Plugin:** Añadir notificaciones discretas y enlaces (en inglés) en la versión gratuita que informen sobre las ventajas de la versión Pro.
+* **SEO:** Optimizar estos artículos para posicionarse en búsquedas relevantes, con objetivo de al menos **3,000 visitas orgánicas mensuales** a la landing.
+* **Relaciones Públicas:** Contactar a bloggers y YouTubers del nicho de WordPress (habla inglesa) para obtener reseñas del plugin, buscando **5 reseñas cualificadas** en los primeros 3 meses. Ofrecerles una licencia gratuita de la versión Pro.
+* **Marketing dentro del Plugin:** Añadir notificaciones discretas y enlaces (en inglés) en la versión gratuita que informen sobre las ventajas de la versión Pro, con meta de **2% de clics** hacia la página Pro.
 - **Contenido educativo continuo:** Publicar guías y webinars en inglés sobre personalización avanzada (generador enriquecido, IA ligera) y paneles de analítica para reforzar la propuesta diferencial.
 - **Programas para partners:** Promover la apertura de hooks/APIs invitando a agencias y desarrolladores internacionales a crear extensiones certificadas.
 - **Campañas de privacidad:** Destacar casos de estudio sobre GDPR/CCPA y reducción de latency frente a Gravatar (~300 ms) en materiales promocionales multicanal en inglés.
-- **Segmentos prioritarios:** Crear funnels específicos en inglés para eLearning, foros y membresías, resaltando plantillas sectoriales y sellos de verificación.
+- **Segmentos prioritarios:** Crear funnels específicos en inglés para eLearning, foros y membresías, resaltando plantillas sectoriales y sellos de verificación, con meta de **150 leads calificados** por trimestre.
 
 ---
 
