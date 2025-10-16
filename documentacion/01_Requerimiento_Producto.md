@@ -132,6 +132,22 @@ La siguiente lista define lo que se considerará “listo” para la entrega del
 - Monitorización: panel interno de analítica con métricas de uso, moderación y performance en tiempo real.
 - Ecosistema: exposición de hooks y APIs documentadas para que terceros extiendan proveedores de avatares o políticas de moderación.
 
+## 12. Análisis del Código Base Original
+
+- El plugin `Simple Local Avatars` centraliza toda la lógica en la clase `Simple_Local_Avatars`, gestionando hooks, metadatos de usuario y rating de contenido en un único archivo (`includes/class-simple-local-avatars.php`).
+- El bootstrap (`simple-local-avatars.php`) depende de compatibilidad mínima (`Validator`) y crea instancias globales, lo que limita la extensibilidad y la inyección de dependencias.
+- Los puntos de extensión existentes utilizan filtros como `pre_simple_local_avatar_url` y hooks AJAX (`assign_simple_local_avatar_media`), útiles para mapear dónde introducir servicios especializados.
+- El soporte multisite condiciona las claves meta con sufijos por sitio (`simple_local_avatar_{blog_id}`), requisito a tener en cuenta durante la refactorización hacia namespaces propios.
+- La limpieza en el desinstalador (`simple_local_avatars_uninstall`) elimina metadatos y opciones específicas; debe replicarse en la nueva arquitectura para evitar residuos.
+
+### Plan de Refactorización
+
+- **Modularización**: separar servicios (uploads, generación, moderación, integraciones) en clases dedicadas dentro de `src/`, reemplazando la estructura monolítica.
+- **Namespaces**: migrar el prefijo global `Simple_Local_Avatars` a espacios de nombres `AvatarSteward\*` para evitar colisiones con forks y liberar el espacio global.
+- **Compatibilidad**: mantener puntos de integración clave (`pre_get_avatar_data`, REST fields, WP-CLI commands) documentando sus equivalentes en la nueva base.
+- **Tests y CI**: trasladar y ampliar las pruebas existentes (`tests/`) asegurando cobertura del generador automático y nuevos módulos.
+- **Deployment**: adoptar un bootstrap minimalista en `src/` que cargue dependencias vía autoload y permita envíos limpios a CodeCanyon/WordPress.org.
+
 ---
 
 ## Requisitos de Publicación (CodeCanyon)

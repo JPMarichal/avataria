@@ -39,6 +39,9 @@ Este documento define el conjunto de tecnologías y herramientas que se utilizar
 ### **4.1. Desarrollo**
 * **Plataforma:** Máquina con **Windows 11**.
 * **Contenedores:** El desarrollo se realizará utilizando **Docker** para crear entornos de contenedores consistentes. Se utilizará `wp-env` o configuraciones personalizadas de Docker Compose para simular el entorno de WordPress localmente, incluyendo PHP, MySQL/MariaDB y Nginx/Apache. Esto asegura compatibilidad y facilita la colaboración.
+- **Repositorio heredado:** El código original (`simple-local-avatars/`) se mantiene como submódulo/git clone de referencia. El nuevo desarrollo vivirá en `src/` siguiendo organización PSR-4 y namespaces `AvatarSteward\*`.
+- **Reescritura por módulos:** Servicios clave (uploads, generación automática, moderación, integraciones sociales) se implementarán como clases independientes, reemplazando la estructura monolítica detectada en `includes/class-simple-local-avatars.php`.
+- **Compatibilidad legacy:** Se mantendrán wrappers temporales para hooks críticos (`pre_get_avatar_data`, REST fields, comandos WP-CLI) hasta completar la migración.
 
 ### **4.2. Producción**
 * **Plataforma:** Servidor VPS en **Ionos**, con **Ubuntu**.

@@ -22,6 +22,10 @@
 
 Se adoptará una arquitectura orientada a objetos clara y desacoplada, aplicando los principios **SOLID**.
 
+- **Estructura de carpetas**: El código activo residirá en `src/` siguiendo PSR-4 y namespaces `AvatarSteward\*`. El directorio `simple-local-avatars/` queda como referencia histórica/analítica y no debe mezclarse con el despliegue.
+- **Servicios dedicados**: Cada dominio (uploads, generador automático, moderación, integraciones sociales, analítica) se implementará como servicio independiente, reemplazando la clase monolítica `Simple_Local_Avatars` del código original.
+- **Wrappers de compatibilidad**: Durante la transición se expondrán adaptadores que conserven hooks clave (`pre_get_avatar_data`, comandos WP-CLI, REST fields) mientras se migran consumidores internos al nuevo núcleo.
+
 * **S - Principio de Responsabilidad Única (Single Responsibility Principle):**
     * Cada clase tendrá una única responsabilidad. Por ejemplo, una clase `Avatar_Uploader` se encargará solo de procesar la subida de archivos, mientras que una clase `Admin_Settings` gestionará la página de configuración.
 
