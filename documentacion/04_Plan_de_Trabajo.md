@@ -48,9 +48,11 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 - [ ] Tarea 2.5: Realizar pruebas internas y depuración.
 - [ ] Tarea 2.6: Mantener actualizados `README.md`, `CHANGELOG.md` y la documentación de usuario con instalación, configuración y uso del MVP.
 - [ ] Tarea 2.7: Ejecutar linting (`phpcs`, ESLint) y tests automatizados (PHPUnit) como parte del Definition of Done del MVP.
+- [ ] Tarea 2.7.1: Implementar modo "bajo ancho de banda" (iniciales/SVG) y documentar métricas de performance.
 - [ ] Tarea 2.8: Preparar assets preliminares (capturas y guion de video demo) y validar licencias de recursos utilizados.
 - [ ] Tarea 2.9: Completar la revisión intermedia de `08_CodeCanyon_Checklist.md`, registrando gaps y acciones en `docs/`.
 - [ ] Tarea 2.10: Documentar en `docs/legal/origen-gpl.md` los módulos refactorizados, diffs relevantes y evidencias de cumplimiento GPL.
+- [ ] Tarea 2.11: Entregar asistente de migración desde Gravatar/WP User Avatar con pruebas de regresión.
 
 ### Entregables
 
@@ -63,6 +65,8 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 - Reportes en `docs/reports/linting/` y `docs/reports/tests/` adjuntos a PRs.
 - Assets preliminares (capturas, guion de video) en `assets/` con licencias en `docs/licensing.md`.
 - Registro de cumplimiento del MVP en `docs/reports/codecanyon-compliance.md`.
+- Validación de modo "bajo ancho de banda" documentada con pruebas de performance.
+- Guía de migración (Gravatar / plugins legacy) en `docs/migracion/`.
 
 ### Criterios de aceptación
 
@@ -86,6 +90,10 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 - [ ] Tarea 3.7: Consolidar la política de soporte (duración, canales, SLA) y documentarla en `docs/`.
 - [ ] Tarea 3.8: Documentar licencias de fuentes, iconos, imágenes y librerías incluidas en el paquete Pro.
 - [ ] Tarea 3.9: Preparar el pipeline de empaquetado (`zip` limpio sin dependencias dev) y validar demo reproducible (`docker-compose.demo.yml`).
+- [ ] Tarea 3.10: Implementar auto-borrado de avatares inactivos con notificaciones configurables.
+- [ ] Tarea 3.11: Desarrollar módulo de auditoría exportable (logs de acceso/modificación).
+- [ ] Tarea 3.12: Configurar sellos de verificación y plantillas sectoriales para la biblioteca.
+- [ ] Tarea 3.13: Añadir API de identidad visual (paletas, estilos) y documentarla en `docs/api/`.
 
 ### Entregables
 

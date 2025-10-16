@@ -1,5 +1,12 @@
 # Estrategia de Negocio - "Avatar Steward"
 
+## 6. Validación de Mercado
+
+- **Necesidad real**: Comunidades eLearning, foros y membresías denuncian en WP Tavern la falta de alternativas locales a Gravatar y exigen mayor control de datos.
+- **Potencial económico**: El mercado de plugins WordPress proyecta un crecimiento del 8.4% anual (2025-2033), mientras la categoría de privacidad y gestión de identidad se expande a doble dígito.
+- **Competencia limitada**: Plugins existentes (Simple Local Avatars, Avatar Privacy) cubren parcialmente necesidades, sin suites integrales con analítica, auditoría y generación avanzada.
+- **Indicadores SEO**: Tendencias de búsqueda para "Gravatar alternative" y "local avatars WordPress" mantienen volumen en aumento, confirmando interés sostenido.
+
 ---
 
 ## 1. Visión y Misión
@@ -31,7 +38,7 @@ Esta estrategia exige mantener los compromisos de la licencia GPL (atribución, 
 
 ## 4. Propuesta Única de Valor (PUV)
 
-"A diferencia de Gravatar que compromete la privacidad y el rendimiento, y de otros plugins que solo permiten subir imágenes, **Avatar Steward** es una suite completa que ofrece generación automática de avatares, moderación y control total, todo alojado en tu propio servidor."
+"A diferencia de Gravatar que compromete la privacidad y el rendimiento, y de otros plugins que solo permiten subir imágenes, **Avatar Steward** es una suite completa que ofrece generación automática de avatares, moderación y control total, todo alojado en tu propio servidor, con cumplimiento GDPR nativo, conversión automática a WebP y reporting de auditoría."
 
 ## 5. Estrategia de Evolución
 
@@ -40,11 +47,12 @@ Esta estrategia exige mantener los compromisos de la licencia GPL (atribución, 
 - **Extensiones Pro**: Añadir filtros inteligentes (IA ligera) que sugieran paletas basadas en la marca y sincronización opcional con CDNs privados.
 - **Monitorización**: Integrar panel de analítica interna con métricas de uso, moderación y performance.
 - **Ecosistema**: Publicar hooks/APIs documentadas para que terceros amplíen proveedores de avatares o políticas de moderación especiales.
+- **Privacidad y transparencia**: Automatizar el borrado de avatares inactivos, registrar accesos y ofrecer herramientas de exportación/borrado conforme a GDPR/CCPA.
 
 ## 5. Análisis Competitivo (SWOT)
 
-* **Fortalezas:** Fácil de iniciar, basado en un concepto probado, modelo de negocio claro, diferenciación a través de características clave (generador, moderación).
-* **Oportunidades:** Creciente preocupación por la privacidad de datos (GDPR), demanda de optimización de velocidad del sitio (Core Web Vitals), insatisfacción general con Gravatar.
+* **Fortalezas:** Fácil de iniciar, basado en un concepto probado, modelo de negocio claro, diferenciación a través de características clave (generador, moderación, auditorías, auto-borrado).
+* **Oportunidades:** Creciente preocupación por la privacidad de datos (GDPR), demanda de optimización de velocidad del sitio (Core Web Vitals), insatisfacción general con Gravatar, auge de comunidades que requieren identidad visual consistente.
 * **Debilidades:** El mercado de plugins es competitivo. Requiere esfuerzo de marketing para destacar. El precio único limita los ingresos recurrentes.
 * **Amenazas:** WordPress podría desarrollar una solución nativa en el futuro (poco probable a corto plazo). Un competidor podría copiar las características Pro.
 

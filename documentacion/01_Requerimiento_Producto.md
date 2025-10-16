@@ -56,6 +56,8 @@ Estas métricas justifican la elección de transformar la base existente para co
 * **RF-P04:** **Soporte para Múltiples Avatares:** Los usuarios podrán subir hasta 5 avatares y elegir cuál de ellos está activo.
 * **RF-P05:** **Restricciones de Subida:** El administrador podrá limitar el peso (MB) y las dimensiones (píxeles) de los avatares subidos.
 * **RF-P06:** **Soporte para Roles de Usuario:** Permitir o denegar la capacidad de subir avatares según el rol del usuario (Ej. solo "Suscriptores" y "Autores" pueden, "Visitantes" no).
+* **RF-P07:** **Auto-borrado de Datos:** El sistema eliminará avatares inactivos (sin uso por 6 meses) avisando al usuario con antelación opcional y registrando la acción.
+* **RF-P08:** **Auditoría de Accesos:** El administrador podrá exportar logs de accesos/modificaciones de avatares para cumplir normativas (GDPR, CCPA, LGPD).
 
 ## 4. Requerimientos No Funcionales
 
@@ -63,6 +65,8 @@ Estas métricas justifican la elección de transformar la base existente para co
 * **RFN-02 (Seguridad):** Todas las subidas de archivos deben ser sanitizadas y validadas para prevenir vulnerabilidades.
 * **RFN-03 (Compatibilidad):** El plugin debe ser compatible con las 3 últimas versiones mayores de WordPress y PHP 7.4+.
 * **RFN-04 (Usabilidad):** La interfaz, tanto para el usuario como para el administrador, debe ser intuitiva y estar integrada de forma nativa en el escritorio de WordPress.
+* **RFN-05 (Privacidad):** Ofrecer mecanismos nativos de consentimiento, exportación y eliminación de datos personales alineados con GDPR/CCPA.
+* **RFN-06 (Formato y Rendimiento):** Convertir automáticamente avatares a WebP (con fallback) y habilitar prefetching inteligente para reducir el TTFB global.
 
 ---
 
@@ -131,6 +135,11 @@ La siguiente lista define lo que se considerará “listo” para la entrega del
 - Extensiones Pro: filtros inteligentes (IA ligera) que sugieran colores según la identidad de marca y sincronización con CDN privado para servir avatares optimizados.
 - Monitorización: panel interno de analítica con métricas de uso, moderación y performance en tiempo real.
 - Ecosistema: exposición de hooks y APIs documentadas para que terceros extiendan proveedores de avatares o políticas de moderación.
+- Migración asistida: asistente 1-click para importar avatares desde Gravatar o plugins previos y asignar equivalencias.
+- Modo bajo ancho de banda: opción para reemplazar imágenes por iniciales o SVG ligeros cuando se detecte conexión limitada.
+- Plantillas sectoriales: paquetes de biblioteca y configuraciones preconfiguradas para eLearning, eCommerce y foros comunitarios.
+- API de identidad visual: endpoints para compartir paletas de colores y estilos con temas/third-parties.
+- Sellos de verificación: insignias configurables para roles clave (moderadores, autores verificados) visibles junto al avatar.
 
 ## 12. Análisis del Código Base Original
 

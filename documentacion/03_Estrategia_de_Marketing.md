@@ -30,6 +30,8 @@
 * **Marketing dentro del Plugin:** Añadir notificaciones discretas y enlaces en la versión gratuita que informen sobre las ventajas de la versión Pro.
 - **Contenido educativo continuo:** Publicar guías y webinars sobre personalización avanzada (generador enriquecido, IA ligera) y paneles de analítica para reforzar la propuesta diferencial.
 - **Programas para partners:** Promover la apertura de hooks/APIs invitando a agencias y desarrolladores a crear extensiones certificadas.
+- **Campañas de privacidad:** Destacar casos de estudio sobre GDPR/CCPA y reducción de latency frente a Gravatar (~300 ms) en materiales promocionales.
+- **Segmentos prioritarios:** Crear funnels específicos para eLearning, foros y membresías, resaltando plantillas sectoriales y sellos de verificación.
 
 ---
 

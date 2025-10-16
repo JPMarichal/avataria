@@ -20,20 +20,25 @@ Este roadmap extiende la visión de `Avatar Steward` durante los próximos 10 a�
   - Completar refactor total del código heredado, aislando namespaces y documentando el origen en `docs/legal/origen-gpl.md`.
   - Lanzar generador de avatares por iniciales (MVP) con opciones de color avanzadas y accesibilidad (contrastes).
   - Publicar panel básico de moderación manual y reporte de auditoría.
+  - Entregar asistente de migración 1-click desde Gravatar/WP User Avatar con guía en `docs/migracion/`.
+  - Implementar modo "bajo ancho de banda" (iniciales/SVG) y documentar mejoras de rendimiento.
 - **H2 2026**
   - Introducir biblioteca curada de avatares con control de licencias y categorización.
   - Publicar primeras integraciones sociales (Twitter/X, Facebook) con consentimiento granular.
   - Lanzar versión Pro en CodeCanyon y establecer pipeline de soporte comercial.
+  - Habilitar sellos de verificación y plantillas sectoriales (eLearning, eCommerce, foros).
 
 ### 2027
 - **H1 2027**
   - Implementar onboarding guiado en la administración con plantillas preconfiguradas.
   - Añadir panel de analítica interna: métricas de uso, moderación y rendimiento en tiempo real.
   - Abrir programa beta de hooks/APIs para terceros, con documentación en `docs/`.
+  - Activar auto-borrado de avatares inactivos (6 meses) con notificaciones y panel de auditoría exportable.
 - **H2 2027**
   - Entregar primer paquete de extensiones partner (ej. automatización de moderación, integraciones con LMS).
   - Incorporar CDN opcional para servir avatares optimizados.
   - Publicar biblioteca de recursos educativos (webinars, guías técnicas, casos de uso).
+  - Lanzar API de identidad visual (paletas, estilos) y campañas de privacidad con estudios de caso (GDPR/CCPA).
 
 ### 2028
 - **H1 2028**
