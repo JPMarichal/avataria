@@ -12,26 +12,26 @@
 
 **Fase 1: Pre-Lanzamiento**
 
-* **Branding:** Definir el nombre final ("Avatar Steward" o similar), logo y esquema de colores.
-* **Creación de Landing Page:** Desarrollar una página de venta simple pero efectiva para la versión Pro en un dominio propio, que luego enlazará a CodeCanyon.
+* **Branding:** Definir el nombre final ("Avatar Steward" o similar), logo y esquema de colores en **inglés** para un posicionamiento global consistente.
+* **Creación de Landing Page:** Desarrollar una página en inglés orientada al mercado internacional, simple pero efectiva para la versión Pro en un dominio propio, que luego enlazará a CodeCanyon.
 
 **Fase 2: Lanzamiento (Mes 1)**
 
-* **Publicación en WordPress.org:** Optimizar el `readme.txt` con excelentes capturas de pantalla, descripción detallada y palabras clave ("avatar", "profile picture", "no gravatar", "local").
-* **Publicación en CodeCanyon:** Crear una página de producto profesional con video-demo, gráficos y documentación clara.
-* **Anuncio en Comunidades:** Publicar el lanzamiento en grupos de Facebook de WordPress, foros de desarrollo y subreddits como r/WordPress.
+* **Publicación en WordPress.org:** Optimizar el `readme.txt` (en inglés) con excelentes capturas de pantalla, descripción detallada y palabras clave ("avatar", "profile picture", "no gravatar", "local").
+* **Publicación en CodeCanyon:** Crear una página de producto profesional en inglés con video-demo, gráficos y documentación clara.
+* **Anuncio en Comunidades:** Difundir el lanzamiento en inglés en grupos de Facebook de WordPress, foros de desarrollo y subreddits como r/WordPress para alcanzar audiencias globales.
 * **Lanzamiento en Product Hunt:** Preparar un lanzamiento coordinado para generar tracción inicial.
 
 **Fase 3: Crecimiento (Continuo)**
 
-* **Marketing de Contenidos:** Escribir artículos en el blog de la landing page sobre temas como: "Cómo Gravatar ralentiza tu sitio WordPress", "La guía definitiva para la privacidad de usuarios en WordPress", "Avatar Steward vs. Gravatar".
+* **Marketing de Contenidos:** Escribir artículos en inglés en el blog de la landing page sobre temas como: "How Gravatar slows down your WordPress site", "The ultimate guide to user privacy in WordPress", "Avatar Steward vs. Gravatar".
 * **SEO:** Optimizar estos artículos para posicionarse en búsquedas relevantes.
-* **Relaciones Públicas:** Contactar a bloggers y YouTubers del nicho de WordPress para que hagan reseñas del plugin. Ofrecerles una licencia gratuita de la versión Pro.
-* **Marketing dentro del Plugin:** Añadir notificaciones discretas y enlaces en la versión gratuita que informen sobre las ventajas de la versión Pro.
-- **Contenido educativo continuo:** Publicar guías y webinars sobre personalización avanzada (generador enriquecido, IA ligera) y paneles de analítica para reforzar la propuesta diferencial.
-- **Programas para partners:** Promover la apertura de hooks/APIs invitando a agencias y desarrolladores a crear extensiones certificadas.
-- **Campañas de privacidad:** Destacar casos de estudio sobre GDPR/CCPA y reducción de latency frente a Gravatar (~300 ms) en materiales promocionales.
-- **Segmentos prioritarios:** Crear funnels específicos para eLearning, foros y membresías, resaltando plantillas sectoriales y sellos de verificación.
+* **Relaciones Públicas:** Contactar a bloggers y YouTubers del nicho de WordPress (habla inglesa) para obtener reseñas del plugin. Ofrecerles una licencia gratuita de la versión Pro.
+* **Marketing dentro del Plugin:** Añadir notificaciones discretas y enlaces (en inglés) en la versión gratuita que informen sobre las ventajas de la versión Pro.
+- **Contenido educativo continuo:** Publicar guías y webinars en inglés sobre personalización avanzada (generador enriquecido, IA ligera) y paneles de analítica para reforzar la propuesta diferencial.
+- **Programas para partners:** Promover la apertura de hooks/APIs invitando a agencias y desarrolladores internacionales a crear extensiones certificadas.
+- **Campañas de privacidad:** Destacar casos de estudio sobre GDPR/CCPA y reducción de latency frente a Gravatar (~300 ms) en materiales promocionales multicanal en inglés.
+- **Segmentos prioritarios:** Crear funnels específicos en inglés para eLearning, foros y membresías, resaltando plantillas sectoriales y sellos de verificación.
 
 ---
 
