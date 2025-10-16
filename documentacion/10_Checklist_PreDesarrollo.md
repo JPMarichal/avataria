@@ -14,9 +14,9 @@ Completa esta lista antes de iniciar cualquier implementación en `src/`.
 - [x] Configurar variables de entorno necesarias (`.env`, `.wp-env.json`) y documentarlas en `README.md`.
 
 ## 3. Estructura del proyecto
-- [ ] Confirmar que el código nuevo se ubicará en `src/` bajo namespaces `AvatarSteward\*`.
-- [ ] Revisar `documentacion/06_Guia_de_Desarrollo.md` para respetar la arquitectura modular y los principios SOLID definidos.
-- [ ] Asegurar que los directorios `docs/`, `assets/`, `docs/reports/`, `docs/migracion/` existen (crear placeholders vacíos si no).
+- [x] Confirmar que el código nuevo se ubicará en `src/` bajo namespaces `AvatarSteward\*`.
+- [x] Revisar `documentacion/06_Guia_de_Desarrollo.md` para respetar la arquitectura modular y los principios SOLID definidos.
+- [x] Asegurar que los directorios `docs/`, `assets/`, `docs/reports/`, `docs/migracion/` existen (crear placeholders vacíos si no).
 
 ## 4. Obligaciones GPL y compliance
 - [ ] Actualizar `docs/legal/origen-gpl.md` con los componentes a refactorizar en la iteración.
