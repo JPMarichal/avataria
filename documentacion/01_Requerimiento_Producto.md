@@ -124,6 +124,16 @@ La siguiente lista define lo que se considerará “listo” para la entrega del
 
 ---
 
+## 11. Mejoras Futuras Planeadas
+
+- Generador enriquecido: variantes gráficas (gradientes, texturas ligeras, formas) y reglas de contraste automáticas para reforzar el branding.
+- Experiencia de usuario: onboarding guiado en la administración con plantillas preconfiguradas y contenido educativo in-app.
+- Extensiones Pro: filtros inteligentes (IA ligera) que sugieran colores según la identidad de marca y sincronización con CDN privado para servir avatares optimizados.
+- Monitorización: panel interno de analítica con métricas de uso, moderación y performance en tiempo real.
+- Ecosistema: exposición de hooks y APIs documentadas para que terceros extiendan proveedores de avatares o políticas de moderación.
+
+---
+
 ## Requisitos de Publicación (CodeCanyon)
 
 El producto debe cumplir los requisitos de calidad y packaging para CodeCanyon. Consulta el checklist adaptado en: `08_CodeCanyon_Checklist.md`.

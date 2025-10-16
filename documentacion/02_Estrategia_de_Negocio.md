@@ -33,6 +33,14 @@ Esta estrategia exige mantener los compromisos de la licencia GPL (atribución, 
 
 "A diferencia de Gravatar que compromete la privacidad y el rendimiento, y de otros plugins que solo permiten subir imágenes, **Avatar Steward** es una suite completa que ofrece generación automática de avatares, moderación y control total, todo alojado en tu propio servidor."
 
+## 5. Estrategia de Evolución
+
+- **Generador enriquecido**: Incorporar gradientes, texturas ligeras y variaciones de formas para reforzar la identidad visual de cada sitio.
+- **Experiencia de usuario**: Desplegar onboarding guiado en el panel de administración con plantillas y contenido educativo contextual.
+- **Extensiones Pro**: Añadir filtros inteligentes (IA ligera) que sugieran paletas basadas en la marca y sincronización opcional con CDNs privados.
+- **Monitorización**: Integrar panel de analítica interna con métricas de uso, moderación y performance.
+- **Ecosistema**: Publicar hooks/APIs documentadas para que terceros amplíen proveedores de avatares o políticas de moderación especiales.
+
 ## 5. Análisis Competitivo (SWOT)
 
 * **Fortalezas:** Fácil de iniciar, basado en un concepto probado, modelo de negocio claro, diferenciación a través de características clave (generador, moderación).

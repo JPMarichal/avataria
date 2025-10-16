@@ -50,6 +50,7 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 - [ ] Tarea 2.7: Ejecutar linting (`phpcs`, ESLint) y tests automatizados (PHPUnit) como parte del Definition of Done del MVP.
 - [ ] Tarea 2.8: Preparar assets preliminares (capturas y guion de video demo) y validar licencias de recursos utilizados.
 - [ ] Tarea 2.9: Completar la revisión intermedia de `08_CodeCanyon_Checklist.md`, registrando gaps y acciones en `docs/`.
+- [ ] Tarea 2.10: Documentar en `docs/legal/origen-gpl.md` los módulos refactorizados, diffs relevantes y evidencias de cumplimiento GPL.
 
 ### Entregables
 
@@ -115,6 +116,7 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 - [ ] Tarea 4.4: Validar demo reproducible (Docker) y entregar instrucciones de acceso al revisor.
 - [ ] Tarea 4.5: Revisar licencias, soporte y changelog definitivo con Product Owner y Responsable Comercial.
 - [ ] Tarea 4.6: Ejecutar el plan de marketing de lanzamiento.
+- [ ] Tarea 4.7: Actualizar `docs/legal/origen-gpl.md` y `CHANGELOG.md` con el resumen final de transformaciones respecto a Simple Local Avatars.
 
 ## Requisitos de Publicación
 
@@ -127,6 +129,7 @@ Antes de preparar el paquete para CodeCanyon, revisa `08_CodeCanyon_Checklist.md
 - `docker-compose.prod.yml` y playbook de despliegue para Ionos/Ubuntu.
 - Documentación final, plan de rollback y materiales de marketing.
 - Evidencia final firmada en `docs/reports/codecanyon-compliance.md`.
+- `docs/legal/origen-gpl.md` actualizado con el estado final del refactor y enlaces a commits clave.
 
 ### Criterios de aceptación
 

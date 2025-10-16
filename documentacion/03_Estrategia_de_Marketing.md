@@ -28,6 +28,8 @@
 * **SEO:** Optimizar estos artículos para posicionarse en búsquedas relevantes.
 * **Relaciones Públicas:** Contactar a bloggers y YouTubers del nicho de WordPress para que hagan reseñas del plugin. Ofrecerles una licencia gratuita de la versión Pro.
 * **Marketing dentro del Plugin:** Añadir notificaciones discretas y enlaces en la versión gratuita que informen sobre las ventajas de la versión Pro.
+- **Contenido educativo continuo:** Publicar guías y webinars sobre personalización avanzada (generador enriquecido, IA ligera) y paneles de analítica para reforzar la propuesta diferencial.
+- **Programas para partners:** Promover la apertura de hooks/APIs invitando a agencias y desarrolladores a crear extensiones certificadas.
 
 ---
 
