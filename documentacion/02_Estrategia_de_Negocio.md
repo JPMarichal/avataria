@@ -32,9 +32,10 @@ Esta estrategia exige mantener los compromisos de la licencia GPL (atribución, 
 
 ## 3. Mercado Objetivo
 
-* **Primario:** Administradores de sitios con comunidades activas (foros, eLearning, membresías).
-* **Secundario:** Agencias y desarrolladores que construyen sitios para clientes y desean eliminar dependencias externas como Gravatar.
-* **Terciario:** Propietarios de blogs preocupados por el rendimiento y la privacidad.
+* **Región/Idioma:** Producto, documentación interna y soporte se entregarán **exclusivamente en inglés** para atender el mercado global de WordPress.
+* **Primario:** Administradores de sitios con comunidades activas (foros, eLearning, membresías) en mercados con alta regulación de privacidad (EE. UU., UE, Canadá, Reino Unido).
+* **Secundario:** Agencias y desarrolladores que crean sitios multi-idioma para clientes corporativos y buscan soluciones white-label con control total de branding.
+* **Terciario:** Propietarios de blogs y negocios en línea preocupados por Core Web Vitals y latencia generada por Gravatar.
 
 ## 4. Propuesta Única de Valor (PUV)
 

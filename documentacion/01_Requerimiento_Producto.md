@@ -96,6 +96,7 @@ Listado de riesgos identificados, su probabilidad y mitigación propuesta.
 - **Restricción C-02 (Dependencias de producción):** El plugin debe evitar dependencias externas en tiempo de ejecución (solo devDependencies permitidas).
 - **Restricción C-03 (Tamaño del plugin):** El plugin empaquetado no debe exceder 5 MB en la versión gratuita para facilitar la instalación desde el repositorio.
 - **Restricción C-04 (Licenciamiento):** La versión Pro seguirá la política de licencias de CodeCanyon (licencia regular de pago único).
+- **Restricción C-05 (Idioma):** Todo el producto (interfaces, cadenas de texto) y la documentación interna deberán entregarse exclusivamente en inglés para facilitar la distribución global.
 
 ## 7. Suposiciones
 
