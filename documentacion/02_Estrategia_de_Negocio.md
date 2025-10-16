@@ -15,13 +15,13 @@
 
 ### Punto de partida y ventaja competitiva
 
-Avatar Steward parte como un **fork** del plugin [Simple Local Avatars](https://wordpress.org/plugins/simple-local-avatars/), aprovechando su código GPL liviano y probado en producción. Sobre esa base, el roadmap introduce mejoras que el plugin original no cubre:
+Avatar Steward reutiliza el código GPL del plugin [Simple Local Avatars](https://wordpress.org/plugins/simple-local-avatars/) como punto de partida, copiándolo y transformándolo a fondo para entregar un producto distinto. La hoja de ruta contempla:
 
 - Generador de avatares por iniciales con personalización de colores (versión gratuita).
 - Moderación avanzada, biblioteca de avatares y múltiples avatares por usuario (versión Pro).
 - Integraciones con redes sociales para importar avatares y pipeline de soporte/licenciamiento comercial.
 
-Esta estrategia posiciona al producto como la **evolución natural** para comunidades que ya usan Simple Local Avatars pero necesitan controles de privacidad, branding y gobernanza de activos.
+Esta estrategia exige mantener los compromisos de la licencia GPL (atribución, redistribución bajo los mismos términos, documentación del origen) y posiciona al producto como la **evolución natural** para comunidades que buscan más control de privacidad, branding y gobernanza de activos.
 
 ## 3. Mercado Objetivo
 

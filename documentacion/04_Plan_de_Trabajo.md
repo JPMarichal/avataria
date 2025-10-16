@@ -14,6 +14,7 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 - [ ] Tarea 1.4: Establecer la estructura inicial de documentación (`README.md`, `CHANGELOG.md`, directorio `docs/`, checklist de soporte) alineada con `08_CodeCanyon_Checklist.md`.
 - [ ] Tarea 1.5: Configurar herramientas de calidad obligatorias (`phpcs.xml`, PHPUnit, ESLint) y documentar su ejecución en el repositorio.
 - [ ] Tarea 1.6: Especificar la estructura del paquete (`plugin/`, `assets/`, `docs/`, `examples/`) y registrar políticas de licencias y soporte preliminares.
+- [ ] Tarea 1.7: Preparar `LICENSE.txt`, documentar el origen GPL y planificar el refactor de namespaces/prefijos heredados para evitar conflictos con Simple Local Avatars.
 
 ### Entregables
 
@@ -24,6 +25,7 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 - Backlog inicial en `documentacion/backlog-mvp.md`.
 - `docs/licensing.md` inicial y política de soporte en `docs/soporte.md`.
 - Checklist de cumplimiento inicial derivada de `08_CodeCanyon_Checklist.md` con responsables y fechas.
+- `docs/legal/origen-gpl.md` con registro de componentes heredados y acciones de refactor.
 
 ### Criterios de aceptación
 
@@ -33,6 +35,7 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 - Documentación mínima (`README.md`, `CHANGELOG.md`, estructura `docs/`) accesible en el repo.
 - Plan de licencias y soporte documentado conforme a CodeCanyon.
 - Registro inicial en `docs/reports/codecanyon-compliance.md` con acciones planificadas.
+- `LICENSE.txt` actualizado y evidencias del aislamiento de namespaces frente al plugin original.
 
 - **Responsable principal:** Desarrollador.
 

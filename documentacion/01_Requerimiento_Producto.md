@@ -10,14 +10,15 @@
 
 WordPress depende de Gravatar, un servicio externo, para la gestión de avatares de usuario. Esto presenta problemas de privacidad (filtrado de datos a terceros), rendimiento (llamadas HTTP externas) y falta de control de marca. "Avatar Steward" solucionará esto al ofrecer una suite completa, ligera y auto-alojada para la gestión de avatares, dando el control total al administrador del sitio y a los usuarios.
 
-### Origen y punto de partida
+### Origen y estrategia de transformación
 
-Avatar Steward nace como un **fork directo** del plugin existente [Simple Local Avatars](https://wordpress.org/plugins/simple-local-avatars/). Ese proyecto base aporta:
+Avatar Steward toma como punto de partida el código GPL del plugin existente [Simple Local Avatars](https://wordpress.org/plugins/simple-local-avatars/). La estrategia consiste en **copiar la base original y transformarla profundamente** para entregar un producto derivado sustancialmente distinto, manteniendo las obligaciones de la licencia GPL:
 
-- Código GPL ligero y probado en producción.
-- Funcionalidad mínima de subida de avatar local.
+- Conservar avisos de copyright y redistribuir bajo GPL.
+- Documentar claramente la procedencia del código heredado.
+- Garantizar que terceros conserven los mismos derechos de uso y modificación.
 
-El objetivo del fork es evolucionarlo hacia una **suite integral de gestión de avatares** que cubra necesidades avanzadas de privacidad, rendimiento y branding que el plugin original no aborda (generación de avatares por iniciales, moderación, biblioteca, integraciones sociales, licenciamiento Pro, etc.).
+El trabajo evoluciona la base hacia una **suite integral de gestión de avatares** con mejoras significativas en privacidad, rendimiento, branding y gobernanza (generador de iniciales avanzado, moderación, biblioteca, integraciones sociales, compliance CodeCanyon, etc.).
 
 ### Evaluación inicial del proyecto
 
@@ -25,11 +26,11 @@ Un análisis preliminar mediante investigación exploratoria arrojó las siguien
 
 - **Demanda: 7/10** — Nicho pero con necesidad aguda en comunidades preocupadas por privacidad y performance.
 - **Facilidad de desarrollo: 9/10** — El plugin base es pequeño; un MVP con generador de iniciales puede completarse en un fin de semana.
-- **Licenciamiento: 10/10** — GPL puro, sin restricciones para el fork.
+- **Licenciamiento: 10/10** — GPL puro, sin restricciones para crear una versión derivada.
 - **Prospección comercial: 6/10** — Ticket medio más bajo, pero las features Pro justifican compra en sitios de membresía/foros.
 - **Viabilidad: 10/10** — Riesgo bajo; excelente proyecto para dominar el ciclo completo de producto premium.
 
-Estas métricas justifican la elección del fork como base para construir una suite premium sostenible.
+Estas métricas justifican la elección de transformar la base existente para construir una suite premium sostenible.
 
 ## 2. Perfiles de Usuario (User Personas)
 
