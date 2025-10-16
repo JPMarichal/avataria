@@ -9,9 +9,9 @@ Completa esta lista antes de iniciar cualquier implementación en `src/`.
 - [x] Asegurar que `LICENSE.txt` contiene la GPL y menciona a `Simple Local Avatars`.
 
 ## 2. Entorno local
-- [ ] Ejecutar `docker-compose.dev.yml` o `wp-env` y validar que WordPress inicia sin errores.
-- [ ] Instalar dependencias de desarrollo: `composer install` y `npm install` (solo si ya existen los manifiestos).
-- [ ] Configurar variables de entorno necesarias (`.env`, `.wp-env.json`) y documentarlas en `README.md`.
+- [x] Ejecutar `docker-compose.dev.yml` o `wp-env` y validar que WordPress inicia sin errores.
+- [x] Instalar dependencias de desarrollo: `composer install` y `npm install` (solo si ya existen los manifiestos).
+- [x] Configurar variables de entorno necesarias (`.env`, `.wp-env.json`) y documentarlas en `README.md`.
 
 ## 3. Estructura del proyecto
 - [ ] Confirmar que el código nuevo se ubicará en `src/` bajo namespaces `AvatarSteward\*`.

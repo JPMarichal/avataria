@@ -42,6 +42,17 @@ Este documento define el conjunto de tecnologías y herramientas que se utilizar
 - **Repositorio heredado:** El código original (`simple-local-avatars/`) se mantiene como submódulo/git clone de referencia. El nuevo desarrollo vivirá en `src/` siguiendo organización PSR-4 y namespaces `AvatarSteward\*`.
 - **Reescritura por módulos:** Servicios clave (uploads, generación automática, moderación, integraciones sociales) se implementarán como clases independientes, reemplazando la estructura monolítica detectada en `includes/class-simple-local-avatars.php`.
 - **Compatibilidad legacy:** Se mantendrán wrappers temporales para hooks críticos (`pre_get_avatar_data`, REST fields, comandos WP-CLI) hasta completar la migración.
+- **Stack Docker oficial:** El archivo `docker-compose.dev.yml` más `.env` definen un entorno con `wordpress:6.8.3-php8.1`, `mysql:8.0` y `phpmyadmin:5`. Para iniciar, ejecutar en la raíz del proyecto:
+
+```pwsh
+docker compose -f docker-compose.dev.yml up -d
+```
+
+  - WordPress queda disponible en `http://localhost:${WORDPRESS_PORT}` (por defecto `8080`).
+  - phpMyAdmin queda en `http://localhost:${PHPMYADMIN_PORT}` (por defecto `8081`).
+  - Credenciales por defecto (`.env`): usuario `avatar_user`, password `avatar_pass123`, base `avatar_steward`, root `root_pass123`. El prefijo de tablas es `avs_`.
+  - Volúmenes: `./src` se monta como plugin activo `avatar-steward`. El plugin original **no** se monta automáticamente; se mantiene solo como referencia en el repositorio. Datos persistentes se guardan en volúmenes `wordpress_data` y `db_data`.
+  - Para detener el entorno: `docker compose -f docker-compose.dev.yml down`.
 
 ### **4.2. Producción**
 * **Plataforma:** Servidor VPS en **Ionos**, con **Ubuntu**.
