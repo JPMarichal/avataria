@@ -26,7 +26,7 @@ Este documento define el conjunto de tecnologías y herramientas que se utilizar
 * **Empaquetador/Bundler:** **Webpack**. Se utilizará para compilar, minificar y empaquetar los archivos SASS y JavaScript en archivos optimizados para producción.
 * **Control de Versiones:** **Git**. El proyecto se gestionará en un repositorio Git (ej. en GitHub o GitLab).
 * **Entorno Local:** Se recomienda el uso de **Docker** (`wp-env`) o herramientas similares como LocalWP para replicar el entorno de producción de forma consistente.
-* **Integración Continua:** A partir del MVP, toda rama debe ejecutar `composer lint`, `composer test`, `npm run lint` y cualquier script documentado en `09_CodeCanyon_Checklist.md` para garantizar el cumplimiento continuo.
+* **Integración Continua:** A partir del MVP, toda rama debe ejecutar `composer lint`, `composer test`, `npm run lint` y cualquier script documentado en `08_CodeCanyon_Checklist.md` para garantizar el cumplimiento continuo.
 
 ### **1.4. Calidad y Compliance**
 * Las herramientas de calidad (`phpcs.xml`, `phpunit.xml.dist`, configuración de ESLint/SASS`) se mantienen versionadas desde el MVP y se documentan en `README.md`.
@@ -70,4 +70,4 @@ Para una comprensión completa del proyecto, consulta los siguientes documentos:
 - [Plan de Trabajo](04_Plan_de_Trabajo.md): Incluye el cronograma de desarrollo.
 - [Guía de Desarrollo](06_Guia_de_Desarrollo.md): Define principios de desarrollo.
 - [Metodología de Desarrollo](07_Metodologia_de_Desarrollo.md): Cubre el flujo de trabajo y pruebas.
-- [CodeCanyon Checklist](09_CodeCanyon_Checklist.md): Detalla los requisitos de cumplimiento continuo para Envato.
+- [CodeCanyon Checklist](08_CodeCanyon_Checklist.md): Detalla los requisitos de cumplimiento continuo para Envato.

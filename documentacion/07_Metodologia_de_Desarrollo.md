@@ -41,7 +41,7 @@ Se utilizará un flujo de trabajo simplificado pero robusto para garantizar la e
 
 ## 4. Cumplimiento con CodeCanyon en Agile 
 
-* Cada Sprint incluye la revisión de la checklist correspondiente en `09_CodeCanyon_Checklist.md` y la actualización de un registro en `docs/reports/codecanyon-compliance.md`.
+* Cada Sprint incluye la revisión de la checklist correspondiente en `08_CodeCanyon_Checklist.md` y la actualización de un registro en `docs/reports/codecanyon-compliance.md`.
 * Definition of Done extendida: `README.md`, `CHANGELOG.md`, documentación en `docs/`, scripts de linting/tests y evidencia de ejecución deben estar actualizados.
 * Los recursos nuevos (assets, librerías) se validan por licencias y se agrega la información en `docs/licensing.md` antes de cerrar el Sprint.
 * Se planifican demos internas con `docker-compose.demo.yml` al final de cada Sprint para garantizar la reproducibilidad exigida por Envato.
@@ -60,12 +60,12 @@ Para una comprensión completa del proyecto, consulta los siguientes documentos:
 - [Documento de Requerimientos del Producto](01_Documento_Requerimientos_Producto.md): Define los requerimientos del producto.
 - [Estrategia de Negocio](02_Estrategia_de_Negocio.md): Detalla el modelo de monetización.
 - [Estrategia de Marketing](03_Estrategia_de_Marketing.md): Describe las fases de marketing.
-- [Plan de Trabajo](04_Plan_de_Trabajo.md): Incluye el cronograma de desarrollo.
+- [Plan de Trabajo y Entregables](04_Plan_de_Trabajo.md): Incluye cronograma, entregables y criterios de aceptación por fase.
 - [Stack Tecnológico](05_Stack_Tecnologico.md): Especifica las tecnologías y entornos.
 - [Guía de Desarrollo](06_Guia_de_Desarrollo.md): Define principios y estándares de codificación.
- - [Entregables y Criterios de Aceptación por Fase](08_Entregables_Por_Fase.md): Checklist operativo y criterios de aceptación detallados por fase.
+- [CodeCanyon Checklist](08_CodeCanyon_Checklist.md): Requisitos de calidad y packaging para la publicación en CodeCanyon.
 
 ## Checklist Rápido de Entregables
 
-- Consulta `08_Entregables_Por_Fase.md` para ver los entregables exactos y los criterios de aceptación por fase.
+- Consulta `04_Plan_de_Trabajo.md` para ver los entregables exactos y los criterios de aceptación por fase.
 - Antes de abrir un PR, asegúrate de que: tests relevantes pasan, documentación actualizada, y `docker-compose.dev.yml` permite reproducir el smoke test local.
