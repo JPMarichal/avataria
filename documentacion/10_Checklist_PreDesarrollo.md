@@ -24,9 +24,9 @@ Completa esta lista antes de iniciar cualquier implementación en `src/`.
 - [x] Verificar que los avisos GPL originales permanecen en `simple-local-avatars/simple-local-avatars.php` e `includes/class-simple-local-avatars.php`.
 
 ## 5. Instrumentación y QA
-- [ ] Definir los tests mínimos (PHPUnit/Playwright) para la funcionalidad a desarrollar y anotarlos en el PRD (`documentacion/01_Requerimiento_Producto.md`).
-- [ ] Configurar scripts de linting y pruebas (`composer lint`, `composer test`, `npm run lint`) en la herramienta CI elegida.
-- [ ] Preparar plantillas de reportes (`docs/reports/linting/README.md`, `docs/reports/tests/README.md`) si aún no existen.
+- [x] Definir los tests mínimos (PHPUnit/Playwright) para la funcionalidad a desarrollar y anotarlos en el PRD (`documentacion/01_Requerimiento_Producto.md`).
+- [x] Configurar scripts de linting y pruebas (`composer lint`, `composer test`, `npm run lint`) en la herramienta CI elegida (ver `composer.json` y `package.json`).
+- [x] Preparar plantillas de reportes (`docs/reports/linting/README.md`, `docs/reports/tests/README.md`).
 
 ## 6. Alineación con stakeholders
 - [ ] Validar con el Product Owner las prioridades del sprint según `documentacion/09_Roadmap.md` y `documentacion/04_Plan_de_Trabajo.md`.

@@ -150,6 +150,12 @@ La siguiente lista define lo que se considerará “listo” para la entrega del
 - El soporte multisite condiciona las claves meta con sufijos por sitio (`simple_local_avatar_{blog_id}`), requisito a tener en cuenta durante la refactorización hacia namespaces propios.
 - La limpieza en el desinstalador (`simple_local_avatars_uninstall`) elimina metadatos y opciones específicas; debe replicarse en la nueva arquitectura para evitar residuos.
 
+## 13. Tests mínimos (MVP)
+
+- **Unitarios (PHPUnit):** servicios de subida (`UploadService`), generador de iniciales (`InitialsGenerator`), utilidades de conversión (WebP, validación MIME).
+- **Integración:** hooks `pre_get_avatar_data`, actualización del perfil de usuario desde WP-Admin, modo bajo ancho de banda.
+- **End-to-end manual:** flujo de instalación del plugin, subida/migración desde Gravatar, verificación de WordPress sin dependencias externas.
+
 ### Plan de Refactorización
 
 - **Modularización**: separar servicios (uploads, generación, moderación, integraciones) en clases dedicadas dentro de `src/`, reemplazando la estructura monolítica.
