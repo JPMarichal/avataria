@@ -1,4 +1,4 @@
-# Estrategia de Marketing - "Avatar Pro"
+# Estrategia de Marketing - "Avatar Steward"
 
 ---
 
@@ -12,7 +12,7 @@
 
 **Fase 1: Pre-Lanzamiento**
 
-* **Branding:** Definir el nombre final ("Avatar Pro" o similar), logo y esquema de colores.
+* **Branding:** Definir el nombre final ("Avatar Steward" o similar), logo y esquema de colores.
 * **Creación de Landing Page:** Desarrollar una página de venta simple pero efectiva para la versión Pro en un dominio propio, que luego enlazará a CodeCanyon.
 
 **Fase 2: Lanzamiento (Mes 1)**
@@ -24,7 +24,7 @@
 
 **Fase 3: Crecimiento (Continuo)**
 
-* **Marketing de Contenidos:** Escribir artículos en el blog de la landing page sobre temas como: "Cómo Gravatar ralentiza tu sitio WordPress", "La guía definitiva para la privacidad de usuarios en WordPress", "Avatar Pro vs. Gravatar".
+* **Marketing de Contenidos:** Escribir artículos en el blog de la landing page sobre temas como: "Cómo Gravatar ralentiza tu sitio WordPress", "La guía definitiva para la privacidad de usuarios en WordPress", "Avatar Steward vs. Gravatar".
 * **SEO:** Optimizar estos artículos para posicionarse en búsquedas relevantes.
 * **Relaciones Públicas:** Contactar a bloggers y YouTubers del nicho de WordPress para que hagan reseñas del plugin. Ofrecerles una licencia gratuita de la versión Pro.
 * **Marketing dentro del Plugin:** Añadir notificaciones discretas y enlaces en la versión gratuita que informen sobre las ventajas de la versión Pro.

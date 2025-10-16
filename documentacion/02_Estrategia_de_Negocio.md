@@ -1,4 +1,4 @@
-# Estrategia de Negocio - "Avatar Pro"
+# Estrategia de Negocio - "Avatar Steward"
 
 ---
 
@@ -15,7 +15,7 @@
 
 ### Punto de partida y ventaja competitiva
 
-Avatar Pro parte como un **fork** del plugin [Simple Local Avatars](https://wordpress.org/plugins/simple-local-avatars/), aprovechando su código GPL liviano y probado en producción. Sobre esa base, el roadmap introduce mejoras que el plugin original no cubre:
+Avatar Steward parte como un **fork** del plugin [Simple Local Avatars](https://wordpress.org/plugins/simple-local-avatars/), aprovechando su código GPL liviano y probado en producción. Sobre esa base, el roadmap introduce mejoras que el plugin original no cubre:
 
 - Generador de avatares por iniciales con personalización de colores (versión gratuita).
 - Moderación avanzada, biblioteca de avatares y múltiples avatares por usuario (versión Pro).
@@ -31,7 +31,7 @@ Esta estrategia posiciona al producto como la **evolución natural** para comuni
 
 ## 4. Propuesta Única de Valor (PUV)
 
-"A diferencia de Gravatar que compromete la privacidad y el rendimiento, y de otros plugins que solo permiten subir imágenes, **Avatar Pro** es una suite completa que ofrece generación automática de avatares, moderación y control total, todo alojado en tu propio servidor."
+"A diferencia de Gravatar que compromete la privacidad y el rendimiento, y de otros plugins que solo permiten subir imágenes, **Avatar Steward** es una suite completa que ofrece generación automática de avatares, moderación y control total, todo alojado en tu propio servidor."
 
 ## 5. Análisis Competitivo (SWOT)
 

@@ -1,6 +1,6 @@
-# Metodología de Desarrollo - "Avatar Pro"
+# Metodología de Desarrollo - "Avatar Steward"
 
-* **Proyecto:** Avatar Pro
+* **Proyecto:** Avatar Steward (Provisional)
 * **Versión:** 1.0
 * **Fecha:** 14 de Octubre de 2025
 

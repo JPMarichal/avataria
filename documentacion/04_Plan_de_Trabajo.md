@@ -1,4 +1,4 @@
-# Plan de Trabajo y Entregables por Fase - "Avatar Pro"
+# Plan de Trabajo y Entregables por Fase - "Avatar Steward"
 
 **Duración Total Estimada: 10 Semanas**
 

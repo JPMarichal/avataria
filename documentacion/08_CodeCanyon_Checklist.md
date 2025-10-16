@@ -1,6 +1,6 @@
 # CodeCanyon / Envato — Checklist de Preparación y Requisitos de Calidad
 
-Este documento adapta las directrices de Envato para que el proyecto "Avatar Pro" cumpla los requisitos de calidad necesarios para la revisión y publicación en CodeCanyon.
+Este documento adapta las directrices de Envato para que el proyecto "Avatar Steward" cumpla los requisitos de calidad necesarios para la revisión y publicación en CodeCanyon.
 
 ## 1. Documentación mínima requerida
 

@@ -1,6 +1,6 @@
-# Stack Tecnológico, Dependencias y Requerimientos - "Avatar Pro"
+# Stack Tecnológico, Dependencias y Requerimientos - "Avatar Steward"
 
-* **Proyecto:** Avatar Pro
+* **Proyecto:** Avatar Steward (Provisional)
 * **Versión:** 1.0
 * **Fecha:** 14 de Octubre de 2025
 
@@ -8,7 +8,7 @@
 
 ## 1. Stack Tecnológico 💻
 
-Este documento define el conjunto de tecnologías y herramientas que se utilizarán para el desarrollo, construcción y despliegue del plugin "Avatar Pro".
+Este documento define el conjunto de tecnologías y herramientas que se utilizarán para el desarrollo, construcción y despliegue del plugin "Avatar Steward".
 
 ### **1.1. Backend**
 * **Lenguaje Principal:** **PHP >= 7.4**. Se utilizará la sintaxis moderna de PHP, incluyendo tipado estricto (`declare(strict_types=1);`), clases anónimas y funciones de flecha donde sea apropiado.

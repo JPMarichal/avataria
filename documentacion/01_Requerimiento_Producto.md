@@ -1,6 +1,6 @@
-# Documento de Requerimientos del Producto (PRD) - "Avatar Pro"
+# Documento de Requerimientos del Producto (PRD) - "Avatar Steward"
 
-* **Producto:** Avatar Pro (Nombre sugerido para la versión expandida de Simple Local Avatars)
+* **Producto:** Avatar Steward (Nombre provisional para la versión expandida de Simple Local Avatars)
 * **Versión:** 1.0
 * **Fecha:** 14 de Octubre de 2025
 
@@ -8,11 +8,11 @@
 
 ## 1. Resumen Ejecutivo
 
-WordPress depende de Gravatar, un servicio externo, para la gestión de avatares de usuario. Esto presenta problemas de privacidad (filtrado de datos a terceros), rendimiento (llamadas HTTP externas) y falta de control de marca. "Avatar Pro" solucionará esto al ofrecer una suite completa, ligera y auto-alojada para la gestión de avatares, dando el control total al administrador del sitio y a los usuarios.
+WordPress depende de Gravatar, un servicio externo, para la gestión de avatares de usuario. Esto presenta problemas de privacidad (filtrado de datos a terceros), rendimiento (llamadas HTTP externas) y falta de control de marca. "Avatar Steward" solucionará esto al ofrecer una suite completa, ligera y auto-alojada para la gestión de avatares, dando el control total al administrador del sitio y a los usuarios.
 
 ### Origen y punto de partida
 
-Avatar Pro nace como un **fork directo** del plugin existente [Simple Local Avatars](https://wordpress.org/plugins/simple-local-avatars/). Ese proyecto base aporta:
+Avatar Steward nace como un **fork directo** del plugin existente [Simple Local Avatars](https://wordpress.org/plugins/simple-local-avatars/). Ese proyecto base aporta:
 
 - Código GPL ligero y probado en producción.
 - Funcionalidad mínima de subida de avatar local.

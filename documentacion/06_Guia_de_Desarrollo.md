@@ -1,6 +1,6 @@
-# Guía de Desarrollo - "Avatar Pro"
+# Guía de Desarrollo - "Avatar Steward"
 
-* **Proyecto:** Avatar Pro
+* **Proyecto:** Avatar Steward (Provisional)
 * **Versión:** 1.0
 * **Fecha:** 14 de Octubre de 2025
 
