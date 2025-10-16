@@ -19,9 +19,9 @@ Completa esta lista antes de iniciar cualquier implementación en `src/`.
 - [x] Asegurar que los directorios `docs/`, `assets/`, `docs/reports/`, `docs/migracion/` existen (crear placeholders vacíos si no).
 
 ## 4. Obligaciones GPL y compliance
-- [ ] Actualizar `docs/legal/origen-gpl.md` con los componentes a refactorizar en la iteración.
-- [ ] Registrar en `docs/reports/codecanyon-compliance.md` los puntos de la checklist que se revisarán durante el sprint.
-- [ ] Verificar que los avisos de copyright originales permanecen en los archivos heredados.
+- [x] Actualizar `docs/legal/origen-gpl.md` con los componentes a refactorizar en la iteración.
+- [x] Registrar en `docs/reports/codecanyon-compliance.md` los puntos de la checklist que se revisarán durante el sprint.
+- [x] Verificar que los avisos GPL originales permanecen en `simple-local-avatars/simple-local-avatars.php` e `includes/class-simple-local-avatars.php`.
 
 ## 5. Instrumentación y QA
 - [ ] Definir los tests mínimos (PHPUnit/Playwright) para la funcionalidad a desarrollar y anotarlos en el PRD (`documentacion/01_Requerimiento_Producto.md`).

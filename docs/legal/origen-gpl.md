@@ -45,6 +45,8 @@
 - Mantener histórico de commits que muestren transformaciones estructurales respecto al código original.
 - Adjuntar diffs relevantes (antes/después) cuando se sustituyan componentes heredados.
 - Documentar en `CHANGELOG.md` las fases clave de reescritura y funcionalidades nuevas.
+- Dejar constancia del entorno de ejecución (ej. `docker-compose.dev.yml`, `.env`) y cualquier script de migración utilizado durante las transformaciones.
+- **2025-10-16:** Se verificó que `simple-local-avatars/simple-local-avatars.php` e `includes/class-simple-local-avatars.php` mantienen los encabezados GPL originales proporcionados por 10up sin modificaciones.
 
 ## 7. Contacto y revisión
 
