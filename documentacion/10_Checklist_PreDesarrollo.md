@@ -5,8 +5,8 @@ Completa esta lista antes de iniciar cualquier implementación en `src/`.
 ## 1. Preparación del repositorio
 - [x] Verificar que `simple-local-avatars/` está actualizado (último commit de referencia) y documentar la versión en `docs/legal/origen-gpl.md`.
 - [x] Confirmar que la rama de trabajo se crea desde `master` (o la rama acordada) y que el historial está limpio (`git status`).
-- [ ] Dejar claro que el directorio `simple-local-avatars/` es referencia intocable; todo desarrollo debe realizarse en `src/`.
-- [ ] Asegurar que `LICENSE.txt` contiene la GPL y menciona a `Simple Local Avatars`.
+- [x] Dejar claro que el directorio `simple-local-avatars/` es referencia intocable; todo desarrollo debe realizarse en `src/`.
+- [x] Asegurar que `LICENSE.txt` contiene la GPL y menciona a `Simple Local Avatars`.
 
 ## 2. Entorno local
 - [ ] Ejecutar `docker-compose.dev.yml` o `wp-env` y validar que WordPress inicia sin errores.
