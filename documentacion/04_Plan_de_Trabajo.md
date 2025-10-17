@@ -9,7 +9,7 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 ## Fase 1: Planificación y Diseño (1 Semana)
 
 - [x] Tarea 1.1: Configurar el entorno de desarrollo local y el repositorio Git.
-- [ ] Tarea 1.2: Diseñar el mockup de la interfaz de administración (pestaña de opciones, panel de moderación).
+- [x] Tarea 1.2: Diseñar el mockup de la interfaz de administración (pestaña de opciones, panel de moderación).
 - [ ] Tarea 1.3: Definir la arquitectura del código (clases, hooks, estructura de archivos).
 - [ ] Tarea 1.4: Establecer la estructura inicial de documentación (`README.md`, `CHANGELOG.md`, directorio `docs/`, checklist de soporte) alineada con `08_CodeCanyon_Checklist.md`.
 - [ ] Tarea 1.5: Configurar herramientas de calidad obligatorias (`phpcs.xml`, PHPUnit, ESLint) y documentar su ejecución en el repositorio.
