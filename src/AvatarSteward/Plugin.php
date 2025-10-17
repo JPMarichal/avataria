@@ -1,33 +1,56 @@
 <?php
+/**
+ * Main Plugin class.
+ *
+ * @package AvatarSteward
+ */
 
 declare(strict_types=1);
 
 namespace AvatarSteward;
 
-final class Plugin
-{
-    private static ?self $instance = null;
+/**
+ * Plugin singleton class.
+ */
+final class Plugin {
 
-    private function __construct()
-    {
-        if (function_exists('add_action')) {
-            add_action('plugins_loaded', [$this, 'boot']);
-        }
-    }
+	/**
+	 * Singleton instance.
+	 *
+	 * @var self|null
+	 */
+	private static ?self $instance = null;
 
-    public static function instance(): self
-    {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
+	/**
+	 * Private constructor to prevent direct instantiation.
+	 */
+	private function __construct() {
+		if ( function_exists( 'add_action' ) ) {
+			add_action( 'plugins_loaded', array( $this, 'boot' ) );
+		}
+	}
 
-        return self::$instance;
-    }
+	/**
+	 * Get the singleton instance.
+	 *
+	 * @return self The singleton instance.
+	 */
+	public static function instance(): self {
+		if ( self::$instance === null ) {
+			self::$instance = new self();
+		}
 
-    public function boot(): void
-    {
-        if (function_exists('do_action')) {
-            do_action('avatarsteward/booted');
-        }
-    }
+		return self::$instance;
+	}
+
+	/**
+	 * Boot the plugin.
+	 *
+	 * @return void
+	 */
+	public function boot(): void {
+		if ( function_exists( 'do_action' ) ) {
+			do_action( 'avatarsteward_booted' );
+		}
+	}
 }

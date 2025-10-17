@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<ruleset name="Avatar Steward">
+	<description>WordPress Coding Standards for Avatar Steward plugin</description>
+
+	<!-- What to scan -->
+	<file>src</file>
+
+	<!-- Exclude vendor and dependencies -->
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/tests/*</exclude-pattern>
+	<exclude-pattern>*/simple-local-avatars/*</exclude-pattern>
+
+	<!-- How to scan -->
+	<arg value="sp"/> <!-- Show sniff and progress -->
+	<arg name="basepath" value="."/> <!-- Strip the file paths down to the relevant bit -->
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+	<arg name="parallel" value="8"/> <!-- Enables parallel processing when available -->
+
+	<!-- Rules: Check PHP version compatibility -->
+	<config name="testVersion" value="7.4-"/>
+
+	<!-- Rules: WordPress Coding Standards -->
+	<rule ref="WordPress-Core">
+		<!-- Allow short array syntax -->
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+	</rule>
+
+	<rule ref="WordPress-Docs"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="avatar-steward"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Verify that everything in the global namespace is prefixed -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="avatar_steward"/>
+				<element value="AvatarSteward"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Rules: Extra checks -->
+	<rule ref="WordPress-Extra">
+		<!-- Exclude Yoda conditions rule -->
+		<exclude name="WordPress.PHP.YodaConditions"/>
+	</rule>
+
+	<!-- Allow for theme specific exceptions to the WordPress naming conventions -->
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<property name="strict_class_file_names" value="false"/>
+			<property name="is_theme" value="false"/>
+		</properties>
+		<!-- Exclude the AvatarSteward namespace from filename checks as we use PSR-4 autoloading -->
+		<exclude-pattern>*/AvatarSteward/*</exclude-pattern>
+	</rule>
+
+	<!-- Minimum PHP version -->
+	<config name="minimum_supported_wp_version" value="5.8"/>
+</ruleset>

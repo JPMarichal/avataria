@@ -9,6 +9,11 @@
     "wp-coding-standards/wpcs": "^3.0",
     "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
   },
+  "autoload": {
+    "psr-4": {
+      "AvatarSteward\\": "src/AvatarSteward/"
+    }
+  },
   "scripts": {
     "lint": "phpcs",
     "test": "phpunit"

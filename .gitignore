@@ -28,3 +28,8 @@ Thumbs.db
 # Logs
 *.log
 /storage/
+
+# Test artifacts
+/docs/reports/tests/coverage-html/
+/docs/reports/tests/junit.xml
+.phpunit.result.cache

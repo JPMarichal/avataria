@@ -4,8 +4,11 @@
   "private": true,
   "description": "Build tooling for Avatar Steward",
   "scripts": {
-    "lint": "echo \"No JS linting configured yet\"",
+    "lint": "eslint assets/js/**/*.js",
+    "lint:fix": "eslint assets/js/**/*.js --fix",
     "build": "echo \"No build step yet\""
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^8.57.0"
+  }
 }
