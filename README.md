@@ -36,6 +36,83 @@ If you want to test the plugin in a local environment:
    ```
 6. Access WordPress at `http://localhost:8080` (username: admin, password: admin).
 
+## Development & Quality Tools
+
+This project uses several quality assurance tools to maintain code standards and reliability.
+
+### PHP Code Standards (phpcs)
+
+We follow WordPress Coding Standards for PHP code.
+
+**Run linting:**
+```bash
+composer lint
+```
+
+**Auto-fix issues (when possible):**
+```bash
+vendor/bin/phpcbf
+```
+
+Configuration is in `phpcs.xml`. The linter checks:
+- WordPress-Core coding standards
+- WordPress documentation standards
+- PHP 7.4+ compatibility
+- Proper text domain usage (`avatar-steward`)
+- Namespace prefixing (`AvatarSteward\` or `avatar_steward_`)
+
+### PHP Unit Tests (PHPUnit)
+
+Unit tests ensure code functionality and prevent regressions.
+
+**Run tests:**
+```bash
+composer test
+```
+
+**Run tests with coverage report:**
+```bash
+vendor/bin/phpunit --coverage-html docs/reports/tests/coverage-html
+```
+
+Configuration is in `phpunit.xml.dist`. Tests are located in `tests/phpunit/`.
+
+### JavaScript Linting (ESLint)
+
+JavaScript code follows ESLint best practices.
+
+**Run linting:**
+```bash
+npm run lint
+```
+
+**Auto-fix issues (when possible):**
+```bash
+npm run lint:fix
+```
+
+Configuration is in `.eslintrc.json`. The linter enforces:
+- ES6+ syntax
+- Tab indentation
+- Single quotes
+- Semicolons
+- No trailing spaces
+
+### Test Reports
+
+Test results and linting reports are saved in:
+- `docs/reports/linting/` - PHP linting reports
+- `docs/reports/tests/` - Test execution reports and coverage
+
+### Pre-commit Checklist
+
+Before committing code, ensure:
+1. ✅ `composer lint` passes without errors
+2. ✅ `composer test` passes all tests
+3. ✅ `npm run lint` passes without errors (if JS changes)
+4. ✅ Code is properly documented
+5. ✅ New features have corresponding tests
+
 ## Configuration
 
 After activating the plugin:
