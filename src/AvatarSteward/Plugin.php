@@ -12,6 +12,7 @@ namespace AvatarSteward;
 use AvatarSteward\Core\AvatarHandler;
 use AvatarSteward\Domain\Initials\Generator;
 use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
+use AvatarSteward\Domain\Licensing\LicenseManager;
 
 /**
  * Plugin singleton class.
@@ -38,6 +39,20 @@ final class Plugin {
 	 * @var Admin\MigrationPage|null
 	 */
 	private ?Admin\MigrationPage $migration_page = null;
+
+	/**
+	 * License page instance.
+	 *
+	 * @var Admin\LicensePage|null
+	 */
+	private ?Admin\LicensePage $license_page = null;
+
+	/**
+	 * License manager instance.
+	 *
+	 * @var LicenseManager|null
+	 */
+	private ?LicenseManager $license_manager = null;
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -67,8 +82,10 @@ final class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
+		$this->init_license_manager();
 		$this->init_settings_page();
 		$this->init_migration_page();
+		$this->init_license_page();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -124,5 +141,52 @@ final class Plugin {
 	 */
 	public function get_migration_page(): ?Admin\MigrationPage {
 		return $this->migration_page;
+	}
+
+	/**
+	 * Initialize the license manager.
+	 *
+	 * @return void
+	 */
+	private function init_license_manager(): void {
+		if ( ! class_exists( Domain\Licensing\LicenseManager::class ) ) {
+			require_once __DIR__ . '/Domain/Licensing/LicenseManager.php';
+		}
+
+		$this->license_manager = new Domain\Licensing\LicenseManager();
+	}
+
+	/**
+	 * Initialize the license page.
+	 *
+	 * @return void
+	 */
+	private function init_license_page(): void {
+		if ( ! class_exists( Admin\LicensePage::class ) ) {
+			require_once __DIR__ . '/Admin/LicensePage.php';
+		}
+
+		if ( $this->license_manager !== null ) {
+			$this->license_page = new Admin\LicensePage( $this->license_manager );
+			$this->license_page->init();
+		}
+	}
+
+	/**
+	 * Get the license manager instance.
+	 *
+	 * @return LicenseManager|null License manager instance.
+	 */
+	public function get_license_manager(): ?LicenseManager {
+		return $this->license_manager;
+	}
+
+	/**
+	 * Get the license page instance.
+	 *
+	 * @return Admin\LicensePage|null License page instance.
+	 */
+	public function get_license_page(): ?Admin\LicensePage {
+		return $this->license_page;
 	}
 }
