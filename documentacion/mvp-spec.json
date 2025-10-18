@@ -1,0 +1,431 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "name": "Avatar Steward MVP Specification",
+  "version": "1.0.0",
+  "description": "Technical specification for Avatar Steward MVP (Free version) covering RF-G01 through RF-G05",
+  "targetRelease": "1.0.0",
+  "functionalRequirements": {
+    "RF-G01": {
+      "title": "User Avatar Upload",
+      "description": "Allow users with profile editing permissions to upload an image from their device to use as avatar",
+      "priority": "critical",
+      "settings": {
+        "enable_uploads": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable user avatar uploads globally"
+        },
+        "upload_max_filesize": {
+          "type": "integer",
+          "default": 2,
+          "unit": "MB",
+          "description": "Maximum file size for avatar uploads"
+        },
+        "allowed_mime_types": {
+          "type": "array",
+          "default": ["image/jpeg", "image/png", "image/gif", "image/webp"],
+          "description": "Allowed MIME types for avatar uploads"
+        },
+        "max_dimensions": {
+          "type": "object",
+          "default": {
+            "width": 2000,
+            "height": 2000
+          },
+          "description": "Maximum dimensions for uploaded avatars"
+        }
+      },
+      "hooks": {
+        "filters": [
+          {
+            "name": "avatarsteward_upload_enabled",
+            "description": "Filter to override whether uploads are enabled",
+            "parameters": ["boolean $enabled", "int $user_id"],
+            "returns": "boolean"
+          },
+          {
+            "name": "avatarsteward_allowed_mime_types",
+            "description": "Filter allowed MIME types for uploads",
+            "parameters": ["array $mime_types"],
+            "returns": "array"
+          },
+          {
+            "name": "avatarsteward_max_filesize",
+            "description": "Filter maximum file size for uploads",
+            "parameters": ["int $size_in_bytes", "int $user_id"],
+            "returns": "int"
+          }
+        ],
+        "actions": [
+          {
+            "name": "avatarsteward_avatar_uploaded",
+            "description": "Fired after a user successfully uploads an avatar",
+            "parameters": ["int $user_id", "int $attachment_id", "array $avatar_data"]
+          },
+          {
+            "name": "avatarsteward_avatar_upload_failed",
+            "description": "Fired when an avatar upload fails validation",
+            "parameters": ["int $user_id", "WP_Error $error"]
+          }
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users with 'edit_user' capability can access avatar upload interface",
+        "File uploads are validated for type, size, and dimensions",
+        "Invalid uploads show clear error messages",
+        "Uploaded avatars are stored in WordPress media library",
+        "Previous avatars are replaced when new ones are uploaded"
+      ]
+    },
+    "RF-G02": {
+      "title": "Replace Gravatar Calls",
+      "description": "Completely replace Gravatar calls with local avatar management",
+      "priority": "critical",
+      "settings": {
+        "disable_gravatar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Disable Gravatar lookups globally"
+        },
+        "gravatar_fallback": {
+          "type": "boolean",
+          "default": false,
+          "description": "Allow Gravatar as fallback if no local avatar exists"
+        }
+      },
+      "hooks": {
+        "filters": [
+          {
+            "name": "avatarsteward_use_gravatar_fallback",
+            "description": "Filter to enable/disable Gravatar fallback per user",
+            "parameters": ["boolean $use_fallback", "int $user_id"],
+            "returns": "boolean"
+          },
+          {
+            "name": "pre_get_avatar_data",
+            "description": "WordPress core filter to override avatar data",
+            "parameters": ["array $args", "mixed $id_or_email"],
+            "returns": "array",
+            "note": "Priority 10 to intercept before Gravatar lookup"
+          }
+        ],
+        "actions": []
+      },
+      "acceptanceCriteria": [
+        "No HTTP requests are made to gravatar.com in typical scenarios",
+        "Avatar display works correctly across all WordPress contexts (comments, user lists, admin bar)",
+        "get_avatar() function returns local avatars consistently",
+        "Performance overhead is less than 50ms per page load"
+      ]
+    },
+    "RF-G03": {
+      "title": "Native Profile Integration",
+      "description": "Integrate with WordPress native user profile avatar field",
+      "priority": "critical",
+      "settings": {
+        "show_in_profile": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show avatar upload field in user profile"
+        },
+        "profile_field_position": {
+          "type": "string",
+          "default": "top",
+          "enum": ["top", "bottom"],
+          "description": "Position of avatar field in profile page"
+        }
+      },
+      "hooks": {
+        "filters": [
+          {
+            "name": "avatarsteward_show_profile_field",
+            "description": "Filter to show/hide profile field per user",
+            "parameters": ["boolean $show", "WP_User $user"],
+            "returns": "boolean"
+          }
+        ],
+        "actions": [
+          {
+            "name": "show_user_profile",
+            "description": "WordPress core action to add fields to user's own profile",
+            "parameters": ["WP_User $user"],
+            "note": "Hook priority 10"
+          },
+          {
+            "name": "edit_user_profile",
+            "description": "WordPress core action to add fields when editing other users",
+            "parameters": ["WP_User $user"],
+            "note": "Hook priority 10"
+          },
+          {
+            "name": "personal_options_update",
+            "description": "WordPress core action when user updates own profile",
+            "parameters": ["int $user_id"],
+            "note": "Handles avatar upload processing"
+          },
+          {
+            "name": "edit_user_profile_update",
+            "description": "WordPress core action when editing another user's profile",
+            "parameters": ["int $user_id"],
+            "note": "Handles avatar upload processing"
+          }
+        ]
+      },
+      "acceptanceCriteria": [
+        "Avatar upload field appears in user profile pages",
+        "Field is accessible to users with appropriate permissions",
+        "Upload interface uses WordPress media uploader",
+        "Changes are saved correctly with profile updates",
+        "UI follows WordPress admin design patterns"
+      ]
+    },
+    "RF-G04": {
+      "title": "Initials Generator",
+      "description": "Automatically generate avatar with user initials if no image is uploaded",
+      "priority": "high",
+      "settings": {
+        "enable_initials": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic initials avatar generation"
+        },
+        "initials_style": {
+          "type": "string",
+          "default": "circular",
+          "enum": ["circular", "rounded", "square"],
+          "description": "Shape style for initials avatars"
+        },
+        "initials_background_colors": {
+          "type": "array",
+          "default": [
+            "#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e",
+            "#f39c12", "#e74c3c", "#95a5a6", "#16a085", "#27ae60"
+          ],
+          "description": "Color palette for initials avatar backgrounds"
+        },
+        "initials_text_color": {
+          "type": "string",
+          "default": "#ffffff",
+          "description": "Text color for initials"
+        },
+        "initials_font_family": {
+          "type": "string",
+          "default": "sans-serif",
+          "enum": ["sans-serif", "serif", "monospace"],
+          "description": "Font family for initials text"
+        },
+        "initials_font_weight": {
+          "type": "string",
+          "default": "bold",
+          "enum": ["normal", "bold"],
+          "description": "Font weight for initials text"
+        },
+        "initials_source": {
+          "type": "string",
+          "default": "display_name",
+          "enum": ["display_name", "username", "first_last_name"],
+          "description": "Source for extracting user initials"
+        },
+        "enable_low_bandwidth_mode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use SVG instead of PNG for initials (lower bandwidth)"
+        }
+      },
+      "hooks": {
+        "filters": [
+          {
+            "name": "avatarsteward_initials_colors",
+            "description": "Filter color palette for initials backgrounds",
+            "parameters": ["array $colors"],
+            "returns": "array"
+          },
+          {
+            "name": "avatarsteward_user_initials",
+            "description": "Filter extracted initials for a user",
+            "parameters": ["string $initials", "int $user_id", "WP_User $user"],
+            "returns": "string"
+          },
+          {
+            "name": "avatarsteward_initials_background_color",
+            "description": "Filter background color for specific user initials avatar",
+            "parameters": ["string $color", "int $user_id", "string $initials"],
+            "returns": "string"
+          },
+          {
+            "name": "avatarsteward_initials_style",
+            "description": "Filter style settings for initials avatar",
+            "parameters": ["array $style", "int $user_id"],
+            "returns": "array"
+          }
+        ],
+        "actions": [
+          {
+            "name": "avatarsteward_initials_generated",
+            "description": "Fired after initials avatar is generated",
+            "parameters": ["int $user_id", "string $initials", "string $avatar_url"]
+          }
+        ]
+      },
+      "acceptanceCriteria": [
+        "Initials are extracted correctly from user display name",
+        "Color assignment is consistent for the same user",
+        "Generated avatars are visually appealing and readable",
+        "SVG format works in low bandwidth mode",
+        "Initials avatars are cached appropriately",
+        "Generator handles edge cases (single character names, special characters)"
+      ]
+    },
+    "RF-G05": {
+      "title": "Default Avatar Setting",
+      "description": "Allow administrator to set a default avatar for users without uploaded avatars",
+      "priority": "medium",
+      "settings": {
+        "default_avatar_type": {
+          "type": "string",
+          "default": "initials",
+          "enum": ["initials", "custom", "mystery", "blank"],
+          "description": "Type of default avatar to use"
+        },
+        "custom_default_avatar": {
+          "type": "integer",
+          "default": null,
+          "description": "WordPress media attachment ID for custom default avatar"
+        },
+        "default_avatar_override_initials": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use default avatar instead of initials generator"
+        }
+      },
+      "hooks": {
+        "filters": [
+          {
+            "name": "avatarsteward_default_avatar",
+            "description": "Filter the default avatar URL",
+            "parameters": ["string $url", "int $user_id", "array $args"],
+            "returns": "string"
+          },
+          {
+            "name": "avatarsteward_default_avatar_type",
+            "description": "Filter the default avatar type for a user",
+            "parameters": ["string $type", "int $user_id"],
+            "returns": "string"
+          }
+        ],
+        "actions": []
+      },
+      "acceptanceCriteria": [
+        "Administrator can upload custom default avatar via settings",
+        "Default avatar is used when user has no uploaded avatar",
+        "Default avatar respects initials generator priority if configured",
+        "Custom default avatar is properly validated",
+        "Settings page provides preview of default avatar"
+      ]
+    }
+  },
+  "technicalSpecifications": {
+    "wordpress": {
+      "minVersion": "5.8",
+      "testedUpTo": "6.7"
+    },
+    "php": {
+      "minVersion": "7.4",
+      "recommendedVersion": "8.0"
+    },
+    "database": {
+      "tables": [],
+      "userMeta": [
+        {
+          "key": "avatarsteward_avatar",
+          "type": "integer",
+          "description": "WordPress attachment ID of user's avatar"
+        },
+        {
+          "key": "avatarsteward_avatar_rating",
+          "type": "string",
+          "description": "Avatar rating (G, PG, R, X)"
+        }
+      ],
+      "options": [
+        {
+          "key": "avatarsteward_settings",
+          "type": "array",
+          "description": "Main plugin settings array",
+          "autoload": true
+        }
+      ]
+    },
+    "assets": {
+      "adminCSS": ["assets/css/admin.css"],
+      "adminJS": ["assets/js/admin.js"],
+      "publicCSS": [],
+      "publicJS": []
+    }
+  },
+  "securityRequirements": {
+    "fileUpload": [
+      "Validate file type using wp_check_filetype()",
+      "Sanitize filename using sanitize_file_name()",
+      "Check file size against configured limits",
+      "Verify image dimensions",
+      "Use WordPress media upload functions",
+      "Check user capabilities before allowing upload"
+    ],
+    "dataSanitization": [
+      "Sanitize all user inputs with appropriate WordPress functions",
+      "Escape all outputs using esc_html(), esc_attr(), esc_url()",
+      "Use nonces for form submissions",
+      "Verify user permissions before data operations"
+    ],
+    "dataPrivacy": [
+      "Support WordPress data export (personal_data_exporter)",
+      "Support WordPress data erasure (personal_data_eraser)",
+      "Document what user data is stored",
+      "Provide user consent mechanisms where required"
+    ]
+  },
+  "performanceRequirements": {
+    "pageLoadOverhead": {
+      "max": "50ms",
+      "description": "Maximum additional time added to page load"
+    },
+    "caching": {
+      "avatarUrls": "Use WordPress transients with 24-hour expiration",
+      "generatedInitials": "Cache generated initials avatars for 7 days",
+      "settings": "Cache plugin settings using wp_cache"
+    },
+    "optimization": [
+      "Lazy load avatars where possible",
+      "Use WordPress image sizes for different contexts",
+      "Minimize database queries",
+      "Avoid external HTTP requests"
+    ]
+  },
+  "testingCriteria": {
+    "unitTests": [
+      "Initials extraction logic",
+      "Color assignment algorithm",
+      "File validation functions",
+      "Settings sanitization"
+    ],
+    "integrationTests": [
+      "Avatar upload flow",
+      "get_avatar() override",
+      "Profile page integration",
+      "Settings save/load"
+    ],
+    "manualTests": [
+      "Visual appearance across themes",
+      "Compatibility with popular plugins (BuddyPress, WooCommerce)",
+      "Mobile responsiveness",
+      "Accessibility compliance"
+    ]
+  },
+  "documentation": {
+    "userGuide": "docs/user-manual.md",
+    "developerDocs": "docs/developer-guide.md",
+    "changelog": "CHANGELOG.md",
+    "readme": "README.md"
+  }
+}
