@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace AvatarSteward;
 
+use AvatarSteward\Core\AvatarHandler;
+
 /**
  * Plugin singleton class.
  */
@@ -20,6 +22,13 @@ final class Plugin {
 	 * @var self|null
 	 */
 	private static ?self $instance = null;
+
+	/**
+	 * Avatar handler instance.
+	 *
+	 * @var AvatarHandler|null
+	 */
+	private ?AvatarHandler $avatar_handler = null;
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -49,8 +58,20 @@ final class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
+		$this->avatar_handler = new AvatarHandler();
+		$this->avatar_handler->init();
+
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
 		}
+	}
+
+	/**
+	 * Get the avatar handler instance.
+	 *
+	 * @return AvatarHandler|null Avatar handler instance.
+	 */
+	public function get_avatar_handler(): ?AvatarHandler {
+		return $this->avatar_handler;
 	}
 }
