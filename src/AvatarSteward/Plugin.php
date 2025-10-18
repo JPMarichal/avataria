@@ -33,11 +33,11 @@ final class Plugin {
 	private ?Admin\SettingsPage $settings_page = null;
 
 	/**
-	 * Avatar handler instance.
+	 * Migration page instance.
 	 *
-	 * @var AvatarHandler|null
+	 * @var Admin\MigrationPage|null
 	 */
-	private ?AvatarHandler $avatar_handler = null;
+	private ?Admin\MigrationPage $migration_page = null;
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -68,7 +68,7 @@ final class Plugin {
 	 */
 	public function boot(): void {
 		$this->init_settings_page();
-		$this->init_avatar_handler();
+		$this->init_migration_page();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -90,6 +90,25 @@ final class Plugin {
 	}
 
 	/**
+	 * Initialize the migration page.
+	 *
+	 * @return void
+	 */
+	private function init_migration_page(): void {
+		if ( ! class_exists( Admin\MigrationPage::class ) ) {
+			require_once __DIR__ . '/Admin/MigrationPage.php';
+		}
+
+		if ( ! class_exists( Domain\Migration\MigrationService::class ) ) {
+			require_once __DIR__ . '/Domain/Migration/MigrationService.php';
+		}
+
+		$migration_service    = new Domain\Migration\MigrationService();
+		$this->migration_page = new Admin\MigrationPage( $migration_service );
+		$this->migration_page->init();
+	}
+
+	/**
 	 * Get the settings page instance.
 	 *
 	 * @return Admin\SettingsPage|null Settings page instance.
@@ -99,51 +118,11 @@ final class Plugin {
 	}
 
 	/**
-	 * Initialize the avatar handler.
+	 * Get the migration page instance.
 	 *
-	 * @return void
+	 * @return Admin\MigrationPage|null Migration page instance.
 	 */
-	private function init_avatar_handler(): void {
-		if ( ! class_exists( AvatarHandler::class ) ) {
-			require_once __DIR__ . '/Core/AvatarHandler.php';
-		}
-
-		$this->avatar_handler = new AvatarHandler();
-
-		// Set up bandwidth optimizer if low-bandwidth mode is enabled.
-		$settings = $this->settings_page ? $this->settings_page->get_settings() : array();
-
-		if ( ! empty( $settings['low_bandwidth_mode'] ) ) {
-			if ( ! class_exists( Generator::class ) ) {
-				require_once __DIR__ . '/Domain/Initials/Generator.php';
-			}
-			if ( ! class_exists( BandwidthOptimizer::class ) ) {
-				require_once __DIR__ . '/Domain/LowBandwidth/BandwidthOptimizer.php';
-			}
-
-			$generator = new Generator();
-			$threshold = isset( $settings['bandwidth_threshold'] ) ? (int) $settings['bandwidth_threshold'] : 100;
-
-			$optimizer = new BandwidthOptimizer(
-				$generator,
-				array(
-					'enabled'   => true,
-					'threshold' => $threshold * 1024, // Convert KB to bytes.
-				)
-			);
-
-			$this->avatar_handler->set_optimizer( $optimizer );
-		}
-
-		$this->avatar_handler->init();
-	}
-
-	/**
-	 * Get the avatar handler instance.
-	 *
-	 * @return AvatarHandler|null Avatar handler instance.
-	 */
-	public function get_avatar_handler(): ?AvatarHandler {
-		return $this->avatar_handler;
+	public function get_migration_page(): ?Admin\MigrationPage {
+		return $this->migration_page;
 	}
 }

@@ -41,6 +41,14 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - Input sanitization and validation for all settings
 - Capability checks for admin-only functions
 
+### Migration Tools
+- **Simple Local Avatars Migration**: Import existing avatars from Simple Local Avatars plugin
+- **WP User Avatar Migration**: Import existing avatars from WP User Avatar plugin
+- **Gravatar Import**: Download and save Gravatars locally for all users
+- **Batch Processing**: Migrate all users at once with detailed results
+- **Safe Migration**: Skip users who already have avatars, no data loss
+- **Statistics Dashboard**: View migration status and available avatars
+
 ## System Requirements
 
 - **WordPress**: Version 5.8 or higher
@@ -249,28 +257,23 @@ After activating the plugin, configure Avatar Steward to match your site's requi
 5. For Pro version: Enter your license key in the "License" tab.
 6. Optional: Configure social integrations in the "Social" tab.
 
-1. In WordPress admin, go to **Settings > Avatar Steward**
-2. The settings page has two main sections: **Upload Restrictions** and **Roles & Permissions**
+## Migrating from Other Plugins
 
-### Upload Restrictions
+If you're switching from another avatar plugin or want to import Gravatars:
 
-Configure how users can upload avatars:
+1. **Backup your database** before starting any migration
+2. Go to **Tools > Avatar Migration** in the admin panel
+3. Review the statistics showing available avatars for migration
+4. Select a migration source:
+   - **Simple Local Avatars**: Migrate existing avatar associations (no file downloads)
+   - **WP User Avatar**: Migrate existing avatar associations (no file downloads)
+   - **Gravatar**: Download and save all user Gravatars locally (may take time)
+5. Click "Start Migration" and review the results
+6. Verify avatars display correctly on user profiles and throughout the site
 
-#### Max File Size
-- **Range**: 0.1 MB to 10 MB
-- **Default**: 2.0 MB
-- **Purpose**: Limits the maximum file size for uploaded avatars to prevent storage issues
+For detailed migration instructions, see [docs/migracion/migration-guide.md](docs/migracion/migration-guide.md)
 
-#### Allowed Formats
-- **Options**: JPEG, PNG, GIF, WebP
-- **Default**: JPEG and PNG
-- **Purpose**: Select which image formats users can upload
-- **Note**: All formats are validated by MIME type for security
-
-#### Max Dimensions
-- **Max Width**: 100 to 5000 pixels (default: 2048px)
-- **Max Height**: 100 to 5000 pixels (default: 2048px)
-- **Purpose**: Prevents excessively large images that could impact performance
+## Basic Usage
 
 #### Convert to WebP
 - **Type**: Checkbox (enabled/disabled)
