@@ -11,6 +11,33 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Disk Space**: Minimum 50 MB for avatars and assets
 - **Permissions**: Write access to `wp-content/uploads/` for uploading avatars
 
+## Features
+
+### Avatar Upload Management
+- **User Profile Upload**: Users can upload custom avatars directly from their WordPress profile page
+- **Multiple Format Support**: Accepts JPEG, PNG, GIF, and WebP image formats
+- **File Validation**: Comprehensive validation for file type, size, dimensions, and security
+- **WordPress Media Integration**: Uploaded avatars are stored in the WordPress media library
+- **Admin Controls**: Administrators can upload avatars for any user
+- **Easy Removal**: Users can remove their avatar and revert to default at any time
+- **Error Handling**: Clear, user-friendly error messages for invalid uploads
+
+### Security Features
+- MIME type detection to prevent invalid file uploads
+- File size limits (2MB default, configurable)
+- Dimension restrictions (2000x2000px max, configurable)
+- Nonce verification for secure form submissions
+- Permission checks to ensure users can only edit their own profiles
+
+## System Requirements
+
+- **WordPress**: Version 5.8 or higher
+- **PHP**: Version 7.4 or higher
+- **Web Server**: Apache or Nginx with PHP support
+- **Database**: MySQL 5.6+ or MariaDB 10.0+
+- **Disk Space**: Minimum 50 MB for avatars and assets
+- **Permissions**: Write access to `wp-content/uploads/` for uploading avatars
+
 ## Installation
 
 ### Option 1: Manual Installation

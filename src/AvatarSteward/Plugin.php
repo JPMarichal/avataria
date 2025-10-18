@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace AvatarSteward;
 
+use AvatarSteward\Core\AvatarHandler;
+
 /**
  * Plugin singleton class.
  */
