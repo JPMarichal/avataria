@@ -41,18 +41,18 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 
 ## Fase 2: Desarrollo del MVP - Versión Gratuita (3 Semanas)
 
-- [ ] Tarea 2.1: Desarrollar la funcionalidad de subida de imagen en el perfil de usuario.
-- [ ] Tarea 2.2: Implementar la lógica para sobreescribir la función `get_avatar()`.
-- [ ] Tarea 2.3: Desarrollar el generador de avatares por iniciales.
-- [ ] Tarea 2.4: Crear la página de opciones básicas del plugin.
-- [ ] Tarea 2.5: Realizar pruebas internas y depuración.
-- [ ] Tarea 2.6: Mantener actualizados `README.md`, `CHANGELOG.md` y la documentación de usuario con instalación, configuración y uso del MVP.
-- [ ] Tarea 2.7: Ejecutar linting (`phpcs`, ESLint) y tests automatizados (PHPUnit) como parte del Definition of Done del MVP.
-- [ ] Tarea 2.7.1: Implementar modo "bajo ancho de banda" (iniciales/SVG) y documentar métricas de performance.
-- [ ] Tarea 2.8: Preparar assets preliminares (capturas y guion de video demo) y validar licencias de recursos utilizados.
-- [ ] Tarea 2.9: Completar la revisión intermedia de `08_CodeCanyon_Checklist.md`, registrando gaps y acciones en `docs/`.
-- [ ] Tarea 2.10: Documentar en `docs/legal/origen-gpl.md` los módulos refactorizados, diffs relevantes y evidencias de cumplimiento GPL.
-- [ ] Tarea 2.11: Entregar asistente de migración desde Gravatar/WP User Avatar con pruebas de regresión.
+- [x] Tarea 2.1: Desarrollar la funcionalidad de subida de imagen en el perfil de usuario.
+- [x] Tarea 2.2: Implementar la lógica para sobreescribir la función `get_avatar()`.
+- [x] Tarea 2.3: Desarrollar el generador de avatares por iniciales.
+- [x] Tarea 2.4: Crear la página de opciones básicas del plugin.
+- [x] Tarea 2.5: Realizar pruebas internas y depuración.
+- [x] Tarea 2.6: Mantener actualizados `README.md`, `CHANGELOG.md` y la documentación de usuario con instalación, configuración y uso del MVP.
+- [x] Tarea 2.7: Ejecutar linting (`phpcs`, ESLint) y tests automatizados (PHPUnit) como parte del Definition of Done del MVP.
+- [x] Tarea 2.7.1: Implementar modo "bajo ancho de banda" (iniciales/SVG) y documentar métricas de performance.
+- [x] Tarea 2.8: Preparar assets preliminares (capturas y guion de video demo) y validar licencias de recursos utilizados.
+- [x] Tarea 2.9: Completar la revisión intermedia de `08_CodeCanyon_Checklist.md`, registrando gaps y acciones en `docs/`.
+- [x] Tarea 2.10: Documentar en `docs/legal/origen-gpl.md` los módulos refactorizados, diffs relevantes y evidencias de cumplimiento GPL.
+- [x] Tarea 2.11: Entregar asistente de migración desde Gravatar/WP User Avatar con pruebas de regresión.
 
 ### Entregables
 
