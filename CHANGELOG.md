@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Pro Features
+- **Avatar Moderation Panel**: Comprehensive moderation system (RF-P03)
+  - Dedicated admin menu page for moderating avatar uploads
+  - Status management: pending, approved, rejected
+  - Bulk actions: approve or reject multiple avatars at once
+  - Individual actions: approve or reject single avatars with one click
+  - Filtering and search: find avatars by user, status, or role
+  - Pagination: handle large moderation queues efficiently
+  - Badge counter: menu badge shows pending avatar count
+  - Previous avatar backup: automatically restore previous avatar on rejection
+  - Smart display: only show approved avatars when moderation is enabled
+- **Moderation History Tracking**:
+  - Complete audit trail of all moderation decisions
+  - Records action, moderator ID, timestamp, and optional comments
+  - Per-user history accessible via API
+  - GDPR-compliant data storage in user meta
+- **Moderation Domain Services**:
+  - `ModerationQueue`: Manages queue retrieval, filtering, and status tracking
+  - `DecisionService`: Processes approve/reject decisions with rollback support
+  - Extensibility hooks: `avatarsteward/avatar_approved`, `avatarsteward/avatar_rejected`
+- **Upload Integration with Moderation**:
+  - Automatic pending status when "Require Approval" is enabled
+  - Previous avatar automatically stored for potential restoration
+  - Seamless integration with existing upload workflow
+- **Avatar Display Integration**:
+  - AvatarHandler respects moderation status
+  - Pending/rejected avatars are never displayed publicly
+  - Approved avatars show immediately after moderation
+
 ### Added - MVP Core Features
 - **Settings Page**: Comprehensive admin settings page at Settings > Avatar Steward
   - WordPress Settings API integration for native admin experience
