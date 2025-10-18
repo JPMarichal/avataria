@@ -11,7 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release of Avatar Steward plugin
 - Local avatar upload functionality
 - Initials-based avatar generator
-- Basic admin settings page
+- Basic admin settings page with WordPress Settings API
+- Settings page accessible at Settings > Avatar Steward
+- Upload restrictions configuration (file size, formats, dimensions)
+- Roles & permissions configuration (allowed roles, approval requirement)
+- Input validation and sanitization for all settings
+- Comprehensive PHPUnit tests for settings page
 - Docker-based development environment
 - Documentation structure aligned with CodeCanyon requirements
 

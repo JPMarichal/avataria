@@ -48,20 +48,20 @@ final class PluginTest extends TestCase {
 	}
 
 	/**
-	 * Test that Plugin has get_avatar_handler method.
+	 * Test that Plugin has a get_settings_page method.
 	 */
-	public function test_plugin_has_get_avatar_handler_method() {
+	public function test_plugin_has_get_settings_page_method() {
 		$instance = Plugin::instance();
-		$this->assertTrue( method_exists( $instance, 'get_avatar_handler' ) );
+		$this->assertTrue( method_exists( $instance, 'get_settings_page' ) );
 	}
 
 	/**
-	 * Test that get_avatar_handler returns AvatarHandler after boot.
+	 * Test that Plugin initializes settings page after boot.
 	 */
-	public function test_get_avatar_handler_returns_avatar_handler_after_boot() {
+	public function test_plugin_initializes_settings_page_after_boot() {
 		$instance = Plugin::instance();
 		$instance->boot();
-		$handler = $instance->get_avatar_handler();
-		$this->assertInstanceOf( \AvatarSteward\Core\AvatarHandler::class, $handler );
+		$settings_page = $instance->get_settings_page();
+		$this->assertInstanceOf( \AvatarSteward\Admin\SettingsPage::class, $settings_page );
 	}
 }

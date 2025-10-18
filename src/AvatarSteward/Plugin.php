@@ -24,11 +24,11 @@ final class Plugin {
 	private static ?self $instance = null;
 
 	/**
-	 * Avatar handler instance.
+	 * Settings page instance.
 	 *
-	 * @var AvatarHandler|null
+	 * @var Admin\SettingsPage|null
 	 */
-	private ?AvatarHandler $avatar_handler = null;
+	private ?Admin\SettingsPage $settings_page = null;
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -58,8 +58,7 @@ final class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
-		$this->avatar_handler = new AvatarHandler();
-		$this->avatar_handler->init();
+		$this->init_settings_page();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -67,11 +66,25 @@ final class Plugin {
 	}
 
 	/**
-	 * Get the avatar handler instance.
+	 * Initialize the settings page.
 	 *
-	 * @return AvatarHandler|null Avatar handler instance.
+	 * @return void
 	 */
-	public function get_avatar_handler(): ?AvatarHandler {
-		return $this->avatar_handler;
+	private function init_settings_page(): void {
+		if ( ! class_exists( Admin\SettingsPage::class ) ) {
+			require_once __DIR__ . '/Admin/SettingsPage.php';
+		}
+
+		$this->settings_page = new Admin\SettingsPage();
+		$this->settings_page->init();
+	}
+
+	/**
+	 * Get the settings page instance.
+	 *
+	 * @return Admin\SettingsPage|null Settings page instance.
+	 */
+	public function get_settings_page(): ?Admin\SettingsPage {
+		return $this->settings_page;
 	}
 }
