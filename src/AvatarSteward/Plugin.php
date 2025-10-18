@@ -49,8 +49,29 @@ final class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
+		// Initialize upload functionality.
+		$this->init_upload_handlers();
+
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
 		}
+	}
+
+	/**
+	 * Initialize upload handlers.
+	 *
+	 * @return void
+	 */
+	private function init_upload_handlers(): void {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$upload_service  = new Domain\Uploads\UploadService();
+		$upload_handler  = new Domain\Uploads\UploadHandler( $upload_service );
+		$fields_renderer = new Domain\Uploads\ProfileFieldsRenderer( $upload_service );
+
+		$upload_handler->register_hooks();
+		$fields_renderer->register_hooks();
 	}
 }
