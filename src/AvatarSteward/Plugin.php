@@ -40,6 +40,13 @@ final class Plugin {
 	private ?Admin\MigrationPage $migration_page = null;
 
 	/**
+	 * Integration service instance.
+	 *
+	 * @var Domain\Integrations\IntegrationService|null
+	 */
+	private ?Domain\Integrations\IntegrationService $integration_service = null;
+
+	/**
 	 * Private constructor to prevent direct instantiation.
 	 */
 	private function __construct() {
@@ -69,6 +76,7 @@ final class Plugin {
 	public function boot(): void {
 		$this->init_settings_page();
 		$this->init_migration_page();
+		$this->init_integration_service();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -124,5 +132,32 @@ final class Plugin {
 	 */
 	public function get_migration_page(): ?Admin\MigrationPage {
 		return $this->migration_page;
+	}
+
+	/**
+	 * Initialize the integration service.
+	 *
+	 * @return void
+	 */
+	private function init_integration_service(): void {
+		if ( ! class_exists( Domain\Integrations\IntegrationService::class ) ) {
+			require_once __DIR__ . '/Domain/Integrations/SocialProviderInterface.php';
+			require_once __DIR__ . '/Domain/Integrations/AbstractSocialProvider.php';
+			require_once __DIR__ . '/Domain/Integrations/TwitterProvider.php';
+			require_once __DIR__ . '/Domain/Integrations/FacebookProvider.php';
+			require_once __DIR__ . '/Domain/Integrations/IntegrationService.php';
+		}
+
+		$this->integration_service = new Domain\Integrations\IntegrationService();
+		$this->integration_service->init();
+	}
+
+	/**
+	 * Get the integration service instance.
+	 *
+	 * @return Domain\Integrations\IntegrationService|null Integration service instance.
+	 */
+	public function get_integration_service(): ?Domain\Integrations\IntegrationService {
+		return $this->integration_service;
 	}
 }
