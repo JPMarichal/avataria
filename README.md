@@ -11,6 +11,33 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Disk Space**: Minimum 50 MB for avatars and assets
 - **Permissions**: Write access to `wp-content/uploads/` for uploading avatars
 
+## Features
+
+### Avatar Upload Management
+- **User Profile Upload**: Users can upload custom avatars directly from their WordPress profile page
+- **Multiple Format Support**: Accepts JPEG, PNG, GIF, and WebP image formats
+- **File Validation**: Comprehensive validation for file type, size, dimensions, and security
+- **WordPress Media Integration**: Uploaded avatars are stored in the WordPress media library
+- **Admin Controls**: Administrators can upload avatars for any user
+- **Easy Removal**: Users can remove their avatar and revert to default at any time
+- **Error Handling**: Clear, user-friendly error messages for invalid uploads
+
+### Security Features
+- MIME type detection to prevent invalid file uploads
+- File size limits (2MB default, configurable)
+- Dimension restrictions (2000x2000px max, configurable)
+- Nonce verification for secure form submissions
+- Permission checks to ensure users can only edit their own profiles
+
+## System Requirements
+
+- **WordPress**: Version 5.8 or higher
+- **PHP**: Version 7.4 or higher
+- **Web Server**: Apache or Nginx with PHP support
+- **Database**: MySQL 5.6+ or MariaDB 10.0+
+- **Disk Space**: Minimum 50 MB for avatars and assets
+- **Permissions**: Write access to `wp-content/uploads/` for uploading avatars
+
 ## Installation
 
 ### Option 1: Manual Installation
@@ -128,8 +155,27 @@ After activating the plugin:
 ## Basic Usage
 
 ### Avatar Upload
-- Users can upload avatars from their profile (Users > Your Profile).
-- Administrators can moderate avatars in **Avatar Steward > Moderation**.
+
+Users can upload custom avatar images from their WordPress profile page:
+
+1. Navigate to **Users > Your Profile** (or **Users > All Users > Edit** for administrators editing other users).
+2. Scroll to the **Avatar** section.
+3. Click **Choose File** and select an image from your device.
+4. Click **Update Profile** to save changes.
+
+**Supported formats:** JPEG, PNG, GIF, WebP  
+**Maximum file size:** 2 MB (configurable)  
+**Maximum dimensions:** 2000x2000 pixels (configurable)
+
+The uploaded avatar is stored in the WordPress media library and can be removed at any time by checking the "Remove current avatar" option.
+
+**File Validation:**
+- File type validation using MIME type detection
+- File size validation to prevent large uploads
+- Image dimension validation
+- Security checks to prevent malicious files
+
+If an invalid file is uploaded, a clear error message will be displayed explaining the issue.
 
 ### Initials Generator
 - If no avatar is uploaded, the plugin automatically generates an avatar with the user's initials.
