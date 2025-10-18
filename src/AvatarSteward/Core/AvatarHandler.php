@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace AvatarSteward\Core;
 
+use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
+
 /**
  * AvatarHandler class for managing avatar display.
  */
@@ -23,6 +25,23 @@ class AvatarHandler {
 	 * @var string
 	 */
 	private const META_KEY = 'avatar_steward_avatar';
+
+	/**
+	 * Bandwidth optimizer instance.
+	 *
+	 * @var BandwidthOptimizer|null
+	 */
+	private ?BandwidthOptimizer $optimizer = null;
+
+	/**
+	 * Set the bandwidth optimizer.
+	 *
+	 * @param BandwidthOptimizer $optimizer Bandwidth optimizer instance.
+	 * @return void
+	 */
+	public function set_optimizer( BandwidthOptimizer $optimizer ): void {
+		$this->optimizer = $optimizer;
+	}
 
 	/**
 	 * Initialize the avatar handler.
@@ -131,6 +150,8 @@ class AvatarHandler {
 	 *
 	 * Retrieves the URL of the locally uploaded avatar for a user,
 	 * or returns null if no local avatar exists.
+	 * If low-bandwidth mode is enabled and the avatar exceeds threshold,
+	 * returns an SVG data URI instead.
 	 *
 	 * @param int $user_id User ID.
 	 * @param int $size    Requested avatar size in pixels.
@@ -145,6 +166,11 @@ class AvatarHandler {
 
 		if ( ! $avatar_id ) {
 			return null;
+		}
+
+		// Check if low-bandwidth mode should be used.
+		if ( $this->optimizer && $this->optimizer->is_enabled() && $this->optimizer->exceeds_threshold( (int) $avatar_id ) ) {
+			return $this->optimizer->generate_svg_avatar( $user_id, $size );
 		}
 
 		// Get the appropriate image size.

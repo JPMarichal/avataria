@@ -137,6 +137,32 @@ class SettingsPage {
 			'avatar_steward_upload_restrictions'
 		);
 
+		// Performance Optimization Section.
+		add_settings_section(
+			'avatar_steward_performance',
+			__( 'Performance Optimization', 'avatar-steward' ),
+			array( $this, 'render_performance_section' ),
+			'avatar-steward'
+		);
+
+		// Low bandwidth mode field.
+		add_settings_field(
+			'low_bandwidth_mode',
+			__( 'Low Bandwidth Mode', 'avatar-steward' ),
+			array( $this, 'render_low_bandwidth_mode_field' ),
+			'avatar-steward',
+			'avatar_steward_performance'
+		);
+
+		// Bandwidth threshold field.
+		add_settings_field(
+			'bandwidth_threshold',
+			__( 'File Size Threshold (KB)', 'avatar-steward' ),
+			array( $this, 'render_bandwidth_threshold_field' ),
+			'avatar-steward',
+			'avatar_steward_performance'
+		);
+
 		// Roles & Permissions Section.
 		add_settings_section(
 			'avatar_steward_roles_permissions',
@@ -320,6 +346,59 @@ class SettingsPage {
 	}
 
 	/**
+	 * Render performance optimization section description.
+	 *
+	 * @return void
+	 */
+	public function render_performance_section(): void {
+		echo '<p>' . esc_html__( 'Optimize avatar delivery for slow connections by automatically using SVG avatars when images exceed a size threshold.', 'avatar-steward' ) . '</p>';
+	}
+
+	/**
+	 * Render low bandwidth mode field.
+	 *
+	 * @return void
+	 */
+	public function render_low_bandwidth_mode_field(): void {
+		$options = $this->get_settings();
+		$checked = ! empty( $options['low_bandwidth_mode'] ) ? 'checked' : '';
+		?>
+		<label>
+			<input type="checkbox" 
+					name="<?php echo esc_attr( self::OPTION_NAME . '[low_bandwidth_mode]' ); ?>" 
+					value="1" 
+					<?php echo esc_attr( $checked ); ?> />
+			<?php esc_html_e( 'Use SVG avatars when images exceed threshold', 'avatar-steward' ); ?>
+		</label>
+		<p class="description">
+			<?php esc_html_e( 'When enabled, SVG avatars with user initials are served instead of large image files, reducing bandwidth usage.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render bandwidth threshold field.
+	 *
+	 * @return void
+	 */
+	public function render_bandwidth_threshold_field(): void {
+		$options = $this->get_settings();
+		$value   = isset( $options['bandwidth_threshold'] ) ? $options['bandwidth_threshold'] : 100;
+		?>
+		<input type="number" 
+				name="<?php echo esc_attr( self::OPTION_NAME . '[bandwidth_threshold]' ); ?>" 
+				value="<?php echo esc_attr( $value ); ?>" 
+				min="10" 
+				max="5000" 
+				step="10" 
+				class="small-text" />
+		<p class="description">
+			<?php esc_html_e( 'Avatar files larger than this threshold (in kilobytes) will be replaced with SVG versions. Default: 100 KB.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
 	 * Render roles & permissions section description.
 	 *
 	 * @return void
@@ -406,13 +485,15 @@ class SettingsPage {
 	 */
 	public function get_default_settings(): array {
 		return array(
-			'max_file_size'    => 2.0,
-			'allowed_formats'  => array( 'image/jpeg', 'image/png' ),
-			'max_width'        => 2048,
-			'max_height'       => 2048,
-			'convert_to_webp'  => false,
-			'allowed_roles'    => array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ),
-			'require_approval' => false,
+			'max_file_size'       => 2.0,
+			'allowed_formats'     => array( 'image/jpeg', 'image/png' ),
+			'max_width'           => 2048,
+			'max_height'          => 2048,
+			'convert_to_webp'     => false,
+			'low_bandwidth_mode'  => false,
+			'bandwidth_threshold' => 100,
+			'allowed_roles'       => array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ),
+			'require_approval'    => false,
 		);
 	}
 
@@ -453,6 +534,15 @@ class SettingsPage {
 
 		// Sanitize convert to WebP.
 		$sanitized['convert_to_webp'] = ! empty( $input['convert_to_webp'] );
+
+		// Sanitize low bandwidth mode.
+		$sanitized['low_bandwidth_mode'] = ! empty( $input['low_bandwidth_mode'] );
+
+		// Sanitize bandwidth threshold.
+		if ( isset( $input['bandwidth_threshold'] ) ) {
+			$sanitized['bandwidth_threshold'] = intval( $input['bandwidth_threshold'] );
+			$sanitized['bandwidth_threshold'] = max( 10, min( 5000, $sanitized['bandwidth_threshold'] ) );
+		}
 
 		// Sanitize allowed roles.
 		if ( isset( $input['allowed_roles'] ) && is_array( $input['allowed_roles'] ) ) {
