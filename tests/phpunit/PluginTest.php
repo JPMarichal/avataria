@@ -46,4 +46,22 @@ final class PluginTest extends TestCase {
 		$instance = Plugin::instance();
 		$this->assertTrue( method_exists( $instance, 'boot' ) );
 	}
+
+	/**
+	 * Test that Plugin has a get_settings_page method.
+	 */
+	public function test_plugin_has_get_settings_page_method() {
+		$instance = Plugin::instance();
+		$this->assertTrue( method_exists( $instance, 'get_settings_page' ) );
+	}
+
+	/**
+	 * Test that Plugin initializes settings page after boot.
+	 */
+	public function test_plugin_initializes_settings_page_after_boot() {
+		$instance = Plugin::instance();
+		$instance->boot();
+		$settings_page = $instance->get_settings_page();
+		$this->assertInstanceOf( \AvatarSteward\Admin\SettingsPage::class, $settings_page );
+	}
 }

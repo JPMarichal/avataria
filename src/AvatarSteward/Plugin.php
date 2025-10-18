@@ -22,6 +22,13 @@ final class Plugin {
 	private static ?self $instance = null;
 
 	/**
+	 * Settings page instance.
+	 *
+	 * @var Admin\SettingsPage|null
+	 */
+	private ?Admin\SettingsPage $settings_page = null;
+
+	/**
 	 * Private constructor to prevent direct instantiation.
 	 */
 	private function __construct() {
@@ -49,8 +56,33 @@ final class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
+		$this->init_settings_page();
+
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
 		}
+	}
+
+	/**
+	 * Initialize the settings page.
+	 *
+	 * @return void
+	 */
+	private function init_settings_page(): void {
+		if ( ! class_exists( Admin\SettingsPage::class ) ) {
+			require_once __DIR__ . '/Admin/SettingsPage.php';
+		}
+
+		$this->settings_page = new Admin\SettingsPage();
+		$this->settings_page->init();
+	}
+
+	/**
+	 * Get the settings page instance.
+	 *
+	 * @return Admin\SettingsPage|null Settings page instance.
+	 */
+	public function get_settings_page(): ?Admin\SettingsPage {
+		return $this->settings_page;
 	}
 }
