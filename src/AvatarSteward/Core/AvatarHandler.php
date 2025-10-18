@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace AvatarSteward\Core;
 
 use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
+use AvatarSteward\Domain\Moderation\ModerationQueue;
 
 /**
  * AvatarHandler class for managing avatar display.
@@ -34,6 +35,13 @@ class AvatarHandler {
 	private ?BandwidthOptimizer $optimizer = null;
 
 	/**
+	 * Moderation queue instance.
+	 *
+	 * @var ModerationQueue|null
+	 */
+	private ?ModerationQueue $moderation_queue = null;
+
+	/**
 	 * Set the bandwidth optimizer.
 	 *
 	 * @param BandwidthOptimizer $optimizer Bandwidth optimizer instance.
@@ -41,6 +49,16 @@ class AvatarHandler {
 	 */
 	public function set_optimizer( BandwidthOptimizer $optimizer ): void {
 		$this->optimizer = $optimizer;
+	}
+
+	/**
+	 * Set the moderation queue.
+	 *
+	 * @param ModerationQueue $moderation_queue Moderation queue instance.
+	 * @return void
+	 */
+	public function set_moderation_queue( ModerationQueue $moderation_queue ): void {
+		$this->moderation_queue = $moderation_queue;
 	}
 
 	/**
@@ -166,6 +184,14 @@ class AvatarHandler {
 
 		if ( ! $avatar_id ) {
 			return null;
+		}
+
+		// Check moderation status - only show approved avatars.
+		if ( $this->moderation_queue ) {
+			$status = $this->moderation_queue->get_status( $user_id );
+			if ( ModerationQueue::STATUS_PENDING === $status || ModerationQueue::STATUS_REJECTED === $status ) {
+				return null;
+			}
 		}
 
 		// Check if low-bandwidth mode should be used.
