@@ -7,24 +7,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- Initial release of Avatar Steward plugin
-- Local avatar upload functionality
-- Initials-based avatar generator
-- Basic admin settings page with WordPress Settings API
-- Settings page accessible at Settings > Avatar Steward
-- Upload restrictions configuration (file size, formats, dimensions)
-- Roles & permissions configuration (allowed roles, approval requirement)
-- Input validation and sanitization for all settings
-- Comprehensive PHPUnit tests for settings page
-- Docker-based development environment
-- Documentation structure aligned with CodeCanyon requirements
+### Added - MVP Core Features
+- **Settings Page**: Comprehensive admin settings page at Settings > Avatar Steward
+  - WordPress Settings API integration for native admin experience
+  - Contextual help and documentation links
+  - Settings validation and sanitization
+- **Upload Restrictions Configuration**:
+  - Max file size setting (0.1 - 10 MB, default: 2 MB)
+  - Allowed formats selection (JPEG, PNG, GIF, WebP)
+  - Max dimensions configuration (100 - 5000px, default: 2048px)
+  - Optional WebP conversion toggle
+- **Roles & Permissions Configuration**:
+  - Multi-role selection for upload permissions
+  - Moderation queue toggle (require approval)
+  - Capability-based access controls
+- **Development Environment**:
+  - Docker Compose configuration for local development
+  - WordPress 6.8.3 with PHP 8.1
+  - MySQL 8.0 database
+  - phpMyAdmin for database management
+  - Hot-reload plugin mounting
+- **Testing Infrastructure**:
+  - PHPUnit test suite with 24+ tests
+  - Comprehensive unit tests for settings validation
+  - Integration test structure
+  - Code coverage reporting
+- **Quality Assurance Tools**:
+  - PHP_CodeSniffer with WordPress Coding Standards
+  - ESLint configuration for JavaScript
+  - Automated linting via composer scripts
+  - Pre-commit validation guidelines
+- **Documentation Structure**:
+  - User manual with installation and usage guides
+  - FAQ section for common questions
+  - Developer documentation for API usage
+  - Security reports and compliance tracking
+  - Legal documentation for GPL compliance
 
-### Changed
-- Refactored from Simple Local Avatars codebase with GPL compliance
+### Changed - From Simple Local Avatars
+- Refactored namespace from `Simple_Local_Avatars` to `AvatarSteward\`
+- Modernized codebase with PHP 7.4+ features (typed properties, return types)
+- Replaced legacy options structure with WordPress Settings API
+- Enhanced validation and sanitization for security
+- Improved code organization with domain-driven structure
 
 ### Fixed
-- Namespace isolation to avoid conflicts with original plugin
+- Namespace isolation to prevent conflicts with Simple Local Avatars
+- Input validation edge cases in settings sanitization
+- Role validation against current WordPress roles
+
+### Security
+- MIME type validation for all uploaded files
+- Nonce verification for form submissions
+- Capability checks for admin functions
+- Input sanitization using WordPress functions
+- Output escaping for all user-displayed content
 
 ## [0.1.0] - 2025-10-17
 
