@@ -336,3 +336,189 @@ if ( ! function_exists( 'number_format_i18n' ) ) {
 		return number_format( $number, $decimals );
 	}
 }
+
+if ( ! function_exists( 'get_option' ) ) {
+	/**
+	 * Mock get_option function.
+	 *
+	 * @param string $option  Option name.
+	 * @param mixed  $default Default value.
+	 * @return mixed Option value.
+	 */
+	function get_option( $option, $default = false ) {
+		return $default;
+	}
+}
+
+if ( ! function_exists( 'update_option' ) ) {
+	/**
+	 * Mock update_option function.
+	 *
+	 * @param string $option Option name.
+	 * @param mixed  $value  Option value.
+	 * @return bool True on success.
+	 */
+	function update_option( $option, $value ) {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_create_nonce' ) ) {
+	/**
+	 * Mock wp_create_nonce function.
+	 *
+	 * @param string $action Action name.
+	 * @return string Nonce value.
+	 */
+	function wp_create_nonce( $action = '' ) {
+		return 'test-nonce-' . md5( $action );
+	}
+}
+
+if ( ! function_exists( 'wp_generate_password' ) ) {
+	/**
+	 * Mock wp_generate_password function.
+	 *
+	 * @param int  $length              Password length.
+	 * @param bool $special_chars       Include special characters.
+	 * @param bool $extra_special_chars Include extra special characters.
+	 * @return string Generated password.
+	 */
+	function wp_generate_password( $length = 12, $special_chars = true, $extra_special_chars = false ) {
+		return str_repeat( 'a', $length );
+	}
+}
+
+if ( ! function_exists( 'admin_url' ) ) {
+	/**
+	 * Mock admin_url function.
+	 *
+	 * @param string $path   Path relative to admin URL.
+	 * @param string $scheme URL scheme.
+	 * @return string Admin URL.
+	 */
+	function admin_url( $path = '', $scheme = 'admin' ) {
+		return 'https://example.com/wp-admin/' . ltrim( $path, '/' );
+	}
+}
+
+if ( ! function_exists( 'wp_remote_request' ) ) {
+	/**
+	 * Mock wp_remote_request function.
+	 *
+	 * @param string $url  Request URL.
+	 * @param array  $args Request arguments.
+	 * @return array|WP_Error Response array or WP_Error on failure.
+	 */
+	function wp_remote_request( $url, $args = array() ) {
+		return array(
+			'response' => array( 'code' => 200 ),
+			'body'     => '{}',
+		);
+	}
+}
+
+if ( ! function_exists( 'wp_remote_retrieve_response_code' ) ) {
+	/**
+	 * Mock wp_remote_retrieve_response_code function.
+	 *
+	 * @param array|WP_Error $response Response array.
+	 * @return int Response code.
+	 */
+	function wp_remote_retrieve_response_code( $response ) {
+		return $response['response']['code'] ?? 200;
+	}
+}
+
+if ( ! function_exists( 'wp_remote_retrieve_body' ) ) {
+	/**
+	 * Mock wp_remote_retrieve_body function.
+	 *
+	 * @param array|WP_Error $response Response array.
+	 * @return string Response body.
+	 */
+	function wp_remote_retrieve_body( $response ) {
+		return $response['body'] ?? '';
+	}
+}
+
+if ( ! function_exists( 'is_wp_error' ) ) {
+	/**
+	 * Mock is_wp_error function.
+	 *
+	 * @param mixed $thing Variable to check.
+	 * @return bool False for testing.
+	 */
+	function is_wp_error( $thing ) {
+		return false;
+	}
+}
+
+if ( ! function_exists( 'add_query_arg' ) ) {
+	/**
+	 * Mock add_query_arg function.
+	 *
+	 * @param array|string $args Query arguments.
+	 * @param string|null  $url  URL to add arguments to.
+	 * @return string Modified URL.
+	 */
+	function add_query_arg( $args, $url = null ) {
+		if ( is_null( $url ) ) {
+			$url = '';
+		}
+		$separator = strpos( $url, '?' ) === false ? '?' : '&';
+		return $url . $separator . http_build_query( $args );
+	}
+}
+
+if ( ! function_exists( 'wp_safe_redirect' ) ) {
+	/**
+	 * Mock wp_safe_redirect function.
+	 *
+	 * @param string $location Redirect location.
+	 * @param int    $status   HTTP status code.
+	 * @return bool True on success.
+	 */
+	function wp_safe_redirect( $location, $status = 302 ) {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_die' ) ) {
+	/**
+	 * Mock wp_die function.
+	 *
+	 * @param string $message Error message.
+	 * @param string $title   Error title.
+	 * @param array  $args    Additional arguments.
+	 */
+	function wp_die( $message = '', $title = '', $args = array() ) {
+		// Mock implementation for testing.
+	}
+}
+
+if ( ! function_exists( 'wp_parse_args' ) ) {
+	/**
+	 * Mock wp_parse_args function.
+	 *
+	 * @param array $args     Arguments to parse.
+	 * @param array $defaults Default arguments.
+	 * @return array Merged arguments.
+	 */
+	function wp_parse_args( $args, $defaults = array() ) {
+		return array_merge( $defaults, $args );
+	}
+}
+
+if ( ! function_exists( 'wp_kses_post' ) ) {
+	/**
+	 * Mock wp_kses_post function.
+	 *
+	 * @param string $data Data to sanitize.
+	 * @return string Sanitized data.
+	 */
+	function wp_kses_post( $data ) {
+		return strip_tags( $data, '<a><b><i><strong><em><p><br>' );
+	}
+}
+
