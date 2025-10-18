@@ -49,6 +49,17 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Safe Migration**: Skip users who already have avatars, no data loss
 - **Statistics Dashboard**: View migration status and available avatars
 
+### Social Media Integrations (Pro Feature)
+- **Twitter / X Integration**: Users can import their Twitter profile picture as their avatar
+- **Facebook Integration**: Users can import their Facebook profile picture as their avatar
+- **OAuth 2.0 Security**: Secure authentication with industry-standard OAuth protocols
+- **PKCE Support**: Enhanced security for Twitter integration using Proof Key for Code Exchange
+- **Easy Connect/Disconnect**: Simple one-click connection and disconnection of social accounts
+- **Privacy First**: Tokens stored securely, no automatic syncing, user controls all imports
+- **Extensible Architecture**: Strategy Pattern allows easy addition of new social providers
+
+For detailed setup instructions, see the [Social Integrations Setup Guide](docs/social-integrations.md).
+
 ## System Requirements
 
 - **WordPress**: Version 5.8 or higher
@@ -254,8 +265,33 @@ After activating the plugin, configure Avatar Steward to match your site's requi
 4. Configure roles & permissions:
    - **Allowed Roles**: Select which user roles can upload avatars
    - **Require Approval**: Enable moderation queue for new avatar uploads
-5. For Pro version: Enter your license key in the "License" tab.
-6. Optional: Configure social integrations in the "Social" tab.
+5. Configure social integrations (Pro version):
+   - **Twitter Client ID & Secret**: Enter credentials from Twitter Developer Portal
+   - **Facebook App ID & Secret**: Enter credentials from Facebook for Developers
+   - See [Social Integrations Setup Guide](docs/social-integrations.md) for detailed instructions
+6. For Pro version: Enter your license key in the "License" tab.
+
+## Using Social Media Integrations
+
+Users can import their profile pictures from connected social media accounts:
+
+### For Users
+
+1. Go to your **Profile** page in WordPress admin
+2. Scroll to the **Social Avatar Import** section
+3. Click **Connect** next to Twitter or Facebook
+4. Authorize the connection on the social platform
+5. Once connected, click **Import Avatar** to use your social profile picture
+6. You can disconnect at any time using the **Disconnect** button
+
+### For Administrators
+
+1. Configure API credentials in **Settings > Avatar Steward > Social Integrations**
+2. Create apps on [Twitter Developer Portal](https://developer.twitter.com/) and [Facebook for Developers](https://developers.facebook.com/)
+3. Enter your Client ID/Secret and App ID/Secret in the settings
+4. Ensure callback URLs match your site's profile URL
+
+For complete setup instructions, see the [Social Integrations Setup Guide](docs/social-integrations.md).
 
 ## Migrating from Other Plugins
 
@@ -419,7 +455,28 @@ add_filter('avatarsteward_sanitize_settings', function($settings) {
 add_action('avatarsteward_booted', function() {
     // Run code after plugin initialization
 });
+
+// Social integrations hooks
+add_action('avatarsteward_social_connected', function($user_id, $provider_name) {
+    // Fired when user connects a social account
+}, 10, 2);
+
+add_action('avatarsteward_avatar_imported', function($user_id, $provider, $attachment_id) {
+    // Fired when avatar is imported from social platform
+}, 10, 3);
+
+// Register custom social providers
+add_action('avatarsteward_register_providers', function($integration_service) {
+    $integration_service->register_provider(new CustomProvider());
+});
 ```
+
+## Additional Documentation
+
+- **[Social Integrations Setup Guide](docs/social-integrations.md)** - Complete guide for setting up Twitter and Facebook integrations
+- **[Social Integrations API](docs/api/integrations.md)** - Developer documentation for extending social integrations
+- **[Migration Guide](docs/migracion/migration-guide.md)** - Guide for migrating from other avatar plugins
+- **[Performance Documentation](docs/performance.md)** - Performance metrics and optimization details
 
 ## Support
 
