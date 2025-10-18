@@ -234,7 +234,20 @@ Before committing code, ensure:
 
 After activating the plugin, configure Avatar Steward to match your site's requirements:
 
-### Accessing Settings
+1. Go to **Settings > Avatar Steward** in the admin panel.
+2. Configure upload restrictions:
+   - **Max File Size**: Set the maximum file size for avatar uploads (0.1 - 10 MB, default: 2 MB)
+   - **Allowed Formats**: Select which image formats are allowed (JPEG, PNG, GIF, WebP)
+   - **Max Dimensions**: Set maximum width and height for avatars (100 - 5000px, default: 2048px)
+   - **Convert to WebP**: Enable automatic conversion to WebP format for better compression
+3. Configure performance optimization:
+   - **Low Bandwidth Mode**: Automatically use SVG avatars when images exceed size threshold
+   - **File Size Threshold**: Set the threshold in KB (default: 100 KB) for switching to SVG
+4. Configure roles & permissions:
+   - **Allowed Roles**: Select which user roles can upload avatars
+   - **Require Approval**: Enable moderation queue for new avatar uploads
+5. For Pro version: Enter your license key in the "License" tab.
+6. Optional: Configure social integrations in the "Social" tab.
 
 1. In WordPress admin, go to **Settings > Avatar Steward**
 2. The settings page has two main sections: **Upload Restrictions** and **Roles & Permissions**
@@ -361,15 +374,16 @@ $settings = $settings_page->get_settings();
 
 Access individual settings:
 
-```php
-$max_file_size = $settings['max_file_size'];      // float (MB)
-$allowed_formats = $settings['allowed_formats'];   // array of MIME types
-$max_width = $settings['max_width'];               // int (pixels)
-$max_height = $settings['max_height'];             // int (pixels)
-$convert_to_webp = $settings['convert_to_webp'];   // bool
-$allowed_roles = $settings['allowed_roles'];       // array of role slugs
-$require_approval = $settings['require_approval']; // bool
-```
+### Low-Bandwidth Mode
+- Automatically serves lightweight SVG avatars when images exceed a size threshold.
+- Reduces bandwidth usage by up to 99% for large avatar images.
+- Configurable threshold (default: 100 KB).
+- Overhead < 1ms per avatar, well under 50ms requirement.
+- See `docs/performance.md` for detailed metrics and benchmarks.
+
+### Avatar Library (Pro Version)
+- Access a curated collection of pre-designed avatars.
+- Assign default avatars to new users.
 
 #### Default Values
 
