@@ -50,6 +50,41 @@ The following packages are used during development but are **not included** in t
   - License: Public Domain / CC0 / GPL v2
   - Sources will be documented here when added.
 
+### Marketing Assets
+
+Marketing materials including screenshots, demo videos, and promotional images are located in the `assets/` directory.
+
+#### Screenshots (`assets/screenshots/`)
+- **Plugin Interface Screenshots**: Original work, captured from WordPress admin
+  - License: GPL v2 (part of the documentation)
+  - Created specifically for Avatar Steward
+  - No third-party content included
+
+- **Avatar Test Images**: When screenshots include sample avatars, only CC0/Public Domain images are used
+  - Sources:
+    - Unsplash (https://unsplash.com/) - CC0 License
+    - UI Faces (https://www.uifaces.co/) - Free for mockups
+    - This Person Does Not Exist (https://thispersondoesnotexist.com/) - AI-generated, no copyright
+  - Specific images used will be documented below as they are added
+
+#### Demo Video (`assets/demo-script.md`)
+- **Script**: Original content, GPL v2
+- **Video Content** (when produced):
+  - Interface recordings: GPL v2
+  - Background music: Must be royalty-free or CC0
+  - Voiceover: Original work, GPL v2
+  - Any stock footage: Must be CC0 or properly licensed
+
+#### Stock Photos Used in Screenshots
+
+When screenshots are captured, any stock photos used will be documented here:
+
+| Screenshot File | Avatar/Image Used | Source | License | URL |
+|-----------------|-------------------|--------|---------|-----|
+| (pending) | (pending) | (pending) | CC0 | (pending) |
+
+**Note:** This table will be updated as screenshots are captured during the MVP testing phase.
+
 ## WordPress Core Integration
 
 Avatar Steward integrates with WordPress core APIs and follows WordPress Coding Standards. WordPress itself is licensed under GPL v2 or later.
@@ -88,6 +123,40 @@ Before each release:
 
 ---
 
-**Last Updated**: October 17, 2025  
+## Marketing Asset Validation
+
+For CodeCanyon submission, all marketing assets have been reviewed:
+
+### Screenshots
+- ✅ Structure defined in `assets/screenshots/README.md`
+- ⏳ Actual screenshots to be captured during MVP testing phase
+- ✅ Placeholder files created documenting requirements
+- ✅ License compliance guidelines established
+
+### Demo Video
+- ✅ Comprehensive script created (`assets/demo-script.md`)
+- ✅ Technical specifications documented
+- ⏳ Video production pending
+- ✅ License compliance for music/footage planned
+
+### Asset Optimization
+- ✅ Optimization guidelines documented
+- ✅ Target file sizes specified (< 500 KB per screenshot)
+- ✅ Recommended tools listed
+- ✅ Quality standards defined
+
+### License Compliance Checklist
+- [x] All development dependencies documented
+- [x] Production dependencies verified (none)
+- [x] Asset sources identified (CC0/Public Domain)
+- [x] Attribution requirements documented
+- [x] GPL compatibility confirmed
+- [x] Marketing asset structure established
+- [ ] Stock photos documented (pending screenshot capture)
+- [ ] Demo video assets documented (pending production)
+
+---
+
+**Last Updated**: October 18, 2025  
 **Reviewed By**: Development Team  
-**Next Review**: Before each major release
+**Next Review**: Before each major release and before MVP submission

@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace AvatarSteward;
 
 use AvatarSteward\Core\AvatarHandler;
+use AvatarSteward\Domain\Initials\Generator;
+use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
 
 /**
  * Plugin singleton class.
