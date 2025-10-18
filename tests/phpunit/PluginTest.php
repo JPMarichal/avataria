@@ -46,4 +46,22 @@ final class PluginTest extends TestCase {
 		$instance = Plugin::instance();
 		$this->assertTrue( method_exists( $instance, 'boot' ) );
 	}
+
+	/**
+	 * Test that Plugin has get_avatar_handler method.
+	 */
+	public function test_plugin_has_get_avatar_handler_method() {
+		$instance = Plugin::instance();
+		$this->assertTrue( method_exists( $instance, 'get_avatar_handler' ) );
+	}
+
+	/**
+	 * Test that get_avatar_handler returns AvatarHandler after boot.
+	 */
+	public function test_get_avatar_handler_returns_avatar_handler_after_boot() {
+		$instance = Plugin::instance();
+		$instance->boot();
+		$handler = $instance->get_avatar_handler();
+		$this->assertInstanceOf( \AvatarSteward\Core\AvatarHandler::class, $handler );
+	}
 }

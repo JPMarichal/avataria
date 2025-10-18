@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace AvatarSteward;
 
+use AvatarSteward\Core\AvatarHandler;
+
 /**
  * Plugin singleton class.
  */
@@ -20,6 +22,13 @@ final class Plugin {
 	 * @var self|null
 	 */
 	private static ?self $instance = null;
+
+	/**
+	 * Avatar handler instance.
+	 *
+	 * @var AvatarHandler|null
+	 */
+	private ?AvatarHandler $avatar_handler = null;
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -49,8 +58,8 @@ final class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
-		// Initialize upload functionality.
-		$this->init_upload_handlers();
+		$this->avatar_handler = new AvatarHandler();
+		$this->avatar_handler->init();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -58,20 +67,11 @@ final class Plugin {
 	}
 
 	/**
-	 * Initialize upload handlers.
+	 * Get the avatar handler instance.
 	 *
-	 * @return void
+	 * @return AvatarHandler|null Avatar handler instance.
 	 */
-	private function init_upload_handlers(): void {
-		if ( ! is_admin() ) {
-			return;
-		}
-
-		$upload_service  = new Domain\Uploads\UploadService();
-		$upload_handler  = new Domain\Uploads\UploadHandler( $upload_service );
-		$fields_renderer = new Domain\Uploads\ProfileFieldsRenderer( $upload_service );
-
-		$upload_handler->register_hooks();
-		$fields_renderer->register_hooks();
+	public function get_avatar_handler(): ?AvatarHandler {
+		return $this->avatar_handler;
 	}
 }
