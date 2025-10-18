@@ -118,18 +118,35 @@ Before committing code, ensure:
 After activating the plugin:
 
 1. Go to **Settings > Avatar Steward** in the admin panel.
-2. Configure basic options:
-   - Maximum avatar size (default: 512x512 px)
-   - Allowed formats (JPG, PNG, GIF)
-   - Restrictions by user role
-3. For Pro version: Enter your license key in the "License" tab.
-4. Optional: Configure social integrations in the "Social" tab.
+2. Configure upload restrictions:
+   - **Max File Size**: Set the maximum file size for avatar uploads (0.1 - 10 MB, default: 2 MB)
+   - **Allowed Formats**: Select which image formats are allowed (JPEG, PNG, GIF, WebP)
+   - **Max Dimensions**: Set maximum width and height for avatars (100 - 5000px, default: 2048px)
+   - **Convert to WebP**: Enable automatic conversion to WebP format for better compression
+3. Configure roles & permissions:
+   - **Allowed Roles**: Select which user roles can upload avatars
+   - **Require Approval**: Enable moderation queue for new avatar uploads
+4. For Pro version: Enter your license key in the "License" tab.
+5. Optional: Configure social integrations in the "Social" tab.
 
 ## Basic Usage
 
 ### Avatar Upload
 - Users can upload avatars from their profile (Users > Your Profile).
+- File size and format restrictions are enforced based on settings.
 - Administrators can moderate avatars in **Avatar Steward > Moderation**.
+
+### Settings API
+- Settings are stored using WordPress Options API
+- All inputs are validated and sanitized before saving
+- Default values are provided for all settings
+- Settings can be retrieved programmatically:
+
+```php
+$settings_page = \AvatarSteward\Plugin::instance()->get_settings_page();
+$settings = $settings_page->get_settings();
+$max_file_size = $settings['max_file_size']; // 2.0 MB
+```
 
 ### Initials Generator
 - If no avatar is uploaded, the plugin automatically generates an avatar with the user's initials.
