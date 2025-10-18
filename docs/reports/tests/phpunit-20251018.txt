@@ -1,0 +1,41 @@
+===============================================
+PHPUnit Test Report
+===============================================
+
+Date: 2025-10-18 04:52:12
+Branch: copilot/execute-linting-tests
+PHP Version: PHP 8.3.6 (cli) (built: Jul 14 2025 18:30:55) (NTS)
+PHPUnit Version: PHPUnit 9.6.29 by Sebastian Bergmann and contributors.
+
+===============================================
+Configuration
+===============================================
+Test Directory: tests/phpunit/
+Bootstrap: tests/phpunit/bootstrap.php
+Config: phpunit.xml.dist
+
+===============================================
+Test Execution
+===============================================
+
+PHPUnit 9.6.29 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.3.6
+Configuration: /home/runner/work/avataria/avataria/phpunit.xml.dist
+Warning:       XDEBUG_MODE=coverage (environment variable) or xdebug.mode=coverage (PHP configuration setting) has to be set
+
+...............................................................  63 / 107 ( 58%)
+............................................                    107 / 107 (100%)
+
+Time: 00:00.094, Memory: 6.00 MB
+
+OK (107 tests, 184 assertions)
+
+===============================================
+Summary
+===============================================
+Status: ✓ ALL TESTS PASSED
+Tests Run: 107
+Assertions: 184
+
+Report generated: 2025-10-18 04:52:12

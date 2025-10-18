@@ -143,8 +143,8 @@ class Generator {
 		// Split by whitespace.
 		$parts = preg_split( '/\s+/u', $name );
 
-		// Filter out empty parts.
-		$parts = array_filter( $parts );
+		// Filter out empty parts and re-index array.
+		$parts = array_values( array_filter( $parts ) );
 
 		if ( empty( $parts ) ) {
 			return '?';
