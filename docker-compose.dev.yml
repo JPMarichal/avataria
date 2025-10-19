@@ -15,6 +15,10 @@ services:
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
     volumes:
       - ./src:/var/www/html/wp-content/plugins/avatar-steward
+      - ./wp-content:/var/www/html/wp-content
+      - ./wp-config.php:/var/www/html/wp-config.php:ro
+      # Optional: expose Apache/PHP logs directory to host for realtime inspection
+      - ./docker_logs:/var/log/apache2
       - wordpress_data:/var/www/html
     depends_on:
       - db
