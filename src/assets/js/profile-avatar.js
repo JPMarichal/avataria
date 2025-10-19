@@ -81,6 +81,37 @@
 		console.log('Avatar Steward JS: Initializing...');
 		try {
 			repositionAvatarSection();
+			
+			// Add form submission debug
+			const form = document.querySelector('form#your-profile');
+			if (form) {
+				console.log('Avatar Steward: Profile form found, adding submit listener');
+				
+				form.addEventListener('submit', function(e) {
+					console.log('🚀 Avatar Steward: Form submission detected!');
+					
+					const fileInput = document.querySelector('input[name="avatar_steward_file"]');
+					const nonceInput = document.querySelector('input[name="avatar_steward_nonce"]');
+					
+					console.log('📁 File input found:', !!fileInput);
+					console.log('🔐 Nonce input found:', !!nonceInput);
+					
+					if (fileInput) {
+						console.log('📄 File selected:', fileInput.files.length > 0);
+						if (fileInput.files.length > 0) {
+							console.log('📝 File name:', fileInput.files[0].name);
+							console.log('📏 File size:', fileInput.files[0].size, 'bytes');
+						}
+					}
+					
+					if (nonceInput) {
+						console.log('🔑 Nonce value:', nonceInput.value);
+					}
+				});
+			} else {
+				console.log('Avatar Steward: Profile form NOT found');
+			}
+			
 		} catch (error) {
 			console.error('Avatar Steward JS: Error during repositioning:', error);
 		}
