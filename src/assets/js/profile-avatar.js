@@ -82,10 +82,21 @@
 		try {
 			repositionAvatarSection();
 			
-			// Add form submission debug
+			// Add form submission debug and fix enctype
 			const form = document.querySelector('form#your-profile');
 			if (form) {
-				console.log('Avatar Steward: Profile form found, adding submit listener');
+				console.log('Avatar Steward: Profile form found');
+				
+				// ¡IMPORTANTE! Añadir enctype para permitir uploads de archivos
+				const currentEnctype = form.getAttribute('enctype');
+				console.log('Current form enctype:', currentEnctype);
+				
+				if (currentEnctype !== 'multipart/form-data') {
+					form.setAttribute('enctype', 'multipart/form-data');
+					console.log('✅ Avatar Steward: Added enctype="multipart/form-data" to form');
+				} else {
+					console.log('✅ Avatar Steward: Form already has correct enctype');
+				}
 				
 				form.addEventListener('submit', function(e) {
 					console.log('🚀 Avatar Steward: Form submission detected!');

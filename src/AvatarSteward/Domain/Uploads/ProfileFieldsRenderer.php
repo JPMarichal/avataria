@@ -40,6 +40,10 @@ class ProfileFieldsRenderer {
 		add_action( 'edit_user_profile', array( $this, 'render_upload_field' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_notices', array( $this, 'show_error_notice' ) );
+		
+		// Asegurar que el formulario tenga enctype correcto
+		add_action( 'admin_head-profile.php', array( $this, 'fix_form_enctype' ) );
+		add_action( 'admin_head-user-edit.php', array( $this, 'fix_form_enctype' ) );
 	}
 
 	/**
@@ -194,6 +198,25 @@ class ProfileFieldsRenderer {
 				</tr>
 			</table>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Fix form enctype to support file uploads.
+	 *
+	 * @return void
+	 */
+	public function fix_form_enctype(): void {
+		?>
+		<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			const form = document.querySelector('form#your-profile');
+			if (form && form.getAttribute('enctype') !== 'multipart/form-data') {
+				form.setAttribute('enctype', 'multipart/form-data');
+				console.log('Avatar Steward: Fixed form enctype to multipart/form-data');
+			}
+		});
+		</script>
 		<?php
 	}
 }
