@@ -1,0 +1,47 @@
+# Screenshot Placeholder: Avatar Management Actions
+
+**Status:** Pending Capture  
+**Priority:** Medium  
+**Required for:** Documentation, User Manual
+
+## Description
+User profile showing avatar management options after an avatar has been uploaded, highlighting the change and remove functionality.
+
+## Elements to Capture
+- Profile Picture section with uploaded avatar
+- "Change Avatar" button clearly visible
+- "Remove Avatar" button clearly visible
+- Both buttons should be in focus
+- Uploaded avatar preview
+- Upload date visible
+- Help text visible
+
+## Capture Instructions
+1. Log in as test user with uploaded avatar
+2. Navigate to Users → Profile
+3. Ensure both "Change Avatar" and "Remove Avatar" buttons are visible
+4. Optional: Capture with mouse hovering over one button (hover state)
+5. Crop to focus on Profile Picture section
+6. Resolution: 1920x1080 minimum
+7. Format: PNG
+8. Zoom: 100%
+
+## Interaction States
+Two options for capture:
+- **Default state:** Both buttons visible, no hover
+- **Hover state:** Mouse over "Change Avatar" showing hover effect
+
+## Annotation Options
+For documentation, consider adding:
+- Arrow pointing to "Change Avatar" button
+- Arrow pointing to "Remove Avatar" button
+- Text label: "Click to upload new avatar"
+- Text label: "Click to revert to initials"
+
+## Expected Outcome
+A clear guide for users showing how to manage their avatar after upload, emphasizing the ease of changing or removing.
+
+---
+**Filename:** `07-avatar-management-actions.png`  
+**Created:** October 18, 2025  
+**To be captured:** During MVP testing phase

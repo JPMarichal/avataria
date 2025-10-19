@@ -1,0 +1,55 @@
+# Screenshot Placeholder: Custom Avatar Uploaded
+
+**Status:** Pending Capture  
+**Priority:** High  
+**Required for:** WordPress.org listing, CodeCanyon, Documentation
+
+## Description
+User profile showing a successfully uploaded custom avatar with management options.
+
+## Elements to Capture
+- Profile Picture section with uploaded avatar
+- Custom avatar preview (96x96px minimum)
+- Upload date/time: "Uploaded on [date]"
+- "Change Avatar" button
+- "Remove Avatar" button
+- Help text (same as upload interface)
+- Professional, appropriate avatar image
+
+## Capture Instructions
+1. Log in as test user
+2. Upload a professional avatar image:
+   - Use stock photo from Unsplash/Pexels (CC0)
+   - Or use generated avatar from UI Faces
+   - Professional headshot style
+   - Appropriate for business context
+3. Navigate to Users → Profile after upload
+4. Capture the Profile Picture section showing the uploaded avatar
+5. Resolution: 1920x1080 minimum
+6. Format: PNG
+7. Zoom: 100%
+
+## Test Data
+- User: Jane Smith
+- Username: janesmith
+- Avatar: Professional headshot (stock photo)
+- Upload Date: Current date
+
+## Avatar Sources
+- Unsplash: https://unsplash.com/s/photos/professional-headshot
+- UI Faces: https://www.uifaces.co/
+- This Person Does Not Exist: https://thispersondoesnotexist.com/
+
+## License Compliance
+- MUST use CC0/Public Domain images
+- Document source in docs/licensing.md
+- No copyrighted celebrity photos
+- No identifiable real people without permission
+
+## Expected Outcome
+A demonstration of successful avatar upload with clear management options (change/remove) that inspires confidence in the upload feature.
+
+---
+**Filename:** `04-custom-avatar-uploaded.png`  
+**Created:** October 18, 2025  
+**To be captured:** During MVP testing phase
