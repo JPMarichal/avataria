@@ -51,10 +51,24 @@
 			console.log('Avatar Steward: Avatar section repositioned as next sibling of first form table');
 		}
 	}	// Run when DOM is ready
+	function initAvatarSteward() {
+		console.log('Avatar Steward JS: Initializing...');
+		try {
+			repositionAvatarSection();
+		} catch (error) {
+			console.error('Avatar Steward JS: Error during repositioning:', error);
+		}
+	}
+
 	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', repositionAvatarSection);
+		document.addEventListener('DOMContentLoaded', initAvatarSteward);
+		console.log('Avatar Steward JS: Waiting for DOMContentLoaded...');
 	} else {
 		// DOM is already loaded
-		repositionAvatarSection();
+		console.log('Avatar Steward JS: DOM already loaded, executing immediately...');
+		initAvatarSteward();
 	}
+
+	// Confirm script loaded
+	console.log('Avatar Steward JS: Script loaded and ready');
 })();

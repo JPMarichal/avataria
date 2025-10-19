@@ -31,6 +31,11 @@ add_action('admin_footer', function() {
         const jsLoaded = scripts.some(script => script.src.includes('profile-avatar.js'));
         console.log('Profile JS loaded:', jsLoaded);
         
+        // Debug: List all loaded scripts for troubleshooting
+        console.log('All profile-related scripts:', 
+            scripts.filter(s => s.src.includes('profile') || s.src.includes('avatar')).map(s => s.src)
+        );
+        
         console.log('=== END DEBUG ===');
         </script>
         <?php

@@ -61,7 +61,7 @@ class ProfileFieldsRenderer {
 
 		// Enqueue Avatar section CSS.
 		wp_enqueue_style(
-			'avatar-steward-profile',
+			'avatar-steward-profile-css',
 			$plugin_base_url . 'assets/css/profile-avatar.css',
 			array(),
 			defined( 'AVATAR_STEWARD_VERSION' ) ? AVATAR_STEWARD_VERSION : '1.0.0'
@@ -69,9 +69,9 @@ class ProfileFieldsRenderer {
 
 		// Enqueue Avatar section repositioning JS.
 		wp_enqueue_script(
-			'avatar-steward-profile',
+			'avatar-steward-profile-js',
 			$plugin_base_url . 'assets/js/profile-avatar.js',
-			array(),
+			array( 'jquery' ),
 			defined( 'AVATAR_STEWARD_VERSION' ) ? AVATAR_STEWARD_VERSION : '1.0.0',
 			true
 		);
