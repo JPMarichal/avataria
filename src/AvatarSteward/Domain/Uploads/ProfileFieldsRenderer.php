@@ -56,15 +56,15 @@ class ProfileFieldsRenderer {
 
 		wp_enqueue_media();
 
-		// Get plugin base URL - we need to go up from src/AvatarSteward/Domain/Uploads to the plugin root.
-		$plugin_base_url = plugin_dir_url( dirname( __DIR__, 3 ) );
+		// Get plugin base URL using the defined constant.
+		$plugin_base_url = defined( 'AVATAR_STEWARD_PLUGIN_URL' ) ? AVATAR_STEWARD_PLUGIN_URL : plugin_dir_url( dirname( __DIR__, 3 ) );
 
 		// Enqueue Avatar section CSS.
 		wp_enqueue_style(
 			'avatar-steward-profile',
 			$plugin_base_url . 'assets/css/profile-avatar.css',
 			array(),
-			'1.0.0'
+			defined( 'AVATAR_STEWARD_VERSION' ) ? AVATAR_STEWARD_VERSION : '1.0.0'
 		);
 
 		// Enqueue Avatar section repositioning JS.
@@ -72,7 +72,7 @@ class ProfileFieldsRenderer {
 			'avatar-steward-profile',
 			$plugin_base_url . 'assets/js/profile-avatar.js',
 			array(),
-			'1.0.0',
+			defined( 'AVATAR_STEWARD_VERSION' ) ? AVATAR_STEWARD_VERSION : '1.0.0',
 			true
 		);
 	}
