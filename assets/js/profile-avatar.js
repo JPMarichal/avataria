@@ -17,75 +17,40 @@
 		// Find the Avatar section
 		const avatarSection = document.getElementById('avatar-steward-section');
 		if (!avatarSection) {
+			console.log('Avatar Steward: Avatar section not found');
 			return;
 		}
 
-		// Find the "About Yourself" section (h2 with text "About Yourself" or localized version)
-		// In WordPress, this is typically identified by looking for specific form-table sections
-		const allH2s = document.querySelectorAll('.user-edit-php h2, .profile-php h2');
-		let aboutYourselfSection = null;
+		console.log('Avatar Steward: Found avatar section, attempting to reposition...');
 
-		// Look for the "About Yourself" heading or similar
-		for (let i = 0; i < allH2s.length; i++) {
-			const h2Text = allH2s[i].textContent.trim().toLowerCase();
-			// Match English or Spanish versions of "About Yourself"
-			if (h2Text.includes('about yourself') ||
-				h2Text.includes('acerca de ti') ||
-				h2Text.includes('sobre ti') ||
-				h2Text.includes('name') && i === 0) {
-				aboutYourselfSection = allH2s[i];
-				break;
-			}
+		// Strategy 1: Look for WordPress profile form structure
+		// In WordPress admin, profile forms have specific classes and structures
+		const profileForm = document.querySelector('.user-edit-php, .profile-php');
+		if (!profileForm) {
+			console.log('Avatar Steward: Profile form not found');
+			return;
 		}
 
-			// If we found the "About Yourself" section, move Avatar section after it
-			if (aboutYourselfSection) {
-				// Prefer inserting after the form-table that follows the heading
-				let nextElement = aboutYourselfSection.nextElementSibling;
-				while (nextElement && !nextElement.classList.contains('form-table')) {
-					nextElement = nextElement.nextElementSibling;
-				}
+		// Strategy 2: Find the first form-table (usually "Personal Options" or similar)
+		const formTables = profileForm.querySelectorAll('.form-table');
+		if (formTables.length === 0) {
+			console.log('Avatar Steward: No form tables found');
+			return;
+		}
 
-				if (nextElement && nextElement.classList.contains('form-table')) {
-					// Insert Avatar section after the "About Yourself" form-table
-					nextElement.parentNode.insertBefore(avatarSection, nextElement.nextSibling);
-					return;
-				}
-			}
-
-			// Try a more robust fallback: place the avatar section before the "Account Management" section
-			const accountManagementHeading = Array.from(allH2s).find(h2 => {
-				const text = h2.textContent.trim().toLowerCase();
-				return text.includes('account management') || text.includes('gestión de la cuenta') || text.includes('account');
-			});
-
-			if (accountManagementHeading) {
-				let nextEl = accountManagementHeading.nextElementSibling;
-				while (nextEl && !nextEl.classList.contains('form-table')) {
-					nextEl = nextEl.nextElementSibling;
-				}
-				if (nextEl && nextEl.classList.contains('form-table')) {
-					// Insert avatar section before the account management form-table
-					nextEl.parentNode.insertBefore(avatarSection, nextEl);
-					return;
-				}
-			}
-
-			// Final fallback: try to position after the first form-table or at the top of the form
-			const firstFormTable = document.querySelector('.user-edit-php .form-table, .profile-php .form-table');
-			if (firstFormTable) {
-				// Insert after first form-table for prominence
-				firstFormTable.parentNode.insertBefore(avatarSection, firstFormTable.nextSibling);
-			} else {
-				// As a last resort, append to the profile form container
-				const profileForm = document.querySelector('.user-edit-php, .profile-php');
-				if (profileForm) {
-					profileForm.appendChild(avatarSection);
-				}
-			}
-	}
-
-	// Run when DOM is ready
+		// Insert after the first form-table (which is typically "Personal Options")
+		const firstTable = formTables[0];
+		const insertionPoint = firstTable.nextElementSibling;
+		
+		if (insertionPoint) {
+			firstTable.parentNode.insertBefore(avatarSection, insertionPoint);
+			console.log('Avatar Steward: Avatar section repositioned after first form table');
+		} else {
+			// If no next sibling, append after the first table
+			firstTable.parentNode.insertBefore(avatarSection, firstTable.nextSibling);
+			console.log('Avatar Steward: Avatar section repositioned as next sibling of first form table');
+		}
+	}	// Run when DOM is ready
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', repositionAvatarSection);
 	} else {
