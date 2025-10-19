@@ -40,6 +40,20 @@ final class Plugin {
 	private ?Admin\MigrationPage $migration_page = null;
 
 	/**
+	 * Profile fields renderer instance.
+	 *
+	 * @var Domain\Uploads\ProfileFieldsRenderer|null
+	 */
+	private ?Domain\Uploads\ProfileFieldsRenderer $profile_fields_renderer = null;
+
+	/**
+	 * Upload handler instance.
+	 *
+	 * @var Domain\Uploads\UploadHandler|null
+	 */
+	private ?Domain\Uploads\UploadHandler $upload_handler = null;
+
+	/**
 	 * Private constructor to prevent direct instantiation.
 	 */
 	private function __construct() {
@@ -69,6 +83,7 @@ final class Plugin {
 	public function boot(): void {
 		$this->init_settings_page();
 		$this->init_migration_page();
+		$this->init_upload_services();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -124,5 +139,53 @@ final class Plugin {
 	 */
 	public function get_migration_page(): ?Admin\MigrationPage {
 		return $this->migration_page;
+	}
+
+	/**
+	 * Initialize upload services.
+	 *
+	 * @return void
+	 */
+	private function init_upload_services(): void {
+		if ( ! class_exists( Domain\Uploads\UploadService::class ) ) {
+			require_once __DIR__ . '/Domain/Uploads/UploadService.php';
+		}
+
+		if ( ! class_exists( Domain\Uploads\ProfileFieldsRenderer::class ) ) {
+			require_once __DIR__ . '/Domain/Uploads/ProfileFieldsRenderer.php';
+		}
+
+		if ( ! class_exists( Domain\Uploads\UploadHandler::class ) ) {
+			require_once __DIR__ . '/Domain/Uploads/UploadHandler.php';
+		}
+
+		// Create upload service instance.
+		$upload_service = new Domain\Uploads\UploadService();
+
+		// Create and register profile fields renderer.
+		$this->profile_fields_renderer = new Domain\Uploads\ProfileFieldsRenderer( $upload_service );
+		$this->profile_fields_renderer->register_hooks();
+
+		// Create and register upload handler.
+		$this->upload_handler = new Domain\Uploads\UploadHandler( $upload_service );
+		$this->upload_handler->register_hooks();
+	}
+
+	/**
+	 * Get the profile fields renderer instance.
+	 *
+	 * @return Domain\Uploads\ProfileFieldsRenderer|null Profile fields renderer instance.
+	 */
+	public function get_profile_fields_renderer(): ?Domain\Uploads\ProfileFieldsRenderer {
+		return $this->profile_fields_renderer;
+	}
+
+	/**
+	 * Get the upload handler instance.
+	 *
+	 * @return Domain\Uploads\UploadHandler|null Upload handler instance.
+	 */
+	public function get_upload_handler(): ?Domain\Uploads\UploadHandler {
+		return $this->upload_handler;
 	}
 }
