@@ -1,0 +1,56 @@
+/**
+ * Avatar Steward - Profile Page Avatar Section Styles
+ * 
+ * Styles for the avatar upload section in the WordPress user profile page.
+ * Provides visual distinction with rounded borders and light gray background.
+ *
+ * @package AvatarSteward
+ */
+
+/* Avatar section container styling */
+#avatar-steward-section {
+	background-color: #f5f5f5;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
+/* Avatar section heading */
+#avatar-steward-section h2 {
+	margin-top: 0;
+	padding-top: 0;
+	font-size: 1.3em;
+	color: #23282d;
+}
+
+/* Ensure proper spacing for the avatar form table */
+#avatar-steward-section .form-table {
+	background-color: transparent;
+	margin-top: 10px;
+}
+
+/* Avatar preview image styling */
+#avatar-steward-preview img {
+	border: 2px solid #ddd;
+	border-radius: 4px;
+	padding: 2px;
+	background-color: #fff;
+}
+
+/* File input styling */
+#avatar_steward_file {
+	display: block;
+	margin-bottom: 10px;
+}
+
+/* Checkbox styling */
+#avatar-steward-section input[type="checkbox"] {
+	margin-right: 5px;
+}
+
+/* Description text styling */
+#avatar-steward-section .description {
+	color: #666;
+	font-style: italic;
+}
