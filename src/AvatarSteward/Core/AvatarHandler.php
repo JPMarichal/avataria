@@ -49,13 +49,9 @@ class AvatarHandler {
 	 * @return void
 	 */
 	public function init(): void {
-		error_log( "Avatar Steward: Initializing AvatarHandler and registering filters" );
 		if ( function_exists( 'add_filter' ) ) {
 			add_filter( 'pre_get_avatar_data', array( $this, 'filter_avatar_data' ), 10, 2 );
 			add_filter( 'get_avatar_url', array( $this, 'filter_avatar_url' ), 10, 3 );
-			error_log( "Avatar Steward: Avatar filters registered successfully" );
-		} else {
-			error_log( "Avatar Steward: add_filter function not available" );
 		}
 	}
 
@@ -73,19 +69,13 @@ class AvatarHandler {
 	public function filter_avatar_data( array $args, $id_or_email ): array {
 		$user_id = $this->get_user_id_from_identifier( $id_or_email );
 
-		// Debug: Log avatar filtering attempt
-		error_log( "Avatar Steward: filter_avatar_data called for user_id: " . ( $user_id ?: 'none' ) );
-
 		if ( ! $user_id ) {
-			error_log( "Avatar Steward: No valid user_id found, returning original args" );
 			return $args;
 		}
 
 		$local_avatar_url = $this->get_local_avatar_url( $user_id, $args['size'] ?? 96 );
-		error_log( "Avatar Steward: Local avatar URL for user {$user_id}: " . ( $local_avatar_url ?: 'none' ) );
 
 		if ( $local_avatar_url ) {
-			error_log( "Avatar Steward: Replacing avatar URL with local one: " . $local_avatar_url );
 			$args['url']          = $local_avatar_url;
 			$args['found_avatar'] = true;
 		}
