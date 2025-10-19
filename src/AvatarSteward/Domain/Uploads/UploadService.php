@@ -62,8 +62,8 @@ class UploadService {
 	 */
 	public function __construct(
 		int $max_file_size = 2097152,
-		int $max_width = 2000,
-		int $max_height = 2000,
+		int $max_width = 4000,
+		int $max_height = 4000,
 		array $allowed_mime_types = array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' ),
 		?LoggerInterface $logger = null
 	) {

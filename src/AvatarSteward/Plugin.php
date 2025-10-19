@@ -54,6 +54,13 @@ final class Plugin {
 	private ?Domain\Uploads\UploadHandler $upload_handler = null;
 
 	/**
+	 * Avatar handler instance.
+	 *
+	 * @var Core\AvatarHandler|null
+	 */
+	private ?Core\AvatarHandler $avatar_handler = null;
+
+	/**
 	 * Private constructor to prevent direct instantiation.
 	 */
 	private function __construct() {
@@ -84,6 +91,7 @@ final class Plugin {
 		$this->init_settings_page();
 		$this->init_migration_page();
 		$this->init_upload_services();
+		$this->init_avatar_handler();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -172,6 +180,33 @@ final class Plugin {
 	}
 
 	/**
+	 * Initialize avatar handler.
+	 *
+	 * @return void
+	 */
+	private function init_avatar_handler(): void {
+		// Load AvatarHandler class.
+		if ( ! class_exists( Core\AvatarHandler::class ) ) {
+			require_once __DIR__ . '/Core/AvatarHandler.php';
+		}
+
+		// Load UploadService if not already loaded.
+		if ( ! class_exists( Domain\Uploads\UploadService::class ) ) {
+			require_once __DIR__ . '/Domain/Uploads/UploadService.php';
+		}
+
+		// Create upload service instance for avatar handler.
+		$upload_service = new Domain\Uploads\UploadService();
+
+		// Create and initialize avatar handler.
+		$this->avatar_handler = new Core\AvatarHandler( $upload_service );
+		$this->avatar_handler->init();
+		
+		// Debug: Confirm avatar handler initialization
+		error_log( "Avatar Steward Plugin: AvatarHandler initialized successfully" );
+	}
+
+	/**
 	 * Get the profile fields renderer instance.
 	 *
 	 * @return Domain\Uploads\ProfileFieldsRenderer|null Profile fields renderer instance.
@@ -187,5 +222,14 @@ final class Plugin {
 	 */
 	public function get_upload_handler(): ?Domain\Uploads\UploadHandler {
 		return $this->upload_handler;
+	}
+
+	/**
+	 * Get the avatar handler instance.
+	 *
+	 * @return Core\AvatarHandler|null Avatar handler instance.
+	 */
+	public function get_avatar_handler(): ?Core\AvatarHandler {
+		return $this->avatar_handler;
 	}
 }
