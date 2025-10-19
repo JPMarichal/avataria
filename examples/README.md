@@ -4,6 +4,9 @@ This directory contains example code snippets, configurations, and integration e
 
 ## Available Examples
 
+### Logger Examples
+- **`logger-examples.php`** - Comprehensive examples of the logging system (10 practical examples covering basic usage, dependency injection, custom handlers, performance monitoring, and testing)
+
 ### Configuration Examples
 - **`custom-palette.php`** - How to create custom color palettes for the initials generator
 - **`role-restrictions.php`** - How to restrict avatar uploads based on user roles
@@ -44,11 +47,28 @@ You can test these examples in a local development environment:
 
 4. Test the functionality and observe the results
 
+### Testing the Logger
+
+To see the logging system in action:
+
+1. Enable WordPress debug mode in `wp-config.php`:
+   ```php
+   define('WP_DEBUG', true);
+   define('WP_DEBUG_LOG', true);
+   ```
+
+2. Review the examples in `logger-examples.php`
+
+3. Check the logs in `wp-content/debug.log`
+
+4. See full documentation in `docs/development/logging.md`
+
 ## Need Help?
 
 - Check the main documentation in `/docs`
 - Review the FAQ in `/docs/faq.md`
 - Contact support (see `/docs/support.md`)
+- For logging system help, see `/docs/development/logging.md`
 
 ## Contributing Examples
 
@@ -60,4 +80,4 @@ If you have useful examples to share:
 
 ---
 
-**Last Updated**: October 17, 2025
+**Last Updated**: October 19, 2025

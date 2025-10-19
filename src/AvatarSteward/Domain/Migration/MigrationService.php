@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace AvatarSteward\Domain\Migration;
 
+use AvatarSteward\Infrastructure\LoggerInterface;
+
 /**
  * Class MigrationService
  *
@@ -33,12 +35,35 @@ class MigrationService {
 	private const MIGRATION_SOURCE_KEY = 'avatar_steward_migrated_from';
 
 	/**
+	 * Logger instance.
+	 *
+	 * @var LoggerInterface|null
+	 */
+	private ?LoggerInterface $logger;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param LoggerInterface|null $logger Optional logger instance.
+	 */
+	public function __construct( ?LoggerInterface $logger = null ) {
+		$this->logger = $logger;
+	}
+
+	/**
 	 * Migrate avatars from Simple Local Avatars plugin.
 	 *
 	 * @return array Migration results with counts.
 	 */
 	public function migrate_from_simple_local_avatars(): array {
+		if ( $this->logger ) {
+			$this->logger->info( 'Starting Simple Local Avatars migration' );
+		}
+
 		if ( ! function_exists( 'get_users' ) || ! function_exists( 'get_user_meta' ) || ! function_exists( 'update_user_meta' ) ) {
+			if ( $this->logger ) {
+				$this->logger->error( 'Required WordPress functions not available for migration' );
+			}
 			return array(
 				'success'  => false,
 				'error'    => __( 'Required WordPress functions are not available.', 'avatar-steward' ),
@@ -73,7 +98,22 @@ class MigrationService {
 			update_user_meta( $user_id, self::AVATAR_META_KEY, $old_avatar );
 			update_user_meta( $user_id, self::MIGRATION_SOURCE_KEY, 'simple_local_avatars' );
 
+			if ( $this->logger ) {
+				$this->logger->debug( 'Migrated avatar from Simple Local Avatars', array( 'user_id' => $user_id ) );
+			}
+
 			++$migrated;
+		}
+
+		if ( $this->logger ) {
+			$this->logger->info(
+				'Simple Local Avatars migration completed',
+				array(
+					'total'    => count( $users ),
+					'migrated' => $migrated,
+					'skipped'  => $skipped,
+				)
+			);
 		}
 
 		return array(
@@ -145,7 +185,14 @@ class MigrationService {
 	 * @return array Import results with counts.
 	 */
 	public function import_from_gravatar( bool $force = false ): array {
+		if ( $this->logger ) {
+			$this->logger->info( 'Starting Gravatar import', array( 'force' => $force ) );
+		}
+
 		if ( ! function_exists( 'get_users' ) || ! function_exists( 'get_user_meta' ) || ! function_exists( 'wp_remote_get' ) ) {
+			if ( $this->logger ) {
+				$this->logger->error( 'Required WordPress functions not available for Gravatar import' );
+			}
 			return array(
 				'success'  => false,
 				'error'    => __( 'Required WordPress functions are not available.', 'avatar-steward' ),
@@ -173,6 +220,16 @@ class MigrationService {
 			$hash         = md5( strtolower( trim( $user->user_email ) ) );
 			$gravatar_url = sprintf( 'https://www.gravatar.com/avatar/%s?s=512&d=404', $hash );
 
+			if ( $this->logger ) {
+				$this->logger->debug(
+					'Fetching Gravatar',
+					array(
+						'user_id'    => $user->ID,
+						'email_hash' => $hash,
+					)
+				);
+			}
+
 			// Try to download the Gravatar.
 			$response = wp_remote_get(
 				$gravatar_url,
@@ -186,6 +243,15 @@ class MigrationService {
 
 			if ( is_wp_error( $response ) || 404 === wp_remote_retrieve_response_code( $response ) ) {
 				// No Gravatar found or error.
+				if ( $this->logger && is_wp_error( $response ) ) {
+					$this->logger->warning(
+						'Gravatar fetch failed',
+						array(
+							'user_id' => $user->ID,
+							'error'   => $response->get_error_message(),
+						)
+					);
+				}
 				++$skipped;
 				continue;
 			}
@@ -194,6 +260,9 @@ class MigrationService {
 			$image_data = wp_remote_retrieve_body( $response );
 
 			if ( empty( $image_data ) ) {
+				if ( $this->logger ) {
+					$this->logger->warning( 'Empty Gravatar response', array( 'user_id' => $user->ID ) );
+				}
 				++$failed;
 				continue;
 			}
@@ -202,6 +271,9 @@ class MigrationService {
 			$attachment_id = $this->save_image_as_attachment( $image_data, $user );
 
 			if ( ! $attachment_id ) {
+				if ( $this->logger ) {
+					$this->logger->error( 'Failed to save Gravatar as attachment', array( 'user_id' => $user->ID ) );
+				}
 				++$failed;
 				continue;
 			}
@@ -210,7 +282,29 @@ class MigrationService {
 			update_user_meta( $user->ID, self::AVATAR_META_KEY, $attachment_id );
 			update_user_meta( $user->ID, self::MIGRATION_SOURCE_KEY, 'gravatar' );
 
+			if ( $this->logger ) {
+				$this->logger->info(
+					'Gravatar imported successfully',
+					array(
+						'user_id'       => $user->ID,
+						'attachment_id' => $attachment_id,
+					)
+				);
+			}
+
 			++$imported;
+		}
+
+		if ( $this->logger ) {
+			$this->logger->info(
+				'Gravatar import completed',
+				array(
+					'total'    => count( $users ),
+					'imported' => $imported,
+					'skipped'  => $skipped,
+					'failed'   => $failed,
+				)
+			);
 		}
 
 		return array(
