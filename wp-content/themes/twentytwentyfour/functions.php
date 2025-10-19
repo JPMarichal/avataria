@@ -260,3 +260,32 @@ add_action('admin_enqueue_scripts', function($hook) {
     
     echo "<script>console.log('=== END ASSET DEBUG ===');</script>";
 }, 5); // Prioridad alta para ejecutar antes que otros scripts
+
+// Debug para upload de avatar
+add_action('personal_options_update', function($user_id) {
+    error_log('Avatar Steward Debug: personal_options_update triggered for user ID: ' . $user_id);
+    if (isset($_POST['avatar_steward_nonce'])) {
+        error_log('Avatar Steward Debug: Nonce found in POST data');
+        if (isset($_FILES['avatar_steward_file'])) {
+            error_log('Avatar Steward Debug: File upload detected: ' . print_r($_FILES['avatar_steward_file'], true));
+        } else {
+            error_log('Avatar Steward Debug: No file upload in $_FILES');
+        }
+    } else {
+        error_log('Avatar Steward Debug: No avatar steward nonce in POST data');
+    }
+}, 1); // Prioridad alta para ejecutar antes que el plugin
+
+add_action('edit_user_profile_update', function($user_id) {
+    error_log('Avatar Steward Debug: edit_user_profile_update triggered for user ID: ' . $user_id);
+    if (isset($_POST['avatar_steward_nonce'])) {
+        error_log('Avatar Steward Debug: Nonce found in POST data');
+        if (isset($_FILES['avatar_steward_file'])) {
+            error_log('Avatar Steward Debug: File upload detected: ' . print_r($_FILES['avatar_steward_file'], true));
+        } else {
+            error_log('Avatar Steward Debug: No file upload in $_FILES');
+        }
+    } else {
+        error_log('Avatar Steward Debug: No avatar steward nonce in POST data');
+    }
+}, 1); // Prioridad alta para ejecutar antes que el plugin
