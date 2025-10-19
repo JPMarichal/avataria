@@ -14,25 +14,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// This file is a legacy entry point. The main plugin file is now in the root directory.
-// Include the main plugin file if it exists.
-$main_plugin_file = dirname( __DIR__ ) . '/avatar-steward.php';
+// Define plugin constants.
+define( 'AVATAR_STEWARD_VERSION', '0.1.0' );
+define( 'AVATAR_STEWARD_PLUGIN_FILE', __FILE__ );
+define( 'AVATAR_STEWARD_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'AVATAR_STEWARD_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-if ( file_exists( $main_plugin_file ) && ! defined( 'AVATAR_STEWARD_VERSION' ) ) {
-	require_once $main_plugin_file;
-} else {
-	// Fallback for standalone usage
-	$avatar_steward_autoload = dirname( __DIR__ ) . '/vendor/autoload.php';
+$avatar_steward_autoload = __DIR__ . '/vendor/autoload.php';
 
-	if ( is_readable( $avatar_steward_autoload ) ) {
-		require_once $avatar_steward_autoload;
-	}
-
-	if ( ! class_exists( AvatarSteward\Plugin::class ) ) {
-		require_once __DIR__ . '/AvatarSteward/Plugin.php';
-	}
-
-	if ( ! defined( 'AVATAR_STEWARD_VERSION' ) ) {
-		AvatarSteward\Plugin::instance();
-	}
+if ( is_readable( $avatar_steward_autoload ) ) {
+	require_once $avatar_steward_autoload;
 }
+
+if ( ! class_exists( AvatarSteward\Plugin::class ) ) {
+	require_once __DIR__ . '/AvatarSteward/Plugin.php';
+}
+
+AvatarSteward\Plugin::instance();
