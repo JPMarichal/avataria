@@ -64,4 +64,40 @@ final class PluginTest extends TestCase {
 		$settings_page = $instance->get_settings_page();
 		$this->assertInstanceOf( \AvatarSteward\Admin\SettingsPage::class, $settings_page );
 	}
+
+	/**
+	 * Test that Plugin has a get_profile_fields_renderer method.
+	 */
+	public function test_plugin_has_get_profile_fields_renderer_method() {
+		$instance = Plugin::instance();
+		$this->assertTrue( method_exists( $instance, 'get_profile_fields_renderer' ) );
+	}
+
+	/**
+	 * Test that Plugin has a get_upload_handler method.
+	 */
+	public function test_plugin_has_get_upload_handler_method() {
+		$instance = Plugin::instance();
+		$this->assertTrue( method_exists( $instance, 'get_upload_handler' ) );
+	}
+
+	/**
+	 * Test that Plugin initializes profile fields renderer after boot.
+	 */
+	public function test_plugin_initializes_profile_fields_renderer_after_boot() {
+		$instance = Plugin::instance();
+		$instance->boot();
+		$renderer = $instance->get_profile_fields_renderer();
+		$this->assertInstanceOf( \AvatarSteward\Domain\Uploads\ProfileFieldsRenderer::class, $renderer );
+	}
+
+	/**
+	 * Test that Plugin initializes upload handler after boot.
+	 */
+	public function test_plugin_initializes_upload_handler_after_boot() {
+		$instance = Plugin::instance();
+		$instance->boot();
+		$handler = $instance->get_upload_handler();
+		$this->assertInstanceOf( \AvatarSteward\Domain\Uploads\UploadHandler::class, $handler );
+	}
 }
