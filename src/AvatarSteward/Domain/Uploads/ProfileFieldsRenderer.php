@@ -114,7 +114,7 @@ class ProfileFieldsRenderer {
 		$has_avatar = false !== $avatar_url;
 
 		?>
-		<div id="avatar-steward-section">
+		<div id="avatar-steward-section" class="avatarsteward-highlight">
 			<h2><?php esc_html_e( 'Avatar', 'avatar-steward' ); ?></h2>
 			<table class="form-table">
 				<tr>

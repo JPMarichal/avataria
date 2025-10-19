@@ -38,25 +38,51 @@
 			}
 		}
 
-		// If we found the "About Yourself" section, move Avatar section after it
-		if (aboutYourselfSection) {
-			// Find the next form-table after "About Yourself"
-			let nextElement = aboutYourselfSection.nextElementSibling;
-			while (nextElement && !nextElement.classList.contains('form-table')) {
-				nextElement = nextElement.nextElementSibling;
+			// If we found the "About Yourself" section, move Avatar section after it
+			if (aboutYourselfSection) {
+				// Prefer inserting after the form-table that follows the heading
+				let nextElement = aboutYourselfSection.nextElementSibling;
+				while (nextElement && !nextElement.classList.contains('form-table')) {
+					nextElement = nextElement.nextElementSibling;
+				}
+
+				if (nextElement && nextElement.classList.contains('form-table')) {
+					// Insert Avatar section after the "About Yourself" form-table
+					nextElement.parentNode.insertBefore(avatarSection, nextElement.nextSibling);
+					return;
+				}
 			}
 
-			if (nextElement && nextElement.classList.contains('form-table')) {
-				// Insert Avatar section after the "About Yourself" form-table
-				nextElement.parentNode.insertBefore(avatarSection, nextElement.nextSibling);
+			// Try a more robust fallback: place the avatar section before the "Account Management" section
+			const accountManagementHeading = Array.from(allH2s).find(h2 => {
+				const text = h2.textContent.trim().toLowerCase();
+				return text.includes('account management') || text.includes('gestión de la cuenta') || text.includes('account');
+			});
+
+			if (accountManagementHeading) {
+				let nextEl = accountManagementHeading.nextElementSibling;
+				while (nextEl && !nextEl.classList.contains('form-table')) {
+					nextEl = nextEl.nextElementSibling;
+				}
+				if (nextEl && nextEl.classList.contains('form-table')) {
+					// Insert avatar section before the account management form-table
+					nextEl.parentNode.insertBefore(avatarSection, nextEl);
+					return;
+				}
 			}
-		} else {
-			// Fallback: try to position after the first form-table
+
+			// Final fallback: try to position after the first form-table or at the top of the form
 			const firstFormTable = document.querySelector('.user-edit-php .form-table, .profile-php .form-table');
-			if (firstFormTable && firstFormTable.nextElementSibling) {
-				firstFormTable.parentNode.insertBefore(avatarSection, firstFormTable.nextElementSibling);
+			if (firstFormTable) {
+				// Insert after first form-table for prominence
+				firstFormTable.parentNode.insertBefore(avatarSection, firstFormTable.nextSibling);
+			} else {
+				// As a last resort, append to the profile form container
+				const profileForm = document.querySelector('.user-edit-php, .profile-php');
+				if (profileForm) {
+					profileForm.appendChild(avatarSection);
+				}
 			}
-		}
 	}
 
 	// Run when DOM is ready
