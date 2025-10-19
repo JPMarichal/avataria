@@ -55,6 +55,23 @@ class ProfileFieldsRenderer {
 		}
 
 		wp_enqueue_media();
+
+		// Enqueue Avatar section CSS.
+		wp_enqueue_style(
+			'avatar-steward-profile',
+			plugins_url( 'assets/css/profile-avatar.css', dirname( __DIR__, 2 ) ),
+			array(),
+			'1.0.0'
+		);
+
+		// Enqueue Avatar section repositioning JS.
+		wp_enqueue_script(
+			'avatar-steward-profile',
+			plugins_url( 'assets/js/profile-avatar.js', dirname( __DIR__, 2 ) ),
+			array(),
+			'1.0.0',
+			true
+		);
 	}
 
 	/**
@@ -97,57 +114,59 @@ class ProfileFieldsRenderer {
 		$has_avatar = false !== $avatar_url;
 
 		?>
-		<h2><?php esc_html_e( 'Avatar', 'avatar-steward' ); ?></h2>
-		<table class="form-table">
-			<tr>
-				<th>
-					<label for="avatar_steward_file"><?php esc_html_e( 'Upload Avatar', 'avatar-steward' ); ?></label>
-				</th>
-				<td>
-					<div id="avatar-steward-container">
-						<?php if ( $has_avatar ) : ?>
-							<div id="avatar-steward-preview" style="margin-bottom: 10px;">
-								<img src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php esc_attr_e( 'Current Avatar', 'avatar-steward' ); ?>" style="max-width: 96px; max-height: 96px; display: block; margin-bottom: 10px;" />
-							</div>
-						<?php endif; ?>
+		<div id="avatar-steward-section">
+			<h2><?php esc_html_e( 'Avatar', 'avatar-steward' ); ?></h2>
+			<table class="form-table">
+				<tr>
+					<th>
+						<label for="avatar_steward_file"><?php esc_html_e( 'Upload Avatar', 'avatar-steward' ); ?></label>
+					</th>
+					<td>
+						<div id="avatar-steward-container">
+							<?php if ( $has_avatar ) : ?>
+								<div id="avatar-steward-preview" style="margin-bottom: 10px;">
+									<img src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php esc_attr_e( 'Current Avatar', 'avatar-steward' ); ?>" style="max-width: 96px; max-height: 96px; display: block; margin-bottom: 10px;" />
+								</div>
+							<?php endif; ?>
 
-						<input 
-							type="file" 
-							name="avatar_steward_file" 
-							id="avatar_steward_file" 
-							accept="image/jpeg,image/png,image/gif,image/webp"
-						/>
+							<input 
+								type="file" 
+								name="avatar_steward_file" 
+								id="avatar_steward_file" 
+								accept="image/jpeg,image/png,image/gif,image/webp"
+							/>
 
-						<?php if ( $has_avatar ) : ?>
-							<div style="margin-top: 10px;">
-								<label>
-									<input 
-										type="checkbox" 
-										name="avatar_steward_remove" 
-										id="avatar_steward_remove" 
-										value="yes"
-									/>
-									<?php esc_html_e( 'Remove current avatar', 'avatar-steward' ); ?>
-								</label>
-							</div>
-						<?php endif; ?>
+							<?php if ( $has_avatar ) : ?>
+								<div style="margin-top: 10px;">
+									<label>
+										<input 
+											type="checkbox" 
+											name="avatar_steward_remove" 
+											id="avatar_steward_remove" 
+											value="yes"
+										/>
+										<?php esc_html_e( 'Remove current avatar', 'avatar-steward' ); ?>
+									</label>
+								</div>
+							<?php endif; ?>
 
-						<?php wp_nonce_field( 'avatar_steward_update', 'avatar_steward_nonce' ); ?>
+							<?php wp_nonce_field( 'avatar_steward_update', 'avatar_steward_nonce' ); ?>
 
-						<p class="description">
-							<?php
-							printf(
-								/* translators: 1: file types, 2: max file size */
-								esc_html__( 'Allowed file types: %1$s. Maximum file size: %2$s MB. Maximum dimensions: 2000x2000 pixels.', 'avatar-steward' ),
-								'JPEG, PNG, GIF, WebP',
-								'2'
-							);
-							?>
-						</p>
-					</div>
-				</td>
-			</tr>
-		</table>
+							<p class="description">
+								<?php
+								printf(
+									/* translators: 1: file types, 2: max file size */
+									esc_html__( 'Allowed file types: %1$s. Maximum file size: %2$s MB. Maximum dimensions: 2000x2000 pixels.', 'avatar-steward' ),
+									'JPEG, PNG, GIF, WebP',
+									'2'
+								);
+								?>
+							</p>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
 		<?php
 	}
 }
