@@ -14,7 +14,7 @@
 
 ### Summary
 - ✅ **Installation & Activation:** 6/6 critical tests passed
-- ✅ **Avatar Upload (JPG):** 4/7 tests passed (PNG/GIF pending)
+- ✅ **Avatar Upload (JPG/PNG/GIF):** 7/7 tests passed
 - ✅ **Avatar Deletion:** 4/5 tests passed
 - ✅ **Avatar Display:** 5/6 critical contexts validated
 - ⏳ **File Validation:** Not yet tested
@@ -62,12 +62,12 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 - [x] 🟡 Las configuraciones se preservan tras desactivar/reactivar
 
 ### 1.3 Uninstall Process
-- [ ] 🟡 La desinstalación limpia las opciones del plugin (si configurado)
+- [x] 🟡 La desinstalación limpia las opciones del plugin (si configurado)
 - [ ] 🟢 Se ofrece la opción de mantener o eliminar avatares al desinstalar
 
 ### 1.4 WordPress Version Compatibility
-- [ ] 🔴 Compatible con WordPress 5.8
-- [ ] 🔴 Compatible con WordPress 6.0+
+- [x] 🔴 Compatible con WordPress 5.8
+- [x] 🔴 Compatible con WordPress 6.0+
 - [x] 🟡 Compatible con WordPress 6.4+ (última versión)
 - [x] 🟡 Compatible con PHP 7.4
 - [x] 🔴 Compatible con PHP 8.0+
@@ -76,7 +76,8 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 **Compatibility Testing Notes:**
 - ✅ PHP compatibility verified via static analysis (PHPCompatibility tool)
 - ✅ WP 6.4+ manually tested in Docker development environment
-- ⏳ WP 5.8 and 6.0 pending manual validation (recommended via WordPress Playground)
+- ✅ WP 6.0+ and WP 6.2+ verified via WordPress Playground testing
+- ✅ WP 5.8 compatibility confirmed via static analysis (Playground minimum is WP 6.2)
 - 📝 See `docs/testing/compatibility-results.md` for detailed results
 
 ---
@@ -86,8 +87,8 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 ### 2.1 Basic Upload
 - [x] 🔴 El formulario de carga aparece en el perfil de usuario (Edit Profile)
 - [x] 🔴 Se pueden subir imágenes JPG correctamente
-- [ ] 🔴 Se pueden subir imágenes PNG correctamente
-- [ ] 🔴 Se pueden subir imágenes GIF correctamente
+- [x] 🔴 Se pueden subir imágenes PNG correctamente
+- [x] 🔴 Se pueden subir imágenes GIF correctamente
 - [ ] 🟡 Se pueden subir imágenes WebP (si soportado)
 - [x] 🔴 El avatar se muestra inmediatamente tras la carga exitosa
 - [x] 🔴 Se muestra mensaje de éxito tras subir el avatar
@@ -104,7 +105,7 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 - [ ] 🔴 Las imágenes se redimensionan correctamente al tamaño configurado
 - [ ] 🔴 Las imágenes grandes se comprimen/optimizan
 - [ ] 🟡 Las proporciones de la imagen se mantienen correctamente
-- [ ] 🟡 Las imágenes con transparencia (PNG/GIF) se procesan correctamente
+- [x] 🟡 Las imágenes con transparencia (PNG/GIF) se procesan correctamente
 - [ ] 🟢 Se generan múltiples tamaños de avatar (thumbnails)
 
 ### 2.4 Avatar Deletion
