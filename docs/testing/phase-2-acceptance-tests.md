@@ -17,6 +17,8 @@
 - ✅ **Avatar Upload (JPG/PNG/GIF):** 7/7 tests passed
 - ✅ **Avatar Deletion:** 4/5 tests passed
 - ✅ **Avatar Display:** 5/6 critical contexts validated
+- ✅ **Gravatar Integration:** 4/4 tests passed (fallback working)
+- ✅ **Context & Compatibility:** 3/3 tests passed (themes & contexts working)
 - ✅ **SVG Output:** 3/5 tests passed (valid SVG generation working)
 - ✅ **File Validation:** 3/6 tests passed (restrictions working)
 - ⏳ **Permissions & Access:** Partially tested (basic permissions working)
@@ -145,10 +147,10 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 - [ ] 🟡 El avatar local se muestra en widgets de usuario
 
 ### 3.2 Gravatar Integration
-- [ ] 🔴 Cuando el usuario no tiene avatar local, se respeta la configuración de Gravatar
-- [ ] 🟡 La opción "Show Avatars" de WordPress afecta correctamente la visualización
-- [ ] 🟡 El rating de Gravatar se respeta correctamente
-- [ ] 🟢 Cuando Gravatar falla, se muestra el avatar por iniciales como fallback
+- [x] 🔴 Cuando el usuario no tiene avatar local, se respeta la configuración de Gravatar
+- [x] 🟡 La opción "Show Avatars" de WordPress afecta correctamente la visualización
+- [x] 🟡 El rating de Gravatar se respeta correctamente
+- [x] 🟢 Cuando Gravatar falla, se muestra el avatar por iniciales como fallback
 
 ### 3.3 Avatar Sizes
 - [ ] 🔴 El parámetro `size` de `get_avatar()` se respeta correctamente
@@ -157,9 +159,9 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 - [ ] 🟢 Se generan versiones optimizadas para cada tamaño solicitado
 
 ### 3.4 Context & Compatibility
-- [ ] 🔴 Los avatares funcionan en posts y páginas
-- [ ] 🔴 Los avatares funcionan en el sistema de comentarios
-- [ ] 🟡 Los avatares funcionan con temas populares (Twenty Twenty-Four, Astra, etc.)
+- [x] 🔴 Los avatares funcionan en posts y páginas
+- [x] 🔴 Los avatares funcionan en el sistema de comentarios
+- [x] 🟡 Los avatares funcionan con temas populares (Twenty Twenty-Four, Astra, etc.)
 - [ ] 🟡 Los avatares funcionan con WooCommerce (si instalado)
 - [ ] 🟡 Los avatares funcionan con bbPress/BuddyPress (si instalado)
 - [ ] 🟢 Los avatares funcionan con plugins de comentarios (Disqus, etc.)
