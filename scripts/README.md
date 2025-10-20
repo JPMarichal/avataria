@@ -4,6 +4,31 @@ Este directorio contiene scripts de utilidad para desarrollo, testing y verifica
 
 ## 📜 Scripts Disponibles
 
+### `demo-avatar-initials-fix.php`
+
+**Propósito:** Demostración interactiva del fix de avatar por defecto con iniciales.
+
+**Uso:**
+```bash
+php scripts/demo-avatar-initials-fix.php
+```
+
+**Características:**
+- Simula escenarios de usuarios sin avatar local
+- Muestra cómo se generan avatares con iniciales automáticamente
+- Verifica que URLs rotas como `2x` sean reemplazadas
+- Prueba ambos filtros: `filter_avatar_data` y `filter_avatar_url`
+- Output colorizado y detallado con resultados de prueba
+
+**Output esperado:**
+```
+✓ SUCCESS: Initials avatar generated!
+Initials: JD
+Background Color: #2c3e50
+```
+
+**Relacionado con:** Issue #JPMarichal/avataria (Avatar removal URL fix)
+
 ### `verify-structure.sh`
 
 **Propósito:** Verificar la congruencia absoluta de la estructura del plugin.

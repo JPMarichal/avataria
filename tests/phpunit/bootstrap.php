@@ -44,6 +44,20 @@ if ( ! function_exists( 'add_action' ) ) {
 	}
 }
 
+if ( ! function_exists( 'add_filter' ) ) {
+	/**
+	 * Mock add_filter function.
+	 *
+	 * @param string   $hook     The name of the filter.
+	 * @param callable $callback The callback function.
+	 * @param int      $priority The priority.
+	 * @param int      $args     The number of arguments.
+	 */
+	function add_filter( $hook, $callback, $priority = 10, $args = 1 ) {
+		// Mock implementation for testing.
+	}
+}
+
 if ( ! function_exists( 'do_action' ) ) {
 	/**
 	 * Mock do_action function.
@@ -342,5 +356,91 @@ if ( ! function_exists( 'number_format_i18n' ) ) {
 	 */
 	function number_format_i18n( $number, $decimals = 0 ) {
 		return number_format( $number, $decimals );
+	}
+}
+
+if ( ! function_exists( 'get_userdata' ) ) {
+	/**
+	 * Mock get_userdata function.
+	 *
+	 * @param int $user_id User ID.
+	 * @return object|false User object or false.
+	 */
+	function get_userdata( $user_id ) {
+		if ( $user_id <= 0 ) {
+			return false;
+		}
+
+		// Return a mock user object.
+		$user = new stdClass();
+		$user->ID = $user_id;
+		$user->user_login = 'testuser' . $user_id;
+		$user->user_email = 'user' . $user_id . '@example.com';
+		$user->display_name = 'Test User ' . $user_id;
+		$user->first_name = 'Test';
+		$user->last_name = 'User';
+
+		return $user;
+	}
+}
+
+if ( ! function_exists( 'get_user_by' ) ) {
+	/**
+	 * Mock get_user_by function.
+	 *
+	 * @param string $field Field name.
+	 * @param mixed  $value Field value.
+	 * @return object|false User object or false.
+	 */
+	function get_user_by( $field, $value ) {
+		// Simple mock: return a user object for any email.
+		if ( 'email' === $field && ! empty( $value ) ) {
+			$user = new stdClass();
+			$user->ID = 1;
+			$user->user_login = 'testuser';
+			$user->user_email = $value;
+			$user->display_name = 'Test User';
+			return $user;
+		}
+
+		return false;
+	}
+}
+
+if ( ! function_exists( 'get_post' ) ) {
+	/**
+	 * Mock get_post function.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return object|null Post object or null.
+	 */
+	function get_post( $post_id ) {
+		if ( $post_id <= 0 ) {
+			return null;
+		}
+
+		$post = new stdClass();
+		$post->ID = $post_id;
+		$post->post_title = 'Test Post';
+		$post->post_author = 1;
+
+		return $post;
+	}
+}
+
+if ( ! function_exists( 'wp_get_attachment_image_url' ) ) {
+	/**
+	 * Mock wp_get_attachment_image_url function.
+	 *
+	 * @param int          $attachment_id Attachment ID.
+	 * @param string|array $size          Image size.
+	 * @return string|false Image URL or false.
+	 */
+	function wp_get_attachment_image_url( $attachment_id, $size = 'thumbnail' ) {
+		if ( $attachment_id <= 0 ) {
+			return false;
+		}
+
+		return 'http://example.com/wp-content/uploads/avatar-' . $attachment_id . '.jpg';
 	}
 }

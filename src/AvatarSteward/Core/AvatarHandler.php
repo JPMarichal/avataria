@@ -146,7 +146,17 @@ class AvatarHandler {
 		$size             = $args['size'] ?? 96;
 		$local_avatar_url = $this->get_local_avatar_url( $user_id, $size );
 
-		return $local_avatar_url ? $local_avatar_url : $url;
+		if ( $local_avatar_url ) {
+			return $local_avatar_url;
+		}
+
+		// Try to generate initials avatar as fallback.
+		$initials_avatar_url = $this->get_initials_avatar_url( $user_id, $size );
+		if ( $initials_avatar_url ) {
+			return $initials_avatar_url;
+		}
+
+		return $url;
 	}
 
 	/**
