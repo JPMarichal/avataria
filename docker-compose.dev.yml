@@ -21,7 +21,7 @@ services:
       - ./wp-content/languages:/var/www/html/wp-content/languages
       - ./wp-content/uploads:/var/www/html/wp-content/uploads
       # Configuración de WordPress
-      - ./wp-config.php:/var/www/html/wp-config.php:ro
+      - ./docker/config/wp-config.php:/var/www/html/wp-config.php:ro
       # Logs de Apache/PHP para inspección en tiempo real
       - ./docker_logs:/var/log/apache2
       # Volumen persistente para WordPress core
