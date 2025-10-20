@@ -115,6 +115,31 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 - [x] 🟡 Las imágenes con transparencia (PNG/GIF) se procesan correctamente
 - [ ] 🟢 Se generan múltiples tamaños de avatar (thumbnails)
 
+#### Evidencia técnica (DevTools)
+- Resultado de consola ejecutando el snippet de validación en la página con el avatar:
+
+```
+{ currentSrc: "https://playground.wordpress.net/scope:creative-pe.../wp-content/uploads/2025/10/Avatar-The-Last-Airbender-GIF.gif-300x221.gif",
+	srcset: "https://playground.wordpress.net/.../Avatar-The-Last-Airbender-GIF.gif-300x221.gif 2x",
+	sizes: null,
+	naturalWidth: 150,
+	naturalHeight: 110 }
+```
+
+- Observación de Network: existen entradas para `Avatar-The-Last-Airbender-GIF.gif-300x221.gif` y `Avatar-The-Last-Airbender-GIF.gif-150x150.gif` (ambos servidos), indicando que WordPress generó varias versiones.
+
+Interpretación:
+- WordPress generó thumbnails (ej. 150×150 y 300×221) — por tanto podemos marcar que **se generan múltiples tamaños de avatar (thumbnails)**.
+- Sin embargo, el recurso que tiene dimensiones intrínsecas reportadas por `naturalWidth`/`naturalHeight` es 150×110 (no cuadrado), lo que indica que el thumbnail mantiene la proporción del original en lugar de hacer un crop cuadrado centrado.
+
+Conclusión y acciones recomendadas:
+- Estado actual: marcar `Se generan múltiples tamaños de avatar (thumbnails)` como **completado** (evidencia Network).
+- Mantener pendientes los checks de "redimensionado correcto" y "proporciones" hasta aplicar uno de los siguientes arreglos o confirmar comportamiento esperado:
+	1) Generar thumbs cuadrados (crop) añadiendo `add_image_size('avatar-50', 50, 50, true);` y regenerando miniaturas (`wp media regenerate --yes`). Esto asegura thumbnails intrínsecamente 50×50/150×150.
+	2) Aplicar CSS `object-fit: cover` a los avatares en UI para evitar distorsión visual inmediata sin regenerar imágenes.
+
+Documentar: incluir los valores `naturalWidth`/`naturalHeight` y captura de Network junto a esta prueba como evidencia.
+
 ### Validación rápida y flujo de descarte para tests críticos (ej. 2.3)
 
 Objetivo: proporcionar un flujo rápido, reproducible y con criterios de aceptación para validar (o justificar aceptar) los tests críticos de procesamiento de imágenes sin necesidad de una batería larga de pruebas manuales.
