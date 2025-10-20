@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace AvatarSteward\Core;
 
 use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
+use AvatarSteward\Domain\Initials\Generator;
+use AvatarSteward\Domain\Uploads\UploadService;
 
 /**
  * AvatarHandler class for managing avatar display.
@@ -27,11 +29,34 @@ class AvatarHandler {
 	private const META_KEY = 'avatar_steward_avatar';
 
 	/**
+	 * Upload service instance.
+	 *
+	 * @var UploadService
+	 */
+	private UploadService $upload_service;
+
+	/**
 	 * Bandwidth optimizer instance.
 	 *
 	 * @var BandwidthOptimizer|null
 	 */
 	private ?BandwidthOptimizer $optimizer = null;
+
+	/**
+	 * Initials generator instance.
+	 *
+	 * @var Generator|null
+	 */
+	private ?Generator $generator = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param UploadService $upload_service Upload service instance.
+	 */
+	public function __construct( UploadService $upload_service ) {
+		$this->upload_service = $upload_service;
+	}
 
 	/**
 	 * Set the bandwidth optimizer.
@@ -41,6 +66,16 @@ class AvatarHandler {
 	 */
 	public function set_optimizer( BandwidthOptimizer $optimizer ): void {
 		$this->optimizer = $optimizer;
+	}
+
+	/**
+	 * Set the initials generator.
+	 *
+	 * @param Generator $generator Initials generator instance.
+	 * @return void
+	 */
+	public function set_generator( Generator $generator ): void {
+		$this->generator = $generator;
 	}
 
 	/**
@@ -78,6 +113,13 @@ class AvatarHandler {
 		if ( $local_avatar_url ) {
 			$args['url']          = $local_avatar_url;
 			$args['found_avatar'] = true;
+		} else {
+			// Try to generate initials avatar as fallback
+			$initials_avatar_url = $this->get_initials_avatar_url( $user_id, $args['size'] ?? 96 );
+			if ( $initials_avatar_url ) {
+				$args['url']          = $initials_avatar_url;
+				$args['found_avatar'] = true;
+			}
 		}
 
 		return $args;
@@ -247,5 +289,48 @@ class AvatarHandler {
 		$avatar_id = get_user_meta( $user_id, self::META_KEY, true );
 
 		return ! empty( $avatar_id );
+	}
+
+	/**
+	 * Generate initials avatar URL.
+	 *
+	 * @param int $user_id User ID.
+	 * @param int $size Avatar size.
+	 * @return string|null Avatar URL or null if generation fails.
+	 */
+	private function get_initials_avatar_url( int $user_id, int $size ): ?string {
+		if ( ! $this->generator ) {
+			return null;
+		}
+
+		// Get user info for initials generation
+		if ( ! function_exists( 'get_userdata' ) ) {
+			return null;
+		}
+
+		$user = get_userdata( $user_id );
+		if ( ! $user ) {
+			return null;
+		}
+
+		// Generate display name for initials
+		$display_name = '';
+		if ( ! empty( $user->display_name ) ) {
+			$display_name = $user->display_name;
+		} elseif ( ! empty( $user->first_name ) || ! empty( $user->last_name ) ) {
+			$display_name = trim( $user->first_name . ' ' . $user->last_name );
+		} else {
+			$display_name = $user->user_login;
+		}
+
+		// Generate SVG avatar with initials
+		try {
+			$svg_content = $this->generator->generate( $display_name, $size );
+			
+			// Return data URL for immediate use
+			return 'data:image/svg+xml;charset=utf-8,' . rawurlencode( $svg_content );
+		} catch ( \Exception $e ) {
+			return null;
+		}
 	}
 }

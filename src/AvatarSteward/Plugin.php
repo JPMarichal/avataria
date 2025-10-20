@@ -61,6 +61,20 @@ final class Plugin {
 	private ?Core\AvatarHandler $avatar_handler = null;
 
 	/**
+	 * Initials generator instance.
+	 *
+	 * @var Domain\Initials\Generator|null
+	 */
+	private ?Domain\Initials\Generator $initials_generator = null;
+
+	/**
+	 * Bandwidth optimizer instance.
+	 *
+	 * @var Domain\LowBandwidth\BandwidthOptimizer|null
+	 */
+	private ?Domain\LowBandwidth\BandwidthOptimizer $bandwidth_optimizer = null;
+
+	/**
 	 * Private constructor to prevent direct instantiation.
 	 */
 	private function __construct() {
@@ -91,6 +105,8 @@ final class Plugin {
 		$this->init_settings_page();
 		$this->init_migration_page();
 		$this->init_upload_services();
+		$this->init_initials_generator();
+		$this->init_bandwidth_optimizer();
 		$this->init_avatar_handler();
 
 		if ( function_exists( 'do_action' ) ) {
@@ -180,6 +196,41 @@ final class Plugin {
 	}
 
 	/**
+	 * Initialize initials generator.
+	 *
+	 * @return void
+	 */
+	private function init_initials_generator(): void {
+		// Load Generator class.
+		if ( ! class_exists( Domain\Initials\Generator::class ) ) {
+			require_once __DIR__ . '/Domain/Initials/Generator.php';
+		}
+
+		// Create initials generator instance.
+		$this->initials_generator = new Domain\Initials\Generator();
+	}
+
+	/**
+	 * Initialize bandwidth optimizer.
+	 *
+	 * @return void
+	 */
+	private function init_bandwidth_optimizer(): void {
+		// Load BandwidthOptimizer class.
+		if ( ! class_exists( Domain\LowBandwidth\BandwidthOptimizer::class ) ) {
+			require_once __DIR__ . '/Domain/LowBandwidth/BandwidthOptimizer.php';
+		}
+
+		// Ensure initials generator is available.
+		if ( ! $this->initials_generator ) {
+			$this->init_initials_generator();
+		}
+
+		// Create bandwidth optimizer instance.
+		$this->bandwidth_optimizer = new Domain\LowBandwidth\BandwidthOptimizer( $this->initials_generator );
+	}
+
+	/**
 	 * Initialize avatar handler.
 	 *
 	 * @return void
@@ -198,12 +249,20 @@ final class Plugin {
 		// Create upload service instance for avatar handler.
 		$upload_service = new Domain\Uploads\UploadService();
 
-		// Create and initialize avatar handler.
+		// Create and initialize avatar handler with services.
 		$this->avatar_handler = new Core\AvatarHandler( $upload_service );
-		$this->avatar_handler->init();
 		
-		// Debug: Confirm avatar handler initialization
-		error_log( "Avatar Steward Plugin: AvatarHandler initialized successfully" );
+		// Set bandwidth optimizer if available.
+		if ( $this->bandwidth_optimizer ) {
+			$this->avatar_handler->set_optimizer( $this->bandwidth_optimizer );
+		}
+		
+		// Set initials generator if available.
+		if ( $this->initials_generator ) {
+			$this->avatar_handler->set_generator( $this->initials_generator );
+		}
+		
+		$this->avatar_handler->init();
 	}
 
 	/**
@@ -231,5 +290,23 @@ final class Plugin {
 	 */
 	public function get_avatar_handler(): ?Core\AvatarHandler {
 		return $this->avatar_handler;
+	}
+
+	/**
+	 * Get the initials generator instance.
+	 *
+	 * @return Domain\Initials\Generator|null Initials generator instance.
+	 */
+	public function get_initials_generator(): ?Domain\Initials\Generator {
+		return $this->initials_generator;
+	}
+
+	/**
+	 * Get the bandwidth optimizer instance.
+	 *
+	 * @return Domain\LowBandwidth\BandwidthOptimizer|null Bandwidth optimizer instance.
+	 */
+	public function get_bandwidth_optimizer(): ?Domain\LowBandwidth\BandwidthOptimizer {
+		return $this->bandwidth_optimizer;
 	}
 }
