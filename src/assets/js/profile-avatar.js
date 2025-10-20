@@ -82,45 +82,10 @@
 		try {
 			repositionAvatarSection();
 			
-			// Add form submission debug and fix enctype
+			// Fix form enctype to allow file uploads
 			const form = document.querySelector('form#your-profile');
-			if (form) {
-				console.log('Avatar Steward: Profile form found');
-				
-				// ¡IMPORTANTE! Añadir enctype para permitir uploads de archivos
-				const currentEnctype = form.getAttribute('enctype');
-				console.log('Current form enctype:', currentEnctype);
-				
-				if (currentEnctype !== 'multipart/form-data') {
-					form.setAttribute('enctype', 'multipart/form-data');
-					console.log('✅ Avatar Steward: Added enctype="multipart/form-data" to form');
-				} else {
-					console.log('✅ Avatar Steward: Form already has correct enctype');
-				}
-				
-				form.addEventListener('submit', function(e) {
-					console.log('🚀 Avatar Steward: Form submission detected!');
-					
-					const fileInput = document.querySelector('input[name="avatar_steward_file"]');
-					const nonceInput = document.querySelector('input[name="avatar_steward_nonce"]');
-					
-					console.log('📁 File input found:', !!fileInput);
-					console.log('🔐 Nonce input found:', !!nonceInput);
-					
-					if (fileInput) {
-						console.log('📄 File selected:', fileInput.files.length > 0);
-						if (fileInput.files.length > 0) {
-							console.log('📝 File name:', fileInput.files[0].name);
-							console.log('📏 File size:', fileInput.files[0].size, 'bytes');
-						}
-					}
-					
-					if (nonceInput) {
-						console.log('🔑 Nonce value:', nonceInput.value);
-					}
-				});
-			} else {
-				console.log('Avatar Steward: Profile form NOT found');
+			if (form && form.getAttribute('enctype') !== 'multipart/form-data') {
+				form.setAttribute('enctype', 'multipart/form-data');
 			}
 			
 		} catch (error) {
