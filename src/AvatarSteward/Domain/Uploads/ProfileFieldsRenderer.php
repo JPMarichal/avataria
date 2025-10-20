@@ -146,7 +146,7 @@ class ProfileFieldsRenderer {
 
 		?>
 		<div id="avatar-steward-section" class="avatarsteward-highlight">
-			<h2><?php esc_html_e( 'Avatar', 'avatar-steward' ); ?></h2>
+			<h2><?php esc_html_e( 'Avatar Steward', 'avatar-steward' ); ?></h2>
 			<table class="form-table">
 				<tr>
 					<th>
