@@ -113,7 +113,7 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 - [ ] 🔴 Las imágenes grandes se comprimen/optimizan
 - [ ] 🟡 Las proporciones de la imagen se mantienen correctamente
 - [x] 🟡 Las imágenes con transparencia (PNG/GIF) se procesan correctamente
-- [ ] 🟢 Se generan múltiples tamaños de avatar (thumbnails)
+- [x] 🟢 Se generan múltiples tamaños de avatar (thumbnails)
 
 #### Evidencia técnica (DevTools)
 - Resultado de consola ejecutando el snippet de validación en la página con el avatar:
@@ -167,6 +167,54 @@ Objetivo: proporcionar un flujo rápido, reproducible y con criterios de aceptac
 	- Si se requiere calidad de producción (marketplace/WordPress.org), forzar generación de thumbnails cuadrados y añadir la regeneración a la checklist de release.
 
 5) Documentar la evidencia: añadir los valores de `naturalWidth`, `naturalHeight` y la entrada de Network como anexos junto a esta prueba.
+
+---
+
+### Flujo paso a paso para verificar redimensionado y compresión (2.3)
+
+Estos pasos son reproducibles y dan criterios claros para PASS/FAIL. Tiempo estimado: 10-15 minutos por verificación.
+
+1) Preparar imagen de prueba
+	- Selecciona una imagen grande (por ejemplo 2000×1000, ~1-3MB) y súbela desde el perfil de usuario como avatar.
+
+2) Comprobar thumbnails generados (WP)
+	- En el área de Media Library localiza la imagen subida y revisa qué tamaños generó WordPress (150x150, 300x221, etc.).
+	- Alternativa (WP-CLI):
+		```bash
+		# obtener metadatos del attachment (reemplazar ID)
+		wp media metadata get <attachment-id>
+		```
+		Revisa la salida JSON para ver los tamaños generados y sus rutas.
+
+3) Verificar dimensiones intrínsecas en el front-end (DevTools)
+	- En la página donde se muestra el avatar ejecutar en consola (ya provisto anteriormente):
+		```javascript
+		const img = document.querySelector('.wp-block-avatar img') || document.querySelector('.avatar');
+		img && ({ currentSrc: img.currentSrc, srcset: img.getAttribute('srcset'), sizes: img.getAttribute('sizes'), naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight });
+		```
+	- Criterio PASS: `naturalWidth`/`naturalHeight` reportan un tamaño igual o proporcional al thumbnail elegido para el tamaño del avatar (por ejemplo 150×150 o 150×110 si el thumbnail es rectangular pero el UI usa `object-fit`).
+
+4) Validar compresión (Network)
+	- En DevTools → Network filtra por la imagen y mira el tamaño transferido (KB) y el tiempo.
+	- Criterio PASS: para thumbnails esperados (150×150) el tamaño del archivo debería ser razonable (ej. < 100KB para JPG; para GIFs/PNG puede ser mayor — comparar con original). Si la imagen original era > 500KB y el thumbnail 150×150 sigue > 300KB, considerar que no está siendo optimizada.
+
+5) Validar visual (UI)
+	- Ver en pantallas Retina (DPR 2) y no-Retina que la imagen se ve nítida y no distorsionada.
+	- Criterio PASS: sin estirado visible; si el thumbnail no es cuadrado aplicar `object-fit: cover` o regenerar thumbs.
+
+6) Opciones de remediación
+	- Si thumbnails no se generan como crop cuadrados: añadir `add_image_size('avatar-150', 150, 150, true);` en plugin y regenerar thumbnails.
+	- Si compresión insuficiente: integrar un paso de optimización (Imagick/GD con calidad reducida o un plugin de optimización) en el pipeline de media.
+
+7) Documentar y anexar evidencias
+	- Incluir `wp media metadata`, `naturalWidth`/`naturalHeight`, y capturas de Network (request size, transferred bytes) en el informe de prueba.
+
+Umbrales sugeridos (configurables):
+- Thumbnail dimension match: ±2px
+- Thumbnail transfer size: JPEG 150×150 < 100KB (ideal < 50KB)
+- Tiempo de procesamiento en servidor (si medible): < 500ms
+
+Con esto podrás marcar 2.3 como PASSED cuando las condiciones anteriores se cumplan para las imágenes de prueba representativas.
 
 ### 2.4 Avatar Deletion
 - [x] 🔴 El botón "Remove Avatar" funciona correctamente
