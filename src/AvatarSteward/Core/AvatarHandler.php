@@ -326,7 +326,7 @@ class AvatarHandler {
 		// Generate SVG avatar with initials
 		try {
 			$svg_content = $this->generator->generate( $display_name, $size );
-			
+
 			// Return data URL for immediate use
 			return 'data:image/svg+xml;charset=utf-8,' . rawurlencode( $svg_content );
 		} catch ( \Exception $e ) {

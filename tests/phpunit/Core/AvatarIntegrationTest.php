@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use AvatarSteward\Core\AvatarHandler;
+use AvatarSteward\Domain\Uploads\UploadService;
 
 /**
  * Integration test case for WordPress avatar compatibility.
@@ -27,7 +28,8 @@ final class AvatarIntegrationTest extends TestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->handler = new AvatarHandler();
+		$upload_service = new UploadService();
+		$this->handler = new AvatarHandler( $upload_service );
 		$this->handler->init();
 	}
 

@@ -24,37 +24,70 @@
 		console.log('Avatar Steward: Found avatar section, attempting to reposition...');
 
 		// Strategy 1: Look for WordPress profile form structure
-		// In WordPress admin, profile forms have specific classes and structures
 		const profileForm = document.querySelector('.user-edit-php, .profile-php');
 		if (!profileForm) {
 			console.log('Avatar Steward: Profile form not found');
 			return;
 		}
 
-		// Strategy 2: Find the first form-table (usually "Personal Options" or similar)
+		// Strategy 2: Find all form tables and position after "About Yourself" section
 		const formTables = profileForm.querySelectorAll('.form-table');
-		if (formTables.length === 0) {
-			console.log('Avatar Steward: No form tables found');
+		if (formTables.length < 5) {
+			console.log('Avatar Steward: Expected at least 5 form tables, found ' + formTables.length);
 			return;
 		}
 
-		// Insert after the first form-table (which is typically "Personal Options")
-		const firstTable = formTables[0];
-		const insertionPoint = firstTable.nextElementSibling;
+		// Look for the "About Yourself" section (usually the 5th table containing biographical info)
+		// or search by content for more reliable positioning
+		let aboutYourselfTable = null;
+		
+		// First try to find by looking for biographical info text
+		for (let i = 0; i < formTables.length; i++) {
+			const table = formTables[i];
+			const text = table.textContent || table.innerText;
+			if (text.includes('Información biográfica') || text.includes('biográfica') || 
+			    text.includes('Biographical Info') || text.includes('About Yourself') ||
+			    text.includes('Imagen de perfil') || text.includes('Profile Picture')) {
+				aboutYourselfTable = table;
+				console.log('Avatar Steward: Found "About Yourself" section by content search at table index ' + i);
+				break;
+			}
+		}
+		
+		// Fallback: use the 5th table (index 4) if content search fails
+		if (!aboutYourselfTable && formTables.length >= 5) {
+			aboutYourselfTable = formTables[4];
+			console.log('Avatar Steward: Using 5th table as fallback for "About Yourself" section');
+		}
+		
+		if (!aboutYourselfTable) {
+			console.log('Avatar Steward: Could not locate "About Yourself" section');
+			return;
+		}
+
+		// Insert after the "About Yourself" table
+		const insertionPoint = aboutYourselfTable.nextElementSibling;
 		
 		if (insertionPoint) {
-			firstTable.parentNode.insertBefore(avatarSection, insertionPoint);
-			console.log('Avatar Steward: Avatar section repositioned after first form table');
+			aboutYourselfTable.parentNode.insertBefore(avatarSection, insertionPoint);
+			console.log('Avatar Steward: Avatar section repositioned after "About Yourself" section');
 		} else {
-			// If no next sibling, append after the first table
-			firstTable.parentNode.insertBefore(avatarSection, firstTable.nextSibling);
-			console.log('Avatar Steward: Avatar section repositioned as next sibling of first form table');
+			// If no next sibling, append after the about yourself table
+			aboutYourselfTable.parentNode.appendChild(avatarSection);
+			console.log('Avatar Steward: Avatar section appended after "About Yourself" section (no next sibling)');
 		}
 	}	// Run when DOM is ready
 	function initAvatarSteward() {
 		console.log('Avatar Steward JS: Initializing...');
 		try {
 			repositionAvatarSection();
+			
+			// Fix form enctype to allow file uploads
+			const form = document.querySelector('form#your-profile');
+			if (form && form.getAttribute('enctype') !== 'multipart/form-data') {
+				form.setAttribute('enctype', 'multipart/form-data');
+			}
+			
 		} catch (error) {
 			console.error('Avatar Steward JS: Error during repositioning:', error);
 		}

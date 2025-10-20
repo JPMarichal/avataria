@@ -36,10 +36,10 @@ class UploadHandler {
 	 * @return void
 	 */
 	public function register_hooks(): void {
-		error_log( "UploadHandler: Registering WordPress hooks for profile updates" );
+		error_log( 'UploadHandler: Registering WordPress hooks for profile updates' );
 		add_action( 'personal_options_update', array( $this, 'handle_profile_update' ) );
 		add_action( 'edit_user_profile_update', array( $this, 'handle_profile_update' ) );
-		error_log( "UploadHandler: Hooks registered successfully" );
+		error_log( 'UploadHandler: Hooks registered successfully' );
 	}
 
 	/**
@@ -70,9 +70,9 @@ class UploadHandler {
 		}
 
 		// Check if file was uploaded.
-		$has_files = ! empty( $_FILES['avatar_steward_file'] );
+		$has_files    = ! empty( $_FILES['avatar_steward_file'] );
 		$has_tmp_name = ! empty( $_FILES['avatar_steward_file']['tmp_name'] );
-		
+
 		if ( ! $has_files || ! $has_tmp_name ) {
 			return;
 		}

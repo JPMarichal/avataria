@@ -251,17 +251,17 @@ final class Plugin {
 
 		// Create and initialize avatar handler with services.
 		$this->avatar_handler = new Core\AvatarHandler( $upload_service );
-		
+
 		// Set bandwidth optimizer if available.
 		if ( $this->bandwidth_optimizer ) {
 			$this->avatar_handler->set_optimizer( $this->bandwidth_optimizer );
 		}
-		
+
 		// Set initials generator if available.
 		if ( $this->initials_generator ) {
 			$this->avatar_handler->set_generator( $this->initials_generator );
 		}
-		
+
 		$this->avatar_handler->init();
 	}
 

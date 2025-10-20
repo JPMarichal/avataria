@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use AvatarSteward\Core\AvatarHandler;
 use AvatarSteward\Domain\Initials\Generator;
 use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
+use AvatarSteward\Domain\Uploads\UploadService;
 
 /**
  * Integration test case for AvatarHandler with BandwidthOptimizer.
@@ -46,7 +47,8 @@ final class AvatarHandlerLowBandwidthTest extends TestCase {
 			)
 		);
 
-		$this->handler = new AvatarHandler();
+		$upload_service = new UploadService();
+		$this->handler  = new AvatarHandler( $upload_service );
 		$this->handler->set_optimizer( $this->optimizer );
 		$this->handler->init();
 	}
@@ -202,7 +204,8 @@ final class AvatarHandlerLowBandwidthTest extends TestCase {
 	 * Test that handler works without optimizer.
 	 */
 	public function test_handler_works_without_optimizer() {
-		$handler_no_opt = new AvatarHandler();
+		$upload_service = new UploadService();
+		$handler_no_opt = new AvatarHandler( $upload_service );
 		$handler_no_opt->init();
 
 		$args = array(
@@ -297,7 +300,8 @@ final class AvatarHandlerLowBandwidthTest extends TestCase {
 				'threshold' => 204800, // 200KB.
 			)
 		);
-		$handler2 = new AvatarHandler();
+		$upload_service2 = new UploadService();
+		$handler2        = new AvatarHandler( $upload_service2 );
 		$handler2->set_optimizer( $optimizer2 );
 		$handler2->init();
 
