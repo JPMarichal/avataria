@@ -97,6 +97,9 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 - [x] 🔴 El avatar se muestra inmediatamente tras la carga exitosa
 - [x] 🔴 Se muestra mensaje de éxito tras subir el avatar
 
+#### Evidencia adjunta
+- Captura: `playground` (comentarios) muestra un avatar GIF cargado y renderizado en el contexto de comentarios. Esta captura sirve como evidencia visual para los puntos de "Basic Upload" (tipo GIF/PNG presentados y avatar mostrado en UI).
+
 ### 2.2 File Validation
 - [x] 🔴 Se rechazan archivos que no son imágenes (ej. .txt, .pdf, .exe)
 - [x] 🔴 Se rechazan imágenes que exceden el tamaño máximo configurado
@@ -111,6 +114,34 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 - [ ] 🟡 Las proporciones de la imagen se mantienen correctamente
 - [x] 🟡 Las imágenes con transparencia (PNG/GIF) se procesan correctamente
 - [ ] 🟢 Se generan múltiples tamaños de avatar (thumbnails)
+
+### Validación rápida y flujo de descarte para tests críticos (ej. 2.3)
+
+Objetivo: proporcionar un flujo rápido, reproducible y con criterios de aceptación para validar (o justificar aceptar) los tests críticos de procesamiento de imágenes sin necesidad de una batería larga de pruebas manuales.
+
+1) Recolección de evidencia mínima (5 min)
+	- En la página con el avatar (Playground o entorno local) ejecutar en la consola de DevTools:
+		```javascript
+		// seleccionar el elemento <img> del avatar y comprobar dimensiones
+		const img = document.querySelector('.wp-block-avatar img') || document.querySelector('.avatar');
+		img && ({ currentSrc: img.currentSrc, srcset: img.getAttribute('srcset'), sizes: img.getAttribute('sizes'), naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight });
+		```
+	- En Network, recargar y confirmar qué URL se descarga y sus dimensiones/KB.
+
+2) Criterios de aceptación para marcar 2.3 como PASSED
+	- Redimensionado: `naturalWidth`/`naturalHeight` del thumbnail ofrecido para el tamaño 50px debe ser aproximadamente 50×50 (o un recurso cuadrado de 100×100/150×150 que el navegador reduce sin distorsión). Aceptar ±2px.
+	- Compresión: El tamaño del archivo para thumbnails típicos debe ser razonable (< 100KB para 150×150 JPEG por defecto en ambientes de prueba). Ajustar umbral según políticas del sitio.
+	- Proporciones: Si el recurso intrínseco no es cuadrado, debe aplicarse `object-fit: cover` o el thumbnail generado debe ser recortado (crop) al centro.
+
+3) Pasos de corrección rápida (si falla)
+	- Ejecutar `add_image_size('avatar-50', 50, 50, true);` en plugin/theme y regenerar thumbnails con WP-CLI: `wp media regenerate --yes`.
+	- Aplicar CSS temporal con `object-fit: cover` para evitar distorsión visual inmediata.
+
+4) Decisión de descarte (risk-based)
+	- Si el plugin proporciona fallback (iniciales SVG) y la experiencia visual no sufre distorsiones críticas, se puede aceptar temporalmente como "low risk" hasta regenerar thumbs en la próxima release.
+	- Si se requiere calidad de producción (marketplace/WordPress.org), forzar generación de thumbnails cuadrados y añadir la regeneración a la checklist de release.
+
+5) Documentar la evidencia: añadir los valores de `naturalWidth`, `naturalHeight` y la entrada de Network como anexos junto a esta prueba.
 
 ### 2.4 Avatar Deletion
 - [x] 🔴 El botón "Remove Avatar" funciona correctamente
