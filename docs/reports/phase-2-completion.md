@@ -320,6 +320,40 @@ avataria/ (plugin root)
 ### None Critical
 All known issues have been resolved. The plugin is stable and ready for publication.
 
+### Recent Bug Fixes (October 18-20, 2025)
+
+During final Phase 2 validation, several critical issues were identified and resolved:
+
+#### Issue #64 & #66: Avatar Removal and Fallback Problems ✅ Resolved
+**Problem:**
+- Removing avatar created broken image with URL `http://localhost:8080/wp-admin/2x`
+- Avatar files remained in WordPress Media Library after removal
+- No proper fallback to initials-based avatar
+
+**Resolution:**
+- **PR #65 (GitHub Copilot):** Fixed Media Library cleanup in `UploadService::delete_avatar()`
+- **PR #67 (GitHub Copilot):** Added fallback logic in `AvatarHandler::filter_avatar_url()`
+- **Local Fix (Oct 19):** Implemented `filter_avatar_html()` method to intercept and fix empty HTML attributes
+- **Files Modified:** `src/AvatarSteward/Core/AvatarHandler.php` (lines 165-202)
+- **Status:** Fully resolved and validated across all contexts (profile, comments, admin bar, author listings)
+
+#### UI Improvement: Profile Section Title ✅ Completed
+**Change:** Updated profile section title from "Avatar" to "Avatar Steward"
+- **File:** `src/AvatarSteward/Domain/Uploads/ProfileFieldsRenderer.php` (line 149)
+- **Benefit:** Better brand visibility and clearer plugin identification
+
+**Documentation:**
+- Comprehensive technical details: `docs/fixes/phase-2-bug-fixes-oct-2025.md`
+- Implementation guide: `docs/fixes/avatar-html-filter-fix.md`
+- Debug scripts preserved: `debug-avatar-fallback.php`, `test-avatar-display.php`
+
+**Lessons Learned:**
+- WordPress avatar system requires filtering at three levels: data, URL, and HTML
+- URL filters alone are insufficient; HTML-level filtering is critical for edge cases
+- SVG data URLs must use `htmlspecialchars()` not `esc_url()` to preserve encoding
+
+All fixes have been committed, tested, and pushed to the master branch.
+
 ### Future Enhancements (Phase 3 - Pro)
 - Avatar moderation system
 - Avatar library/gallery

@@ -1,17 +1,37 @@
 # Phase 2 - Acceptance Testing Checklist
 **Version:** 0.1.0 (MVP)  
-**Date:** October 20, 2025  
-**Status:** Ready for Testing  
-**Tester:** _______________  
-**Test Environment:** _______________
+**Date:** October 20, 2025
+**Status:** In Progress - Partially Validated
+**Tester:** JPMarichal
+**Test Environment:** Docker Dev Environment (WordPress 6.4+, PHP 8.0)
+**Last Updated:** October 20, 2025
+
+---
+
+## Testing Progress
+
+**Overall Status:** 🟡 Partially Complete
+
+### Summary
+- ✅ **Installation & Activation:** 6/6 critical tests passed
+- ✅ **Avatar Upload (JPG):** 4/7 tests passed (PNG/GIF pending)
+- ✅ **Avatar Deletion:** 4/5 tests passed
+- ✅ **Avatar Display:** 5/6 critical contexts validated
+- ⏳ **File Validation:** Not yet tested
+- ⏳ **Compatibility Testing:** Not yet tested
+- ⏳ **Performance Testing:** Not yet tested
+
+### Recent Fixes Validated
+- ✅ Issue #64/#66: Avatar removal now works correctly with proper fallback
+- ✅ Media Library cleanup functioning
+- ✅ Initials-based avatar generation working
+- ✅ Avatar display in all major contexts (profile, comments, admin bar, author listings)
 
 ---
 
 ## Introduction
 
-Este documento contiene la lista exhaustiva de pruebas de aceptación que deben completarse antes de dar por finalizada la **Fase 2: Desarrollo del MVP - Versión Gratuita**. Las pruebas cubren funcionalidad, usabilidad, seguridad, rendimiento y compatibilidad.
-
-### Criterios de Aprobación
+Este documento contiene la lista exhaustiva de pruebas de aceptación que deben completarse antes de dar por finalizada la **Fase 2: Desarrollo del MVP - Versión Gratuita**. Las pruebas cubren funcionalidad, usabilidad, seguridad, rendimiento y compatibilidad.### Criterios de Aprobación
 - ✅ Todas las pruebas críticas deben pasar (marcadas con 🔴)
 - ✅ Al menos 95% de pruebas no críticas deben pasar
 - ✅ Cualquier fallo debe ser documentado con evidencia (screenshots/logs)
@@ -29,17 +49,17 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 ## 1. Installation & Setup Tests
 
 ### 1.1 Plugin Installation
-- [ ] 🔴 El plugin se activa correctamente desde la interfaz de WordPress
-- [ ] 🔴 No aparecen errores PHP en el log durante la activación
-- [ ] 🔴 Las tablas/opciones necesarias se crean correctamente
+- [x] 🔴 El plugin se activa correctamente desde la interfaz de WordPress
+- [x] 🔴 No aparecen errores PHP en el log durante la activación
+- [x] 🔴 Las tablas/opciones necesarias se crean correctamente
 - [ ] 🟡 El menú "Avatar Steward" aparece en el panel de administración
 - [ ] 🟡 La página de configuración es accesible inmediatamente después de activar
 - [ ] 🟢 Se muestra un mensaje de bienvenida o notice tras activación exitosa
 
 ### 1.2 Plugin Deactivation
-- [ ] 🔴 El plugin se desactiva sin errores
-- [ ] 🟡 Los avatares locales siguen funcionando después de desactivar y reactivar
-- [ ] 🟡 Las configuraciones se preservan tras desactivar/reactivar
+- [x] 🔴 El plugin se desactiva sin errores
+- [x] 🟡 Los avatares locales siguen funcionando después de desactivar y reactivar
+- [x] 🟡 Las configuraciones se preservan tras desactivar/reactivar
 
 ### 1.3 Uninstall Process
 - [ ] 🟡 La desinstalación limpia las opciones del plugin (si configurado)
@@ -58,13 +78,13 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 ## 2. Avatar Upload Functionality (Tarea 2.1)
 
 ### 2.1 Basic Upload
-- [ ] 🔴 El formulario de carga aparece en el perfil de usuario (Edit Profile)
-- [ ] 🔴 Se pueden subir imágenes JPG correctamente
+- [x] 🔴 El formulario de carga aparece en el perfil de usuario (Edit Profile)
+- [x] 🔴 Se pueden subir imágenes JPG correctamente
 - [ ] 🔴 Se pueden subir imágenes PNG correctamente
 - [ ] 🔴 Se pueden subir imágenes GIF correctamente
 - [ ] 🟡 Se pueden subir imágenes WebP (si soportado)
-- [ ] 🔴 El avatar se muestra inmediatamente tras la carga exitosa
-- [ ] 🔴 Se muestra mensaje de éxito tras subir el avatar
+- [x] 🔴 El avatar se muestra inmediatamente tras la carga exitosa
+- [x] 🔴 Se muestra mensaje de éxito tras subir el avatar
 
 ### 2.2 File Validation
 - [ ] 🔴 Se rechazan archivos que no son imágenes (ej. .txt, .pdf, .exe)
@@ -82,11 +102,11 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 - [ ] 🟢 Se generan múltiples tamaños de avatar (thumbnails)
 
 ### 2.4 Avatar Deletion
-- [ ] 🔴 El botón "Remove Avatar" funciona correctamente
-- [ ] 🔴 El archivo de avatar se elimina del servidor
-- [ ] 🔴 El usuario vuelve a ver el avatar por defecto tras eliminar
+- [x] 🔴 El botón "Remove Avatar" funciona correctamente
+- [x] 🔴 El archivo de avatar se elimina del servidor
+- [x] 🔴 El usuario vuelve a ver el avatar por defecto tras eliminar
 - [ ] 🟡 Se muestra confirmación antes de eliminar el avatar
-- [ ] 🟡 Se limpia la base de datos (user meta) al eliminar avatar
+- [x] 🟡 Se limpia la base de datos (user meta) al eliminar avatar
 
 ### 2.5 Permissions & Access Control
 - [ ] 🔴 Los usuarios pueden subir avatares para su propio perfil
@@ -108,11 +128,11 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 ## 3. Avatar Override System (Tarea 2.2)
 
 ### 3.1 Basic Override Functionality
-- [ ] 🔴 `get_avatar()` retorna el avatar local cuando existe
-- [ ] 🔴 `get_avatar()` retorna avatar por iniciales cuando no existe avatar local
-- [ ] 🔴 El avatar local se muestra en comentarios
-- [ ] 🔴 El avatar local se muestra en la barra de admin (Toolbar)
-- [ ] 🔴 El avatar local se muestra en listados de autores
+- [x] 🔴 `get_avatar()` retorna el avatar local cuando existe
+- [x] 🔴 `get_avatar()` retorna avatar por iniciales cuando no existe avatar local
+- [x] 🔴 El avatar local se muestra en comentarios
+- [x] 🔴 El avatar local se muestra en la barra de admin (Toolbar)
+- [x] 🔴 El avatar local se muestra en listados de autores
 - [ ] 🟡 El avatar local se muestra en widgets de usuario
 
 ### 3.2 Gravatar Integration
