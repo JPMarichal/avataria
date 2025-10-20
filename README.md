@@ -296,6 +296,12 @@ Control who can upload avatars and whether moderation is required:
 - **Purpose**: Enable moderation queue where avatars must be approved before display
 - **Note**: When enabled, new uploads are held for review by administrators
 
+#### Delete Attachment on Remove
+- **Type**: Checkbox (enabled/disabled)
+- **Default**: Disabled
+- **Purpose**: Automatically delete avatar attachment from Media Library when user removes their avatar
+- **Note**: When enabled, the attachment file is permanently deleted only if it's not used by other users. When disabled, the attachment remains in the Media Library after avatar removal.
+
 ### Saving Settings
 
 1. Configure your desired options
@@ -394,13 +400,14 @@ All settings have sensible defaults:
 
 ```php
 array(
-    'max_file_size'    => 2.0,                     // 2 MB
-    'allowed_formats'  => ['image/jpeg', 'image/png'],
-    'max_width'        => 2048,                    // pixels
-    'max_height'       => 2048,                    // pixels
-    'convert_to_webp'  => false,
-    'allowed_roles'    => ['administrator', 'editor', 'author', 'contributor', 'subscriber'],
-    'require_approval' => false,
+    'max_file_size'                => 2.0,                     // 2 MB
+    'allowed_formats'              => ['image/jpeg', 'image/png'],
+    'max_width'                    => 2048,                    // pixels
+    'max_height'                   => 2048,                    // pixels
+    'convert_to_webp'              => false,
+    'allowed_roles'                => ['administrator', 'editor', 'author', 'contributor', 'subscriber'],
+    'require_approval'             => false,
+    'delete_attachment_on_remove'  => false,
 )
 ```
 

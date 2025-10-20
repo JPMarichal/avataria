@@ -331,13 +331,20 @@ class UploadService {
 	/**
 	 * Delete a user's avatar.
 	 *
-	 * @param int $user_id User ID.
+	 * @param int  $user_id            User ID.
+	 * @param bool $delete_attachment  Whether to delete the attachment file from media library.
 	 *
 	 * @return bool Whether the avatar was deleted successfully.
 	 */
-	public function delete_avatar( int $user_id ): bool {
+	public function delete_avatar( int $user_id, bool $delete_attachment = false ): bool {
 		if ( $this->logger ) {
-			$this->logger->info( 'Deleting avatar', array( 'user_id' => $user_id ) );
+			$this->logger->info(
+				'Deleting avatar',
+				array(
+					'user_id'           => $user_id,
+					'delete_attachment' => $delete_attachment,
+				)
+			);
 		}
 
 		$avatar_id = get_user_meta( $user_id, 'avatar_steward_avatar', true );
@@ -352,6 +359,41 @@ class UploadService {
 		// Remove user meta.
 		delete_user_meta( $user_id, 'avatar_steward_avatar' );
 
+		// Delete the attachment if requested.
+		if ( $delete_attachment && function_exists( 'wp_delete_attachment' ) ) {
+			// Check if the attachment is used by other users before deleting.
+			if ( ! $this->is_attachment_used_by_others( (int) $avatar_id, $user_id ) ) {
+				$deleted = wp_delete_attachment( (int) $avatar_id, true );
+				if ( $this->logger ) {
+					if ( $deleted ) {
+						$this->logger->info(
+							'Avatar attachment deleted from media library',
+							array(
+								'user_id'   => $user_id,
+								'avatar_id' => $avatar_id,
+							)
+						);
+					} else {
+						$this->logger->warning(
+							'Failed to delete avatar attachment',
+							array(
+								'user_id'   => $user_id,
+								'avatar_id' => $avatar_id,
+							)
+						);
+					}
+				}
+			} elseif ( $this->logger ) {
+				$this->logger->info(
+					'Avatar attachment not deleted - it is used by other users',
+					array(
+						'user_id'   => $user_id,
+						'avatar_id' => $avatar_id,
+					)
+				);
+			}
+		}
+
 		if ( $this->logger ) {
 			$this->logger->info(
 				'Avatar deleted successfully',
@@ -363,6 +405,33 @@ class UploadService {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check if an attachment is used by other users as their avatar.
+	 *
+	 * @param int $attachment_id  Attachment ID to check.
+	 * @param int $exclude_user_id User ID to exclude from the check.
+	 *
+	 * @return bool True if attachment is used by other users, false otherwise.
+	 */
+	private function is_attachment_used_by_others( int $attachment_id, int $exclude_user_id ): bool {
+		if ( ! function_exists( 'get_users' ) ) {
+			return false;
+		}
+
+		// Query for users who have this attachment as their avatar, excluding the current user.
+		$users = get_users(
+			array(
+				'meta_key'    => 'avatar_steward_avatar',
+				'meta_value'  => $attachment_id,
+				'exclude'     => array( $exclude_user_id ),
+				'count_total' => false,
+				'number'      => 1,
+			)
+		);
+
+		return ! empty( $users );
 	}
 
 	/**

@@ -65,7 +65,14 @@ class UploadHandler {
 		// Handle avatar removal.
 		$remove_requested = isset( $_POST['avatar_steward_remove'] ) && 'yes' === $_POST['avatar_steward_remove'];
 		if ( $remove_requested ) {
-			$this->upload_service->delete_avatar( $user_id );
+			// Get the delete_attachment setting.
+			$delete_attachment = false;
+			if ( function_exists( 'get_option' ) ) {
+				$options           = get_option( 'avatar_steward_options', array() );
+				$delete_attachment = ! empty( $options['delete_attachment_on_remove'] );
+			}
+
+			$this->upload_service->delete_avatar( $user_id, $delete_attachment );
 			return;
 		}
 

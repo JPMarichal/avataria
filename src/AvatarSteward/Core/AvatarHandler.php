@@ -114,7 +114,7 @@ class AvatarHandler {
 			$args['url']          = $local_avatar_url;
 			$args['found_avatar'] = true;
 		} else {
-			// Try to generate initials avatar as fallback
+			// Try to generate initials avatar as fallback.
 			$initials_avatar_url = $this->get_initials_avatar_url( $user_id, $args['size'] ?? 96 );
 			if ( $initials_avatar_url ) {
 				$args['url']          = $initials_avatar_url;
@@ -207,6 +207,15 @@ class AvatarHandler {
 		$avatar_id = get_user_meta( $user_id, self::META_KEY, true );
 
 		if ( ! $avatar_id ) {
+			return null;
+		}
+
+		// Verify the attachment still exists.
+		if ( ! function_exists( 'get_post' ) || ! get_post( (int) $avatar_id ) ) {
+			// Attachment no longer exists, clean up the user meta.
+			if ( function_exists( 'delete_user_meta' ) ) {
+				delete_user_meta( $user_id, self::META_KEY );
+			}
 			return null;
 		}
 
@@ -303,7 +312,7 @@ class AvatarHandler {
 			return null;
 		}
 
-		// Get user info for initials generation
+		// Get user info for initials generation.
 		if ( ! function_exists( 'get_userdata' ) ) {
 			return null;
 		}
@@ -313,7 +322,7 @@ class AvatarHandler {
 			return null;
 		}
 
-		// Generate display name for initials
+		// Generate display name for initials.
 		$display_name = '';
 		if ( ! empty( $user->display_name ) ) {
 			$display_name = $user->display_name;
@@ -323,11 +332,11 @@ class AvatarHandler {
 			$display_name = $user->user_login;
 		}
 
-		// Generate SVG avatar with initials
+		// Generate SVG avatar with initials.
 		try {
 			$svg_content = $this->generator->generate( $display_name, $size );
 
-			// Return data URL for immediate use
+			// Return data URL for immediate use.
 			return 'data:image/svg+xml;charset=utf-8,' . rawurlencode( $svg_content );
 		} catch ( \Exception $e ) {
 			return null;
