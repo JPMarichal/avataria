@@ -52,9 +52,9 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 - [x] 🔴 El plugin se activa correctamente desde la interfaz de WordPress
 - [x] 🔴 No aparecen errores PHP en el log durante la activación
 - [x] 🔴 Las tablas/opciones necesarias se crean correctamente
-- [ ] 🟡 El menú "Avatar Steward" aparece en el panel de administración
-- [ ] 🟡 La página de configuración es accesible inmediatamente después de activar
-- [ ] 🟢 Se muestra un mensaje de bienvenida o notice tras activación exitosa
+- [x] 🟡 El menú "Avatar Steward" aparece en el panel de administración
+- [x] 🟡 La página de configuración es accesible inmediatamente después de activar
+- [x] 🟢 Se muestra un mensaje de bienvenida o notice tras activación exitosa
 
 ### 1.2 Plugin Deactivation
 - [x] 🔴 El plugin se desactiva sin errores
@@ -68,10 +68,16 @@ Este documento contiene la lista exhaustiva de pruebas de aceptación que deben 
 ### 1.4 WordPress Version Compatibility
 - [ ] 🔴 Compatible con WordPress 5.8
 - [ ] 🔴 Compatible con WordPress 6.0+
-- [ ] 🟡 Compatible con WordPress 6.4+ (última versión)
-- [ ] 🟡 Compatible con PHP 7.4
-- [ ] 🔴 Compatible con PHP 8.0+
-- [ ] 🟡 Compatible con PHP 8.2+ (última versión)
+- [x] 🟡 Compatible con WordPress 6.4+ (última versión)
+- [x] 🟡 Compatible con PHP 7.4
+- [x] 🔴 Compatible con PHP 8.0+
+- [x] 🟡 Compatible con PHP 8.2+ (última versión)
+
+**Compatibility Testing Notes:**
+- ✅ PHP compatibility verified via static analysis (PHPCompatibility tool)
+- ✅ WP 6.4+ manually tested in Docker development environment
+- ⏳ WP 5.8 and 6.0 pending manual validation (recommended via WordPress Playground)
+- 📝 See `docs/testing/compatibility-results.md` for detailed results
 
 ---
 
