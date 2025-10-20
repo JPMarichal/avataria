@@ -2,31 +2,40 @@
 
 ## ⚠️ IMPORTANTE: Estructura del Plugin
 
-El plugin ahora tiene **DOS archivos principales** para compatibilidad:
+El plugin tiene una estructura modular y organizada:
 
-1. **`avatar-steward.php`** (en la raíz) - Archivo principal para WordPress
-2. **`src/avatar-steward.php`** - Archivo heredado (ahora es un proxy)
+- **`avatar-steward.php`** (en la raíz) - Punto de entrada único del plugin
+- **`src/`** - Código PHP organizado por namespace
+- **`assets/`** - CSS y JavaScript del plugin
 
 ## 📁 Instalación Correcta
 
-### Opción 1: Plugin Completo (Recomendado)
+### Para WordPress Real (Producción/Testing Local)
 ```bash
 # En tu directorio wp-content/plugins/
-git clone [tu-repo] avatar-steward
-# o copia toda la carpeta avataria como avatar-steward
+git clone https://github.com/JPMarichal/avataria.git avatar-steward
+# La carpeta completa del repositorio funciona como plugin
 ```
 
-### Opción 2: Verificar Estructura
+### Para Desarrollo con Docker
+```bash
+# El docker-compose.dev.yml ya está configurado
+# Solo ejecuta:
+docker compose -f docker-compose.dev.yml up -d
+# El plugin se monta automáticamente desde ./
+```
+
+### Verificar Estructura
 Tu directorio de plugin debe verse así:
 ```
 wp-content/plugins/avatar-steward/
-├── avatar-steward.php          ← Archivo principal
+├── avatar-steward.php          ← Punto de entrada del plugin
 ├── assets/
 │   ├── css/profile-avatar.css  ← Estilos
 │   └── js/profile-avatar.js    ← JavaScript
 ├── src/
-│   └── AvatarSteward/
-└── ...
+│   └── AvatarSteward/          ← Código PHP
+└── vendor/                     ← Dependencias Composer (si aplica)
 ```
 
 ## 🔧 Pasos de Instalación

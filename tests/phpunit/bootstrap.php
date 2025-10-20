@@ -10,7 +10,15 @@ require_once dirname( dirname( __DIR__ ) ) . '/vendor/autoload.php';
 
 // Define plugin constants for tests.
 if ( ! defined( 'AVATAR_STEWARD_PLUGIN_FILE' ) ) {
-	define( 'AVATAR_STEWARD_PLUGIN_FILE', dirname( dirname( __DIR__ ) ) . '/src/avatar-steward.php' );
+	define( 'AVATAR_STEWARD_PLUGIN_FILE', dirname( dirname( __DIR__ ) ) . '/avatar-steward.php' );
+}
+
+if ( ! defined( 'AVATAR_STEWARD_PLUGIN_DIR' ) ) {
+	define( 'AVATAR_STEWARD_PLUGIN_DIR', dirname( dirname( __DIR__ ) ) . '/' );
+}
+
+if ( ! defined( 'AVATAR_STEWARD_PLUGIN_URL' ) ) {
+	define( 'AVATAR_STEWARD_PLUGIN_URL', 'http://localhost/' );
 }
 
 if ( ! defined( 'AVATAR_STEWARD_VERSION' ) ) {
