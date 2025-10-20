@@ -41,7 +41,7 @@ class ProfileFieldsRenderer {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_notices', array( $this, 'show_error_notice' ) );
 
-		// Asegurar que el formulario tenga enctype correcto
+		// Ensure the form has the correct enctype.
 		add_action( 'admin_head-profile.php', array( $this, 'fix_form_enctype' ) );
 		add_action( 'admin_head-user-edit.php', array( $this, 'fix_form_enctype' ) );
 	}
@@ -60,24 +60,24 @@ class ProfileFieldsRenderer {
 
 		wp_enqueue_media();
 
-		// Get plugin base URL with fallback
+		// Get plugin base URL with fallback.
 		if ( defined( 'AVATAR_STEWARD_PLUGIN_URL' ) ) {
 			$plugin_base_url = AVATAR_STEWARD_PLUGIN_URL;
 		} else {
-			// Fallback: calculate URL from this file's location
-			$plugin_root     = dirname( dirname( dirname( __DIR__ ) ) ); // Go up to plugin root
+			// Fallback: calculate URL from this file's location.
+			$plugin_root     = dirname( dirname( dirname( __DIR__ ) ) ); // Go up to plugin root.
 			$plugin_base_url = plugin_dir_url( $plugin_root . '/avatar-steward.php' );
 		}
 
-		// Debug: Log the URLs being used
+		// Debug: Log the URLs being used.
 		error_log( 'Avatar Steward - Plugin Base URL: ' . $plugin_base_url );
 		error_log( 'Avatar Steward - CSS URL: ' . $plugin_base_url . 'assets/css/profile-avatar.css' );
 		error_log( 'Avatar Steward - JS URL: ' . $plugin_base_url . 'assets/js/profile-avatar.js' );
 
-		// Get plugin directory path for file existence checks
+		// Get plugin directory path for file existence checks.
 		$plugin_dir = defined( 'AVATAR_STEWARD_PLUGIN_DIR' ) ? AVATAR_STEWARD_PLUGIN_DIR : plugin_dir_path( dirname( dirname( dirname( __DIR__ ) ) ) . '/avatar-steward.php' );
 
-		// Enqueue CSS only if file exists
+		// Enqueue CSS only if file exists.
 		$css_path = $plugin_dir . 'assets/css/profile-avatar.css';
 		if ( file_exists( $css_path ) ) {
 			wp_enqueue_style(
@@ -90,7 +90,7 @@ class ProfileFieldsRenderer {
 			error_log( 'Avatar Steward - CSS file not found: ' . $css_path );
 		}
 
-		// Enqueue JS only if file exists
+		// Enqueue JS only if file exists.
 		$js_path = $plugin_dir . 'assets/js/profile-avatar.js';
 		if ( file_exists( $js_path ) ) {
 			wp_enqueue_script(
