@@ -18,6 +18,11 @@ yarn-error.log*
 .docker/
 /docker-compose.override.yml
 
+# Test and debug files (should not be committed)
+debug-*.php
+test-*.php
+/tmp/
+
 # IDE & OS metadata
 .idea/
 .vscode/

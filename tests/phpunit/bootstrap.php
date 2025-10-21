@@ -10,7 +10,15 @@ require_once dirname( dirname( __DIR__ ) ) . '/vendor/autoload.php';
 
 // Define plugin constants for tests.
 if ( ! defined( 'AVATAR_STEWARD_PLUGIN_FILE' ) ) {
-	define( 'AVATAR_STEWARD_PLUGIN_FILE', dirname( dirname( __DIR__ ) ) . '/src/avatar-steward.php' );
+	define( 'AVATAR_STEWARD_PLUGIN_FILE', dirname( dirname( __DIR__ ) ) . '/avatar-steward.php' );
+}
+
+if ( ! defined( 'AVATAR_STEWARD_PLUGIN_DIR' ) ) {
+	define( 'AVATAR_STEWARD_PLUGIN_DIR', dirname( dirname( __DIR__ ) ) . '/' );
+}
+
+if ( ! defined( 'AVATAR_STEWARD_PLUGIN_URL' ) ) {
+	define( 'AVATAR_STEWARD_PLUGIN_URL', 'http://localhost/' );
 }
 
 if ( ! defined( 'AVATAR_STEWARD_VERSION' ) ) {
@@ -32,6 +40,20 @@ if ( ! function_exists( 'add_action' ) ) {
 	 * @param int      $args     The number of arguments.
 	 */
 	function add_action( $hook, $callback, $priority = 10, $args = 1 ) {
+		// Mock implementation for testing.
+	}
+}
+
+if ( ! function_exists( 'add_filter' ) ) {
+	/**
+	 * Mock add_filter function.
+	 *
+	 * @param string   $hook     The name of the filter.
+	 * @param callable $callback The callback function.
+	 * @param int      $priority The priority.
+	 * @param int      $args     The number of arguments.
+	 */
+	function add_filter( $hook, $callback, $priority = 10, $args = 1 ) {
 		// Mock implementation for testing.
 	}
 }

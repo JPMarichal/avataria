@@ -53,6 +53,7 @@ final class SettingsPageTest extends TestCase {
 		$this->assertArrayHasKey( 'convert_to_webp', $default_settings );
 		$this->assertArrayHasKey( 'allowed_roles', $default_settings );
 		$this->assertArrayHasKey( 'require_approval', $default_settings );
+		$this->assertArrayHasKey( 'delete_attachment_on_remove', $default_settings );
 	}
 
 	/**
@@ -105,6 +106,16 @@ final class SettingsPageTest extends TestCase {
 		$default_settings = $settings_page->get_default_settings();
 
 		$this->assertFalse( $default_settings['require_approval'] );
+	}
+
+	/**
+	 * Test that default delete_attachment_on_remove is false.
+	 */
+	public function test_default_delete_attachment_on_remove_is_false() {
+		$settings_page     = new SettingsPage();
+		$default_settings = $settings_page->get_default_settings();
+
+		$this->assertFalse( $default_settings['delete_attachment_on_remove'] );
 	}
 
 	/**
@@ -204,6 +215,16 @@ final class SettingsPageTest extends TestCase {
 		$input  = array( 'require_approval' => '' );
 		$result = $settings_page->sanitize_settings( $input );
 		$this->assertFalse( $result['require_approval'] );
+
+		// Test delete_attachment_on_remove true.
+		$input  = array( 'delete_attachment_on_remove' => '1' );
+		$result = $settings_page->sanitize_settings( $input );
+		$this->assertTrue( $result['delete_attachment_on_remove'] );
+
+		// Test delete_attachment_on_remove false.
+		$input  = array( 'delete_attachment_on_remove' => '' );
+		$result = $settings_page->sanitize_settings( $input );
+		$this->assertFalse( $result['delete_attachment_on_remove'] );
 	}
 
 	/**
@@ -258,6 +279,7 @@ final class SettingsPageTest extends TestCase {
 		$this->assertTrue( method_exists( $settings_page, 'render_roles_permissions_section' ) );
 		$this->assertTrue( method_exists( $settings_page, 'render_allowed_roles_field' ) );
 		$this->assertTrue( method_exists( $settings_page, 'render_require_approval_field' ) );
+		$this->assertTrue( method_exists( $settings_page, 'render_delete_attachment_on_remove_field' ) );
 	}
 
 	/**

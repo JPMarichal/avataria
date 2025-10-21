@@ -138,4 +138,28 @@ final class UploadServiceTest extends TestCase {
 	public function test_service_has_get_avatar_url_method() {
 		$this->assertTrue( method_exists( $this->service, 'get_avatar_url' ) );
 	}
+
+	/**
+	 * Test delete_avatar with delete_attachment parameter set to false.
+	 */
+	public function test_delete_avatar_without_deleting_attachment() {
+		// Test that the method accepts the delete_attachment parameter.
+		$user_id = 999999;
+
+		$result = $this->service->delete_avatar( $user_id, false );
+
+		$this->assertFalse( $result );
+	}
+
+	/**
+	 * Test delete_avatar with delete_attachment parameter set to true.
+	 */
+	public function test_delete_avatar_with_delete_attachment_parameter() {
+		// Test that the method accepts the delete_attachment parameter.
+		$user_id = 999999;
+
+		$result = $this->service->delete_avatar( $user_id, true );
+
+		$this->assertFalse( $result );
+	}
 }

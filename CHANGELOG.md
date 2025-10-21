@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed - Avatar Removal
+- **No More Broken Images**: Fixed issue where removing avatar resulted in broken image display
+- **Proper Fallback**: Avatar removal now correctly displays initials-based SVG fallback instead of broken image
+- **Orphaned Meta Cleanup**: Automatically cleans up user meta when attachment no longer exists
+- **Attachment Validation**: Added verification that attachment exists before attempting to display it
+
+### Added - Avatar Removal
+- **Delete Attachment on Remove Setting**: New configurable option to automatically delete avatar attachments from Media Library when users remove their avatars
+  - Location: Settings > Avatar Steward > Roles & Permissions
+  - Default: Disabled (maintains backward compatibility)
+  - Smart deletion: Only deletes if attachment is not used by other users
+- **Enhanced Logging**: Comprehensive logging of avatar removal operations
+- **Test Coverage**: Added tests for avatar removal with and without attachment deletion
+
+### Added - Profile UI Improvements
+- **Enhanced Avatar Section Positioning**: Avatar upload section now appears immediately after "About Yourself" section in user profiles
+- **Visual Enhancement**: Avatar section features distinctive styling with light gray background (#f3f4f6), rounded borders, and subtle shadow
+- **Improved User Experience**: Avatar section is more prominently positioned and visually distinct from other profile sections
+- **Smart Repositioning**: JavaScript automatically moves the avatar section to optimal position regardless of WordPress theme or language
+
+### Fixed
+- **Plugin Structure**: Created proper WordPress plugin structure with main file in root directory
+- **Asset Loading**: Fixed CSS and JS asset URLs to work correctly with WordPress plugin system
+- **Version Management**: Added proper plugin constants for version and path management
+
 ### Added - MVP Core Features
 - **Settings Page**: Comprehensive admin settings page at Settings > Avatar Steward
   - WordPress Settings API integration for native admin experience
