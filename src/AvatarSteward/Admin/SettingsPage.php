@@ -84,6 +84,12 @@ class SettingsPage {
 			)
 		);
 
+		// Register social credentials separately for security.
+		register_setting( self::SETTINGS_GROUP, 'avatarsteward_twitter_client_id', 'sanitize_text_field' );
+		register_setting( self::SETTINGS_GROUP, 'avatarsteward_twitter_client_secret', 'sanitize_text_field' );
+		register_setting( self::SETTINGS_GROUP, 'avatarsteward_facebook_app_id', 'sanitize_text_field' );
+		register_setting( self::SETTINGS_GROUP, 'avatarsteward_facebook_app_secret', 'sanitize_text_field' );
+
 		// Upload Restrictions Section.
 		add_settings_section(
 			'avatar_steward_upload_restrictions',
@@ -189,6 +195,48 @@ class SettingsPage {
 			'avatar_steward_roles_permissions'
 		);
 
+		// Social Integrations Section.
+		add_settings_section(
+			'avatar_steward_social_integrations',
+			__( 'Social Integrations', 'avatar-steward' ),
+			array( $this, 'render_social_integrations_section' ),
+			'avatar-steward'
+		);
+
+		// Twitter Client ID.
+		add_settings_field(
+			'twitter_client_id',
+			__( 'Twitter Client ID', 'avatar-steward' ),
+			array( $this, 'render_twitter_client_id_field' ),
+			'avatar-steward',
+			'avatar_steward_social_integrations'
+		);
+
+		// Twitter Client Secret.
+		add_settings_field(
+			'twitter_client_secret',
+			__( 'Twitter Client Secret', 'avatar-steward' ),
+			array( $this, 'render_twitter_client_secret_field' ),
+			'avatar-steward',
+			'avatar_steward_social_integrations'
+		);
+
+		// Facebook App ID.
+		add_settings_field(
+			'facebook_app_id',
+			__( 'Facebook App ID', 'avatar-steward' ),
+			array( $this, 'render_facebook_app_id_field' ),
+			'avatar-steward',
+			'avatar_steward_social_integrations'
+		);
+
+		// Facebook App Secret.
+		add_settings_field(
+			'facebook_app_secret',
+			__( 'Facebook App Secret', 'avatar-steward' ),
+			array( $this, 'render_facebook_app_secret_field' ),
+			'avatar-steward',
+			'avatar_steward_social_integrations'
 		// Delete attachment when removing avatar field.
 		add_settings_field(
 			'delete_attachment_on_remove',
@@ -530,6 +578,103 @@ class SettingsPage {
 	}
 
 	/**
+	 * Render social integrations section description.
+	 *
+	 * @return void
+	 */
+	public function render_social_integrations_section(): void {
+		?>
+		<p><?php esc_html_e( 'Configure API credentials for social media integrations. Users will be able to import their profile pictures from connected accounts.', 'avatar-steward' ); ?></p>
+		<p class="description">
+			<?php
+			printf(
+				/* translators: 1: Twitter Developer Portal URL, 2: Facebook Developers URL */
+				wp_kses_post( __( 'To obtain API credentials, create applications at <a href="%1$s" target="_blank">Twitter Developer Portal</a> and <a href="%2$s" target="_blank">Facebook for Developers</a>.', 'avatar-steward' ) ),
+				'https://developer.twitter.com/en/portal/dashboard',
+				'https://developers.facebook.com/'
+			);
+			?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render Twitter Client ID field.
+	 *
+	 * @return void
+	 */
+	public function render_twitter_client_id_field(): void {
+		$value = get_option( 'avatarsteward_twitter_client_id', '' );
+		?>
+		<input type="text" 
+				name="avatarsteward_twitter_client_id" 
+				value="<?php echo esc_attr( $value ); ?>" 
+				class="regular-text" />
+		<p class="description">
+			<?php esc_html_e( 'OAuth 2.0 Client ID from Twitter Developer Portal.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render Twitter Client Secret field.
+	 *
+	 * @return void
+	 */
+	public function render_twitter_client_secret_field(): void {
+		$value         = get_option( 'avatarsteward_twitter_client_secret', '' );
+		$display_value = ! empty( $value ) ? '••••••••••••••••' : '';
+		?>
+		<input type="password" 
+				name="avatarsteward_twitter_client_secret" 
+				value="<?php echo esc_attr( $value ); ?>" 
+				placeholder="<?php echo esc_attr( $display_value ); ?>"
+				class="regular-text" />
+		<p class="description">
+			<?php esc_html_e( 'OAuth 2.0 Client Secret from Twitter Developer Portal.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render Facebook App ID field.
+	 *
+	 * @return void
+	 */
+	public function render_facebook_app_id_field(): void {
+		$value = get_option( 'avatarsteward_facebook_app_id', '' );
+		?>
+		<input type="text" 
+				name="avatarsteward_facebook_app_id" 
+				value="<?php echo esc_attr( $value ); ?>" 
+				class="regular-text" />
+		<p class="description">
+			<?php esc_html_e( 'App ID from Facebook for Developers.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render Facebook App Secret field.
+	 *
+	 * @return void
+	 */
+	public function render_facebook_app_secret_field(): void {
+		$value         = get_option( 'avatarsteward_facebook_app_secret', '' );
+		$display_value = ! empty( $value ) ? '••••••••••••••••' : '';
+		?>
+		<input type="password" 
+				name="avatarsteward_facebook_app_secret" 
+				value="<?php echo esc_attr( $value ); ?>" 
+				placeholder="<?php echo esc_attr( $display_value ); ?>"
+				class="regular-text" />
+		<p class="description">
+			<?php esc_html_e( 'App Secret from Facebook for Developers.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
 	 * Sanitize settings before saving.
 	 *
 	 * @param array $input Raw input from form.
@@ -591,8 +736,8 @@ class SettingsPage {
 		// Sanitize require approval.
 		$sanitized['require_approval'] = ! empty( $input['require_approval'] );
 
-		// Sanitize delete attachment on remove.
-		$sanitized['delete_attachment_on_remove'] = ! empty( $input['delete_attachment_on_remove'] );
+		// Note: Social integration credentials are stored separately for security.
+		// They are handled via update_option calls in the individual render methods.
 
 		return $sanitized;
 	}

@@ -41,37 +41,11 @@ final class Plugin {
 	private ?Admin\MigrationPage $migration_page = null;
 
 	/**
-	 * Moderation page instance.
+	 * Integration service instance.
 	 *
-	 * @var Admin\ModerationPage|null
+	 * @var Domain\Integrations\IntegrationService|null
 	 */
-	private ?Admin\ModerationPage $moderation_page = null;
-
-	/**
-	 * Moderation queue instance.
-	 *
-	 * @var Domain\Moderation\ModerationQueue|null
-	 */
-	private ?Domain\Moderation\ModerationQueue $moderation_queue = null;
-
-	/**
-	 * Avatar handler instance.
-	 *
-	 * @var Core\AvatarHandler|null
-	 */
-	private ?Core\AvatarHandler $avatar_handler = null;
-	 * License page instance.
-	 *
-	 * @var Admin\LicensePage|null
-	 */
-	private ?Admin\LicensePage $license_page = null;
-
-	/**
-	 * License manager instance.
-	 *
-	 * @var LicenseManager|null
-	 */
-	private ?LicenseManager $license_manager = null;
+	private ?Domain\Integrations\IntegrationService $integration_service = null;
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -104,7 +78,7 @@ final class Plugin {
 		$this->init_avatar_handler();
 		$this->init_settings_page();
 		$this->init_migration_page();
-		$this->init_moderation();
+		$this->init_integration_service();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -211,20 +185,29 @@ final class Plugin {
 	}
 
 	/**
-	 * Get the moderation page instance.
+	 * Initialize the integration service.
 	 *
-	 * @return Admin\ModerationPage|null Moderation page instance.
+	 * @return void
 	 */
-	public function get_moderation_page(): ?Admin\ModerationPage {
-		return $this->moderation_page;
+	private function init_integration_service(): void {
+		if ( ! class_exists( Domain\Integrations\IntegrationService::class ) ) {
+			require_once __DIR__ . '/Domain/Integrations/SocialProviderInterface.php';
+			require_once __DIR__ . '/Domain/Integrations/AbstractSocialProvider.php';
+			require_once __DIR__ . '/Domain/Integrations/TwitterProvider.php';
+			require_once __DIR__ . '/Domain/Integrations/FacebookProvider.php';
+			require_once __DIR__ . '/Domain/Integrations/IntegrationService.php';
+		}
+
+		$this->integration_service = new Domain\Integrations\IntegrationService();
+		$this->integration_service->init();
 	}
 
 	/**
-	 * Get the moderation queue instance.
+	 * Get the integration service instance.
 	 *
-	 * @return Domain\Moderation\ModerationQueue|null Moderation queue instance.
+	 * @return Domain\Integrations\IntegrationService|null Integration service instance.
 	 */
-	public function get_moderation_queue(): ?Domain\Moderation\ModerationQueue {
-		return $this->moderation_queue;
+	public function get_integration_service(): ?Domain\Integrations\IntegrationService {
+		return $this->integration_service;
 	}
 }

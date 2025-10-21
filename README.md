@@ -59,63 +59,16 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Safe Migration**: Skip users who already have avatars, no data loss
 - **Statistics Dashboard**: View migration status and available avatars
 
-### Pro Features (License Required)
+### Social Media Integrations (Pro Feature)
+- **Twitter / X Integration**: Users can import their Twitter profile picture as their avatar
+- **Facebook Integration**: Users can import their Facebook profile picture as their avatar
+- **OAuth 2.0 Security**: Secure authentication with industry-standard OAuth protocols
+- **PKCE Support**: Enhanced security for Twitter integration using Proof Key for Code Exchange
+- **Easy Connect/Disconnect**: Simple one-click connection and disconnection of social accounts
+- **Privacy First**: Tokens stored securely, no automatic syncing, user controls all imports
+- **Extensible Architecture**: Strategy Pattern allows easy addition of new social providers
 
-Activate your Pro license to unlock these advanced features:
-
-#### Avatar Library
-- **Predefined Avatars**: Create a gallery of pre-approved avatars for users to choose from
-- **Custom Collections**: Organize avatars by category, theme, or user group
-- **Easy Selection**: Users can pick from library without uploading their own image
-- **Admin Management**: Upload, organize, and remove library avatars from admin panel
-
-#### Social Media Integration
-- **Twitter Integration**: Import profile pictures directly from Twitter accounts
-- **Facebook Integration**: Use Facebook profile pictures as avatars
-- **OAuth Flow**: Secure authentication with user consent
-- **Automatic Updates**: Option to sync avatar changes from social media
-
-#### Moderation Panel
-- **Review Queue**: See all recently uploaded avatars in one place
-- **Approve/Reject**: Quick approval or rejection with one click
-- **User Notifications**: Automatic notifications when avatars are reviewed
-- **Audit Trail**: Track who approved/rejected each avatar and when
-- **Bulk Actions**: Process multiple avatars at once
-
-#### Multiple Avatars per User
-- **Avatar Slots**: Users can upload up to 5 different avatars
-- **Quick Switching**: Change active avatar with one click
-- **Context-Based**: Use different avatars for different purposes
-- **History Management**: Keep track of previously used avatars
-
-#### Advanced Upload Restrictions
-- **Fine-grained Controls**: Set different limits per user role
-- **Custom File Sizes**: Configure size limits from 0.1 MB to 10 MB
-- **Dimension Controls**: Set minimum and maximum dimensions per role
-- **Format Restrictions**: Allow/deny specific formats by role
-
-#### Role-based Permissions
-- **Granular Access**: Control exactly which roles can upload avatars
-- **Feature Toggles**: Enable/disable specific features per role
-- **Admin Overrides**: Administrators bypass all restrictions
-- **Guest Controls**: Manage avatar display for non-registered users
-
-#### Auto-deletion of Inactive Avatars
-- **Inactivity Detection**: Identify avatars not used for 6+ months
-- **Advance Warnings**: Email users before deletion
-- **Configurable Thresholds**: Set custom inactivity periods
-- **Audit Logging**: Track all automatic deletions
-- **Manual Override**: Exclude specific users from auto-deletion
-
-#### Audit Logs & Compliance
-- **Access Logs**: Record every avatar view and download
-- **Modification History**: Track changes, uploads, and deletions
-- **Export Reports**: Generate CSV/PDF reports for compliance
-- **GDPR Tools**: Built-in data export and deletion workflows
-- **Retention Policies**: Configure how long to keep audit data
-- **Search & Filter**: Find specific events quickly
-
-For complete Pro feature documentation and licensing details, see [docs/licensing-system.md](docs/licensing-system.md).
+For detailed setup instructions, see the [Social Integrations Setup Guide](docs/social-integrations.md).
 
 ## System Requirements
 
@@ -341,8 +294,33 @@ After activating the plugin, configure Avatar Steward to match your site's requi
 4. Configure roles & permissions:
    - **Allowed Roles**: Select which user roles can upload avatars
    - **Require Approval**: Enable moderation queue for new avatar uploads
-5. For Pro version: Enter your license key in the "License" tab.
-6. Optional: Configure social integrations in the "Social" tab.
+5. Configure social integrations (Pro version):
+   - **Twitter Client ID & Secret**: Enter credentials from Twitter Developer Portal
+   - **Facebook App ID & Secret**: Enter credentials from Facebook for Developers
+   - See [Social Integrations Setup Guide](docs/social-integrations.md) for detailed instructions
+6. For Pro version: Enter your license key in the "License" tab.
+
+## Using Social Media Integrations
+
+Users can import their profile pictures from connected social media accounts:
+
+### For Users
+
+1. Go to your **Profile** page in WordPress admin
+2. Scroll to the **Social Avatar Import** section
+3. Click **Connect** next to Twitter or Facebook
+4. Authorize the connection on the social platform
+5. Once connected, click **Import Avatar** to use your social profile picture
+6. You can disconnect at any time using the **Disconnect** button
+
+### For Administrators
+
+1. Configure API credentials in **Settings > Avatar Steward > Social Integrations**
+2. Create apps on [Twitter Developer Portal](https://developer.twitter.com/) and [Facebook for Developers](https://developers.facebook.com/)
+3. Enter your Client ID/Secret and App ID/Secret in the settings
+4. Ensure callback URLs match your site's profile URL
+
+For complete setup instructions, see the [Social Integrations Setup Guide](docs/social-integrations.md).
 
 ## Migrating from Other Plugins
 
@@ -587,7 +565,28 @@ add_filter('avatarsteward_sanitize_settings', function($settings) {
 add_action('avatarsteward_booted', function() {
     // Run code after plugin initialization
 });
+
+// Social integrations hooks
+add_action('avatarsteward_social_connected', function($user_id, $provider_name) {
+    // Fired when user connects a social account
+}, 10, 2);
+
+add_action('avatarsteward_avatar_imported', function($user_id, $provider, $attachment_id) {
+    // Fired when avatar is imported from social platform
+}, 10, 3);
+
+// Register custom social providers
+add_action('avatarsteward_register_providers', function($integration_service) {
+    $integration_service->register_provider(new CustomProvider());
+});
 ```
+
+## Additional Documentation
+
+- **[Social Integrations Setup Guide](docs/social-integrations.md)** - Complete guide for setting up Twitter and Facebook integrations
+- **[Social Integrations API](docs/api/integrations.md)** - Developer documentation for extending social integrations
+- **[Migration Guide](docs/migracion/migration-guide.md)** - Guide for migrating from other avatar plugins
+- **[Performance Documentation](docs/performance.md)** - Performance metrics and optimization details
 
 ## Support
 
