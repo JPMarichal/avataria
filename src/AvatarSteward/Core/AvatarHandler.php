@@ -14,6 +14,8 @@ namespace AvatarSteward\Core;
 
 use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
 use AvatarSteward\Domain\Moderation\ModerationQueue;
+use AvatarSteward\Domain\Initials\Generator;
+use AvatarSteward\Domain\Uploads\UploadService;
 
 /**
  * AvatarHandler class for managing avatar display.
@@ -49,6 +51,35 @@ class AvatarHandler {
 	private ?ModerationQueue $moderation_queue = null;
 
 	/**
+	 * Initials generator instance.
+	 *
+	 * @var Generator|null
+	 */
+	private ?Generator $generator = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param UploadService|null $upload_service Upload service instance.
+	 */
+	public function __construct( ?UploadService $upload_service = null ) {
+		// Initialize upload service if provided, otherwise create a new one.
+		if ( $upload_service ) {
+			$this->upload_service = $upload_service;
+		} else {
+			// Check if class exists before instantiating.
+			if ( class_exists( 'AvatarSteward\Domain\Uploads\UploadService' ) ) {
+				$this->upload_service = new \AvatarSteward\Domain\Uploads\UploadService();
+			}
+		}
+
+		// Initialize generator if class exists.
+		if ( class_exists( 'AvatarSteward\Domain\Initials\Generator' ) ) {
+			$this->generator = new Generator();
+		}
+	}
+
+	/**
 	 * Set the bandwidth optimizer.
 	 *
 	 * @param BandwidthOptimizer $optimizer Bandwidth optimizer instance.
@@ -66,6 +97,16 @@ class AvatarHandler {
 	 */
 	public function set_moderation_queue( ModerationQueue $moderation_queue ): void {
 		$this->moderation_queue = $moderation_queue;
+	}
+
+	/**
+	 * Set the initials generator.
+	 *
+	 * @param Generator $generator Initials generator instance.
+	 * @return void
+	 */
+	public function set_generator( Generator $generator ): void {
+		$this->generator = $generator;
 	}
 
 	/**

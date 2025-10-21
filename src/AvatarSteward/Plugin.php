@@ -74,6 +74,8 @@ final class Plugin {
 	 * @var Domain\Cleanup\CleanupService|null
 	 */
 	private ?Domain\Cleanup\CleanupService $cleanup_service = null;
+
+	/**
 	 * Audit service instance.
 	 *
 	 * @var Domain\Audit\AuditService|null
