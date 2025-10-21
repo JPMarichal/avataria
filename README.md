@@ -113,6 +113,17 @@ For detailed API documentation and usage examples, see the [Visual Identity API 
 - Notify admins after cleanup (optional)
 
 For usage examples, see [examples/cleanup-demo.php](examples/cleanup-demo.php).
+### Audit Logs (Pro Feature)
+- **Comprehensive Tracking**: Log all avatar-related events (uploads, deletions, moderation, changes)
+- **Custom Database Table**: Dedicated indexed table for fast queries and scalability
+- **Advanced Filtering**: Filter logs by user, event type, action, and date range
+- **Export Functionality**: Export audit logs in CSV or JSON formats via UI or REST API
+- **Automatic Retention**: Configurable log purging with daily cron job (default 90 days)
+- **Security Tracking**: Records IP addresses and user agents for security auditing
+- **REST API Access**: Full REST API for programmatic access and SIEM integration
+- **Admin Interface**: User-friendly admin panel for viewing and managing logs
+
+For detailed documentation and API examples, see the [Audit Logs Documentation](docs/audit-logs.md).
 
 ## System Requirements
 

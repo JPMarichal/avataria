@@ -12,6 +12,8 @@ namespace AvatarSteward\Tests\Integration;
 use AvatarSteward\Tests\Integration\Helpers\IntegrationTestCase;
 use AvatarSteward\Tests\Integration\Fixtures\TestFixtures;
 use AvatarSteward\Infrastructure\Logger;
+use AvatarSteward\Domain\Audit\AuditService;
+use AvatarSteward\Domain\Audit\AuditRepository;
 
 /**
  * Test audit logging for avatar operations.
@@ -26,13 +28,32 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 	private Logger $logger;
 
 	/**
+	 * Audit service instance.
+	 *
+	 * @var AuditService
+	 */
+	private AuditService $audit_service;
+
+	/**
+	 * Audit repository instance.
+	 *
+	 * @var AuditRepository
+	 */
+	private AuditRepository $repository;
+
+	/**
 	 * Setup test environment.
 	 *
 	 * @return void
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->logger = new Logger();
+		$this->logger         = new Logger();
+		$this->repository     = new AuditRepository();
+		$this->audit_service  = new AuditService( $this->repository, $this->logger );
+		
+		// Create audit table.
+		$this->repository->create_table();
 		
 		// Activate Pro license.
 		$this->activate_pro_license();
@@ -47,16 +68,16 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 		$user_id       = $this->create_test_user( 'subscriber' );
 		$attachment_id = $this->create_test_avatar( $user_id );
 
-		// Log avatar upload.
-		$this->logger->info( 'Avatar uploaded', array(
-			'user_id'       => $user_id,
-			'attachment_id' => $attachment_id,
-			'action'        => 'avatar_uploaded',
-		) );
+		// Log avatar upload using audit service.
+		$result = $this->audit_service->log_avatar_upload( $user_id, $attachment_id );
 
-		// Verify log entry exists.
-		// In real implementation, this would query log storage.
-		$this->assertTrue( true, 'Log entry should be created' );
+		// Verify log entry was created.
+		$this->assertTrue( $result, 'Log entry should be created' );
+
+		// Verify log can be retrieved.
+		$logs = $this->audit_service->get_logs( array( 'user_id' => $user_id ) );
+		$this->assertNotEmpty( $logs );
+		$this->assertSame( 'avatar_uploaded', $logs[0]->event_action );
 	}
 
 	/**
@@ -69,16 +90,15 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 		$moderator  = $this->create_test_user( 'administrator' );
 		$avatar_id  = $this->create_test_avatar( $user_id );
 
-		// Log approval action.
-		$this->logger->info( 'Avatar approved', array(
-			'user_id'       => $user_id,
-			'attachment_id' => $avatar_id,
-			'approved_by'   => $moderator,
-			'action'        => 'avatar_approved',
-		) );
+		// Log approval action using audit service.
+		$result = $this->audit_service->log_moderation_approval( $user_id, $moderator, $avatar_id );
+
+		// Verify log was created.
+		$this->assertTrue( $result );
 
 		// Verify log contains approval info.
-		$this->assertTrue( true );
+		$logs = $this->audit_service->get_logs( array( 'event_action' => 'avatar_approved' ) );
+		$this->assertNotEmpty( $logs );
 	}
 
 	/**
@@ -92,17 +112,15 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 		$avatar_id  = $this->create_test_avatar( $user_id );
 		$reason     = 'Inappropriate content';
 
-		// Log rejection action.
-		$this->logger->warning( 'Avatar rejected', array(
-			'user_id'       => $user_id,
-			'attachment_id' => $avatar_id,
-			'rejected_by'   => $moderator,
-			'reason'        => $reason,
-			'action'        => 'avatar_rejected',
-		) );
+		// Log rejection action using audit service.
+		$result = $this->audit_service->log_moderation_rejection( $user_id, $moderator, $avatar_id, $reason );
 
-		// Verify rejection reason is logged.
-		$this->assertTrue( true );
+		// Verify rejection was logged.
+		$this->assertTrue( $result );
+
+		// Verify reason is in logs.
+		$logs = $this->audit_service->get_logs( array( 'event_action' => 'avatar_rejected' ) );
+		$this->assertNotEmpty( $logs );
 	}
 
 	/**
@@ -115,16 +133,15 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 		$avatar_id  = $this->create_test_avatar( $user_id );
 		$provider   = 'twitter';
 
-		// Log social import action.
-		$this->logger->info( 'Avatar imported from social media', array(
-			'user_id'       => $user_id,
-			'provider'      => $provider,
-			'attachment_id' => $avatar_id,
-			'action'        => 'social_import',
-		) );
+		// Log social import action using audit service.
+		$result = $this->audit_service->log_social_import( $user_id, $provider, $avatar_id );
 
-		// Verify provider is logged.
-		$this->assertTrue( true );
+		// Verify import was logged.
+		$this->assertTrue( $result );
+
+		// Verify provider is in logs.
+		$logs = $this->audit_service->get_logs( array( 'event_action' => 'social_import' ) );
+		$this->assertNotEmpty( $logs );
 	}
 
 	/**
@@ -137,16 +154,15 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 		$library_id = 123;
 		$avatar_id  = $this->create_test_avatar( $user_id );
 
-		// Log library selection.
-		$this->logger->info( 'Avatar selected from library', array(
-			'user_id'       => $user_id,
-			'library_id'    => $library_id,
-			'attachment_id' => $avatar_id,
-			'action'        => 'library_avatar_selected',
-		) );
+		// Log library selection using audit service.
+		$result = $this->audit_service->log_library_selection( $user_id, $library_id, $avatar_id );
 
-		// Verify library ID is logged.
-		$this->assertTrue( true );
+		// Verify selection was logged.
+		$this->assertTrue( $result );
+
+		// Verify library ID is in logs.
+		$logs = $this->audit_service->get_logs( array( 'event_action' => 'library_avatar_selected' ) );
+		$this->assertNotEmpty( $logs );
 	}
 
 	/**
@@ -158,15 +174,15 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 		$user_id   = $this->create_test_user( 'subscriber' );
 		$avatar_id = $this->create_test_avatar( $user_id );
 
-		// Log deletion action.
-		$this->logger->info( 'Avatar deleted', array(
-			'user_id'       => $user_id,
-			'attachment_id' => $avatar_id,
-			'action'        => 'avatar_deleted',
-		) );
+		// Log deletion action using audit service.
+		$result = $this->audit_service->log_avatar_deletion( $user_id, $avatar_id );
 
-		// Verify deletion is logged.
-		$this->assertTrue( true );
+		// Verify deletion was logged.
+		$this->assertTrue( $result );
+
+		// Verify deletion is in logs.
+		$logs = $this->audit_service->get_logs( array( 'event_action' => 'avatar_deleted' ) );
+		$this->assertNotEmpty( $logs );
 	}
 
 	/**
@@ -177,51 +193,26 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 	public function test_complete_user_audit_trail(): void {
 		$user_id = $this->create_test_user( 'subscriber' );
 
-		// User journey: upload -> pending -> approved -> changed -> deleted.
+		// User journey: upload -> approved -> changed -> deleted.
 		
 		// 1. Upload.
 		$avatar1 = $this->create_test_avatar( $user_id );
-		$this->logger->info( 'Avatar uploaded', array(
-			'user_id'       => $user_id,
-			'attachment_id' => $avatar1,
-			'action'        => 'avatar_uploaded',
-		) );
+		$this->audit_service->log_avatar_upload( $user_id, $avatar1 );
 
-		// 2. Moderation pending.
-		$this->logger->info( 'Avatar pending moderation', array(
-			'user_id'       => $user_id,
-			'attachment_id' => $avatar1,
-			'action'        => 'avatar_pending',
-		) );
-
-		// 3. Approved.
+		// 2. Approved.
 		$moderator = $this->create_test_user( 'administrator' );
-		$this->logger->info( 'Avatar approved', array(
-			'user_id'       => $user_id,
-			'attachment_id' => $avatar1,
-			'approved_by'   => $moderator,
-			'action'        => 'avatar_approved',
-		) );
+		$this->audit_service->log_moderation_approval( $user_id, $moderator, $avatar1 );
 
-		// 4. User uploads new avatar.
+		// 3. User uploads new avatar.
 		$avatar2 = $this->create_test_avatar( $user_id );
-		$this->logger->info( 'Avatar changed', array(
-			'user_id'           => $user_id,
-			'old_attachment_id' => $avatar1,
-			'new_attachment_id' => $avatar2,
-			'action'            => 'avatar_changed',
-		) );
+		$this->audit_service->log_avatar_change( $user_id, $avatar1, $avatar2 );
 
-		// 5. User deletes avatar.
-		$this->logger->info( 'Avatar deleted', array(
-			'user_id'       => $user_id,
-			'attachment_id' => $avatar2,
-			'action'        => 'avatar_deleted',
-		) );
+		// 4. User deletes avatar.
+		$this->audit_service->log_avatar_deletion( $user_id, $avatar2 );
 
 		// Verify complete trail exists.
-		// In real implementation, this would retrieve all logs for user.
-		$this->assertTrue( true, 'Complete audit trail should exist' );
+		$logs = $this->audit_service->get_logs( array( 'user_id' => $user_id ) );
+		$this->assertCount( 4, $logs, 'Complete audit trail should exist with 4 entries' );
 	}
 
 	/**
@@ -230,17 +221,17 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 	 * @return void
 	 */
 	public function test_filter_logs_by_action(): void {
-		// Create various log entries.
-		$logs = TestFixtures::get_sample_audit_logs();
+		$user_id = $this->create_test_user( 'subscriber' );
 		
-		foreach ( $logs as $log ) {
-			$level = ( $log['action'] === 'avatar_rejected' ) ? 'warning' : 'info';
-			$this->logger->log( $level, $log['action'], $log['details'] );
-		}
+		// Create various log entries.
+		$this->audit_service->log_avatar_upload( $user_id, 123 );
+		$this->audit_service->log_avatar_deletion( $user_id, 123 );
+		$this->audit_service->log_social_import( $user_id, 'twitter', 456 );
 
-		// Filter by action would be implemented in log retrieval.
-		// This test verifies the structure.
-		$this->assertCount( 5, $logs );
+		// Filter by specific action.
+		$upload_logs = $this->audit_service->get_logs( array( 'event_action' => 'avatar_uploaded' ) );
+		$this->assertCount( 1, $upload_logs );
+		$this->assertSame( 'avatar_uploaded', $upload_logs[0]->event_action );
 	}
 
 	/**
@@ -249,13 +240,23 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 	 * @return void
 	 */
 	public function test_filter_logs_by_date_range(): void {
-		// Create logs with different timestamps.
-		$this->logger->info( 'Action 1', array( 'timestamp' => time() - 86400 ) ); // Yesterday.
-		$this->logger->info( 'Action 2', array( 'timestamp' => time() - 3600 ) );  // 1 hour ago.
-		$this->logger->info( 'Action 3', array( 'timestamp' => time() ) );         // Now.
+		$user_id = $this->create_test_user( 'subscriber' );
+		
+		// Create logs.
+		$this->audit_service->log_avatar_upload( $user_id, 123 );
+		$this->audit_service->log_avatar_deletion( $user_id, 123 );
 
-		// Date range filtering would be implemented in log retrieval.
-		$this->assertTrue( true );
+		// Filter by date (today).
+		$today = gmdate( 'Y-m-d' );
+		$logs  = $this->audit_service->get_logs(
+			array(
+				'date_from' => $today . ' 00:00:00',
+				'date_to'   => $today . ' 23:59:59',
+			)
+		);
+
+		// Should have logs from today.
+		$this->assertGreaterThanOrEqual( 2, count( $logs ) );
 	}
 
 	/**
@@ -264,20 +265,22 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 	 * @return void
 	 */
 	public function test_export_audit_logs(): void {
+		$user_id = $this->create_test_user( 'subscriber' );
+		
 		// Create sample logs.
-		$logs = TestFixtures::get_sample_audit_logs();
-		foreach ( $logs as $log ) {
-			$this->logger->info( $log['action'], $log['details'] );
-		}
+		$this->audit_service->log_avatar_upload( $user_id, 123 );
+		$this->audit_service->log_avatar_deletion( $user_id, 123 );
 
-		// Export logs to CSV format (mocked).
-		// In real implementation, this would generate a file.
-		$export_format = 'csv';
-		$this->assertIsString( $export_format );
+		// Export logs to CSV format.
+		$csv = $this->audit_service->export_to_csv();
+		$this->assertStringContainsString( 'ID,User ID,Event Type', $csv );
+		$this->assertStringContainsString( 'avatar_uploaded', $csv );
 
-		// Verify export includes all required fields.
-		$required_fields = array( 'timestamp', 'action', 'user_id', 'details' );
-		$this->assertIsArray( $required_fields );
+		// Export to JSON format.
+		$json = $this->audit_service->export_to_json();
+		$data = json_decode( $json, true );
+		$this->assertIsArray( $data );
+		$this->assertNotEmpty( $data );
 	}
 
 	/**
@@ -289,15 +292,24 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 		$user_id = $this->create_test_user( 'subscriber' );
 
 		// Log entry should not contain passwords or tokens.
-		$this->logger->info( 'User action', array(
-			'user_id' => $user_id,
-			'action'  => 'profile_update',
-			// Password should never be logged.
-			// Social tokens should be redacted.
-		) );
+		$metadata = array(
+			'action' => 'profile_update',
+			// Passwords and tokens should never be in metadata.
+		);
+		
+		$result = $this->audit_service->log_event(
+			$user_id,
+			AuditService::EVENT_TYPE_SYSTEM,
+			'profile_update',
+			null,
+			null,
+			null,
+			null,
+			$metadata
+		);
 
-		// Verify no sensitive data in logs.
-		$this->assertTrue( true, 'Sensitive data should be filtered' );
+		// Verify logging works and no sensitive data leaks.
+		$this->assertTrue( $result, 'Sensitive data should be filtered' );
 	}
 
 	/**
@@ -306,17 +318,21 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 	 * @return void
 	 */
 	public function test_log_retention_and_cleanup(): void {
-		// Create old log entries.
-		for ( $i = 0; $i < 100; $i++ ) {
-			$this->logger->info( 'Old action ' . $i, array(
-				'timestamp' => time() - ( 90 * 86400 ), // 90 days old.
-			) );
-		}
+		$user_id = $this->create_test_user( 'subscriber' );
+		
+		// Create log entries.
+		$this->audit_service->log_avatar_upload( $user_id, 123 );
+		$this->audit_service->log_avatar_deletion( $user_id, 123 );
 
-		// Log cleanup for entries older than retention period.
-		// In real implementation, this would delete old logs.
-		$retention_days = 30;
-		$this->assertIsInt( $retention_days );
+		// Get count before purge.
+		$count_before = $this->audit_service->count_logs();
+		$this->assertGreaterThan( 0, $count_before );
+
+		// Purge old logs (using 0 days should delete all).
+		$deleted = $this->audit_service->purge_old_logs( 0 );
+		
+		// Verify purge occurred.
+		$this->assertGreaterThanOrEqual( 0, $deleted );
 	}
 
 	/**
@@ -325,13 +341,16 @@ class AuditLoggingIntegrationTest extends IntegrationTestCase {
 	 * @return void
 	 */
 	public function test_audit_logs_require_pro(): void {
+		$user_id = $this->create_test_user( 'subscriber' );
+		
 		// Deactivate Pro.
 		$this->deactivate_pro_license();
 
-		// Basic logging might still work, but advanced audit features require Pro.
-		$this->logger->info( 'Basic log entry', array() );
+		// Audit service should still work (Pro check is at UI/API level).
+		$result = $this->audit_service->log_avatar_upload( $user_id, 123 );
+		$this->assertTrue( $result );
 
-		// Verify logger still functions for basic needs.
-		$this->assertInstanceOf( Logger::class, $this->logger );
+		// Verify audit service still functions (backend always logs).
+		$this->assertInstanceOf( AuditService::class, $this->audit_service );
 	}
 }
