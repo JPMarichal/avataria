@@ -53,6 +53,16 @@ final class Plugin {
 	 * @var LicenseManager|null
 	 */
 	private ?LicenseManager $license_manager = null;
+	 * Library page instance.
+	 *
+	 * @var Admin\LibraryPage|null
+	 */
+	private ?Admin\LibraryPage $library_page = null;
+	 * Visual identity REST controller instance.
+	 *
+	 * @var Infrastructure\REST\VisualIdentityController|null
+	 */
+	private ?Infrastructure\REST\VisualIdentityController $visual_identity_controller = null;
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -60,6 +70,7 @@ final class Plugin {
 	private function __construct() {
 		if ( function_exists( 'add_action' ) ) {
 			add_action( 'plugins_loaded', array( $this, 'boot' ) );
+			add_action( 'rest_api_init', array( $this, 'init_rest_api' ) );
 		}
 	}
 
@@ -86,6 +97,7 @@ final class Plugin {
 		$this->init_settings_page();
 		$this->init_migration_page();
 		$this->init_integration_service();
+		$this->init_library_page();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -233,5 +245,73 @@ final class Plugin {
 	 */
 	public function get_integration_service(): ?Domain\Integrations\IntegrationService {
 		return $this->integration_service;
+	}
+
+	/**
+	 * Initialize the library page.
+	 *
+	 * @return void
+	 */
+	private function init_library_page(): void {
+		if ( ! class_exists( Domain\Library\LibraryService::class ) ) {
+			require_once __DIR__ . '/Domain/Library/LibraryService.php';
+		}
+
+		if ( ! class_exists( Admin\LibraryPage::class ) ) {
+			require_once __DIR__ . '/Admin/LibraryPage.php';
+		}
+
+		if ( ! class_exists( Admin\LibraryRestController::class ) ) {
+			require_once __DIR__ . '/Admin/LibraryRestController.php';
+		}
+
+		if ( ! class_exists( Domain\Uploads\UploadService::class ) ) {
+			require_once __DIR__ . '/Domain/Uploads/UploadService.php';
+		}
+
+		$library_service = new Domain\Library\LibraryService();
+		$upload_service  = new Domain\Uploads\UploadService();
+
+		$this->library_page = new Admin\LibraryPage( $library_service, $upload_service );
+		$this->library_page->init();
+
+		// Register REST API routes.
+		add_action(
+			'rest_api_init',
+			function () use ( $library_service ) {
+				$rest_controller = new Admin\LibraryRestController( $library_service );
+				$rest_controller->register_routes();
+			}
+		);
+	}
+
+	/**
+	 * Get the library page instance.
+	 *
+	 * @return Admin\LibraryPage|null Library page instance.
+	 */
+	public function get_library_page(): ?Admin\LibraryPage {
+		return $this->library_page;
+	 * Initialize REST API endpoints.
+	 *
+	 * @return void
+	 */
+	public function init_rest_api(): void {
+		if ( ! class_exists( Infrastructure\REST\VisualIdentityController::class ) ) {
+			require_once __DIR__ . '/Domain/VisualIdentity/VisualIdentityService.php';
+			require_once __DIR__ . '/Infrastructure/REST/VisualIdentityController.php';
+		}
+
+		$this->visual_identity_controller = new Infrastructure\REST\VisualIdentityController();
+		$this->visual_identity_controller->register_routes();
+	}
+
+	/**
+	 * Get the visual identity controller instance.
+	 *
+	 * @return Infrastructure\REST\VisualIdentityController|null Controller instance.
+	 */
+	public function get_visual_identity_controller(): ?Infrastructure\REST\VisualIdentityController {
+		return $this->visual_identity_controller;
 	}
 }

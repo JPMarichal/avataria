@@ -59,6 +59,18 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Safe Migration**: Skip users who already have avatars, no data loss
 - **Statistics Dashboard**: View migration status and available avatars
 
+### Avatar Library (Pro Feature)
+- **Centralized Library**: Manage a collection of avatars available for all users
+- **Metadata Support**: Organize avatars by author, license, sector, and tags
+- **Profile Integration**: Users can select avatars from the library on their profile page
+- **Search and Filter**: Find avatars quickly with search and filter options
+- **Sectoral Templates**: Import avatar templates organized by industry sectors
+- **REST API**: Full REST API support for programmatic access and integrations
+- **Bulk Import**: Upload multiple avatars at once with sectoral categorization
+- **Performance Optimized**: Transient caching for fast library queries
+
+For detailed information, see the [Avatar Library Documentation](docs/avatar-library.md).
+
 ### Social Media Integrations (Pro Feature)
 - **Twitter / X Integration**: Users can import their Twitter profile picture as their avatar
 - **Facebook Integration**: Users can import their Facebook profile picture as their avatar
@@ -69,6 +81,18 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Extensible Architecture**: Strategy Pattern allows easy addition of new social providers
 
 For detailed setup instructions, see the [Social Integrations Setup Guide](docs/social-integrations.md).
+
+### Visual Identity API (Pro Feature)
+- **REST API Endpoints**: Programmatic access to color palettes and visual styles
+- **Versioned API (v1)**: Stable, versioned API for long-term compatibility
+- **Public Access**: Read-only endpoints available without authentication
+- **Caching Support**: Built-in response caching for optimal performance
+- **Color Palettes**: Access to avatar initials colors, brand colors, and status colors
+- **Style Configuration**: Retrieve avatar dimensions, typography, and layout settings
+- **Developer-Friendly**: Comprehensive documentation with JavaScript, CSS, and PHP examples
+- **Extensible**: Add custom palettes and styles via WordPress filters
+
+For detailed API documentation and usage examples, see the [Visual Identity API Documentation](docs/api/visual-identity.md).
 
 ## System Requirements
 
@@ -581,8 +605,70 @@ add_action('avatarsteward_register_providers', function($integration_service) {
 });
 ```
 
+#### Visual Identity REST API
+
+Access color palettes and visual styles programmatically:
+
+```javascript
+// Fetch complete visual identity
+fetch('/wp-json/avatar-steward/v1/visual-identity')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Palettes:', data.palettes);
+    console.log('Styles:', data.styles);
+  });
+
+// Get avatar color palette
+fetch('/wp-json/avatar-steward/v1/visual-identity/palettes/avatar_initials')
+  .then(response => response.json())
+  .then(palette => {
+    palette.colors.forEach(color => {
+      console.log('Color:', color);
+    });
+  });
+
+// Get avatar styles
+fetch('/wp-json/avatar-steward/v1/visual-identity/styles/avatar')
+  .then(response => response.json())
+  .then(styles => {
+    console.log('Border radius:', styles.properties.border_radius);
+    console.log('Font family:', styles.properties.font_family);
+  });
+```
+
+**Extend with custom palettes and styles:**
+
+```php
+// Add custom color palette
+add_filter('avatar_steward_palettes', function($palettes) {
+    $palettes['custom_brand'] = array(
+        'name'        => 'Custom Brand Colors',
+        'description' => 'My brand color palette',
+        'colors'      => array('#ff6b6b', '#4ecdc4', '#45b7d1'),
+        'usage'       => 'custom_branding',
+    );
+    return $palettes;
+});
+
+// Add custom styles
+add_filter('avatar_steward_styles', function($styles) {
+    $styles['custom_theme'] = array(
+        'name'        => 'Custom Theme Styles',
+        'description' => 'Additional styling options',
+        'properties'  => array(
+            'border_width' => '2px',
+            'shadow'       => '0 2px 4px rgba(0,0,0,0.1)',
+        ),
+    );
+    return $styles;
+});
+```
+
+For complete API documentation, see [Visual Identity API Documentation](docs/api/visual-identity.md).
+
 ## Additional Documentation
 
+- **[Visual Identity API](docs/api/visual-identity.md)** - REST API documentation for accessing color palettes and visual styles
 - **[Social Integrations Setup Guide](docs/social-integrations.md)** - Complete guide for setting up Twitter and Facebook integrations
 - **[Social Integrations API](docs/api/integrations.md)** - Developer documentation for extending social integrations
 - **[Migration Guide](docs/migracion/migration-guide.md)** - Guide for migrating from other avatar plugins

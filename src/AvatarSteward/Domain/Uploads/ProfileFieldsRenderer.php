@@ -167,6 +167,10 @@ class ProfileFieldsRenderer {
 								accept="image/jpeg,image/png,image/gif,image/webp"
 							/>
 
+							<button type="button" class="button button-secondary" id="avatar-library-select-btn" style="margin-top: 10px;">
+								<?php esc_html_e( 'Select from Library', 'avatar-steward' ); ?>
+							</button>
+
 							<?php if ( $has_avatar ) : ?>
 								<div style="margin-top: 10px;">
 									<label>
