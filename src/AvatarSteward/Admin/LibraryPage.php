@@ -60,6 +60,8 @@ class LibraryPage {
 		add_action( 'wp_ajax_avatar_library_upload', array( $this, 'handle_ajax_upload' ) );
 		add_action( 'wp_ajax_avatar_library_delete', array( $this, 'handle_ajax_delete' ) );
 		add_action( 'wp_ajax_avatar_library_search', array( $this, 'handle_ajax_search' ) );
+		add_action( 'wp_ajax_avatar_library_assign_badge', array( $this, 'handle_ajax_assign_badge' ) );
+		add_action( 'wp_ajax_avatar_library_remove_badge', array( $this, 'handle_ajax_remove_badge' ) );
 	}
 
 	/**
@@ -483,5 +485,61 @@ class LibraryPage {
 		);
 
 		wp_send_json_success( $results );
+	}
+
+	/**
+	 * Handle AJAX request to assign badge.
+	 *
+	 * @return void
+	 */
+	public function handle_ajax_assign_badge(): void {
+		check_ajax_referer( 'avatar_library_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'avatar-steward' ) ) );
+		}
+
+		$attachment_id = isset( $_POST['attachment_id'] ) ? (int) $_POST['attachment_id'] : 0;
+		$badge_type    = isset( $_POST['badge_type'] ) ? sanitize_text_field( $_POST['badge_type'] ) : '';
+		$custom_data   = isset( $_POST['custom_data'] ) ? (array) $_POST['custom_data'] : array();
+
+		if ( ! $attachment_id || ! $badge_type ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid parameters.', 'avatar-steward' ) ) );
+		}
+
+		$result = $this->library_service->assign_badge( $attachment_id, $badge_type, $custom_data );
+
+		if ( $result ) {
+			wp_send_json_success( array( 'message' => __( 'Badge assigned successfully.', 'avatar-steward' ) ) );
+		} else {
+			wp_send_json_error( array( 'message' => __( 'Failed to assign badge.', 'avatar-steward' ) ) );
+		}
+	}
+
+	/**
+	 * Handle AJAX request to remove badge.
+	 *
+	 * @return void
+	 */
+	public function handle_ajax_remove_badge(): void {
+		check_ajax_referer( 'avatar_library_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'avatar-steward' ) ) );
+		}
+
+		$attachment_id = isset( $_POST['attachment_id'] ) ? (int) $_POST['attachment_id'] : 0;
+
+		if ( ! $attachment_id ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid attachment ID.', 'avatar-steward' ) ) );
+		}
+
+		$result = $this->library_service->remove_badge( $attachment_id );
+
+		if ( $result ) {
+			wp_send_json_success( array( 'message' => __( 'Badge removed successfully.', 'avatar-steward' ) ) );
+		} else {
+			wp_send_json_error( array( 'message' => __( 'Failed to remove badge.', 'avatar-steward' ) ) );
+		}
 	}
 }

@@ -65,11 +65,16 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Profile Integration**: Users can select avatars from the library on their profile page
 - **Search and Filter**: Find avatars quickly with search and filter options
 - **Sectoral Templates**: Import avatar templates organized by industry sectors
+- **Verification Badges**: Assign visual badges to avatars (Verified, Moderator, Author, Premium, Custom)
+- **Badge Management**: Manual and automatic badge assignment based on user roles
+- **Template Configurations**: Pre-configured settings for eLearning, eCommerce, Forums, Healthcare, Corporate, and Membership sites
 - **REST API**: Full REST API support for programmatic access and integrations
 - **Bulk Import**: Upload multiple avatars at once with sectoral categorization
 - **Performance Optimized**: Transient caching for fast library queries
 
-For detailed information, see the [Avatar Library Documentation](docs/avatar-library.md).
+For detailed information, see:
+- [Avatar Library Documentation](docs/avatar-library.md)
+- [Badges and Templates Guide](docs/badges-and-templates.md)
 
 ### Social Media Integrations (Pro Feature)
 - **Twitter / X Integration**: Users can import their Twitter profile picture as their avatar
@@ -93,6 +98,37 @@ For detailed setup instructions, see the [Social Integrations Setup Guide](docs/
 - **Extensible**: Add custom palettes and styles via WordPress filters
 
 For detailed API documentation and usage examples, see the [Visual Identity API Documentation](docs/api/visual-identity.md).
+
+### Automatic Avatar Cleanup (Pro Feature)
+- **Scheduled Deletion**: Automatically remove inactive avatars based on configurable criteria
+- **WP-Cron Integration**: Uses WordPress's built-in cron system for scheduled tasks
+- **Flexible Criteria**: Configure maximum avatar age and user inactivity periods
+- **Dry-Run Mode**: Preview which avatars would be deleted before actual cleanup
+- **Email Notifications**: Send warnings to users before deletion and reports to administrators
+- **Configurable Schedule**: Choose daily, weekly, or monthly cleanup frequency
+- **Safe Deletion**: Only removes avatars from inactive users based on login activity
+- **Settings Page Integration**: All options accessible from the WordPress admin settings
+
+**Configuration Options:**
+- Enable/disable automatic cleanup
+- Cleanup schedule (daily, weekly, monthly)
+- Maximum avatar age (days) - default: 365
+- User inactivity period (days) - default: 180
+- Notify users before deletion (optional)
+- Notify admins after cleanup (optional)
+
+For usage examples, see [examples/cleanup-demo.php](examples/cleanup-demo.php).
+### Audit Logs (Pro Feature)
+- **Comprehensive Tracking**: Log all avatar-related events (uploads, deletions, moderation, changes)
+- **Custom Database Table**: Dedicated indexed table for fast queries and scalability
+- **Advanced Filtering**: Filter logs by user, event type, action, and date range
+- **Export Functionality**: Export audit logs in CSV or JSON formats via UI or REST API
+- **Automatic Retention**: Configurable log purging with daily cron job (default 90 days)
+- **Security Tracking**: Records IP addresses and user agents for security auditing
+- **REST API Access**: Full REST API for programmatic access and SIEM integration
+- **Admin Interface**: User-friendly admin panel for viewing and managing logs
+
+For detailed documentation and API examples, see the [Audit Logs Documentation](docs/audit-logs.md).
 
 ## System Requirements
 

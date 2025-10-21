@@ -309,6 +309,68 @@ class SettingsPage {
 				'avatar-steward',
 				'avatar_steward_pro_features'
 			);
+
+			// Cleanup Section.
+			add_settings_section(
+				'avatar_steward_cleanup',
+				__( 'Automatic Cleanup', 'avatar-steward' ),
+				array( $this, 'render_cleanup_section' ),
+				'avatar-steward'
+			);
+
+			// Enable cleanup field.
+			add_settings_field(
+				'cleanup_enabled',
+				__( 'Enable Automatic Cleanup', 'avatar-steward' ),
+				array( $this, 'render_cleanup_enabled_field' ),
+				'avatar-steward',
+				'avatar_steward_cleanup'
+			);
+
+			// Cleanup schedule field.
+			add_settings_field(
+				'cleanup_schedule',
+				__( 'Cleanup Schedule', 'avatar-steward' ),
+				array( $this, 'render_cleanup_schedule_field' ),
+				'avatar-steward',
+				'avatar_steward_cleanup'
+			);
+
+			// Cleanup max age days field.
+			add_settings_field(
+				'cleanup_max_age_days',
+				__( 'Maximum Avatar Age (Days)', 'avatar-steward' ),
+				array( $this, 'render_cleanup_max_age_days_field' ),
+				'avatar-steward',
+				'avatar_steward_cleanup'
+			);
+
+			// Cleanup user inactivity days field.
+			add_settings_field(
+				'cleanup_user_inactivity_days',
+				__( 'User Inactivity Period (Days)', 'avatar-steward' ),
+				array( $this, 'render_cleanup_user_inactivity_days_field' ),
+				'avatar-steward',
+				'avatar_steward_cleanup'
+			);
+
+			// Cleanup notify users field.
+			add_settings_field(
+				'cleanup_notify_users',
+				__( 'Notify Users Before Deletion', 'avatar-steward' ),
+				array( $this, 'render_cleanup_notify_users_field' ),
+				'avatar-steward',
+				'avatar_steward_cleanup'
+			);
+
+			// Cleanup notify admins field.
+			add_settings_field(
+				'cleanup_notify_admins',
+				__( 'Notify Admins After Cleanup', 'avatar-steward' ),
+				array( $this, 'render_cleanup_notify_admins_field' ),
+				'avatar-steward',
+				'avatar_steward_cleanup'
+			);
 		}
 	}
 
@@ -827,20 +889,26 @@ class SettingsPage {
 	 */
 	public function get_default_settings(): array {
 		return array(
-			'max_file_size'               => 2.0,
-			'allowed_formats'             => array( 'image/jpeg', 'image/png' ),
-			'max_width'                   => 2048,
-			'max_height'                  => 2048,
-			'convert_to_webp'             => false,
-			'low_bandwidth_mode'          => false,
-			'bandwidth_threshold'         => 100,
-			'allowed_roles'               => array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ),
-			'require_approval'            => false,
-			'delete_attachment_on_remove' => false,
-			'role_file_size_limits'       => array(),
-			'role_format_restrictions'    => array(),
-			'avatar_expiration_enabled'   => false,
-			'avatar_expiration_days'      => 365,
+			'max_file_size'                => 2.0,
+			'allowed_formats'              => array( 'image/jpeg', 'image/png' ),
+			'max_width'                    => 2048,
+			'max_height'                   => 2048,
+			'convert_to_webp'              => false,
+			'low_bandwidth_mode'           => false,
+			'bandwidth_threshold'          => 100,
+			'allowed_roles'                => array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ),
+			'require_approval'             => false,
+			'delete_attachment_on_remove'  => false,
+			'role_file_size_limits'        => array(),
+			'role_format_restrictions'     => array(),
+			'avatar_expiration_enabled'    => false,
+			'avatar_expiration_days'       => 365,
+			'cleanup_enabled'              => false,
+			'cleanup_schedule'             => 'weekly',
+			'cleanup_max_age_days'         => 365,
+			'cleanup_user_inactivity_days' => 180,
+			'cleanup_notify_users'         => true,
+			'cleanup_notify_admins'        => true,
 		);
 	}
 
@@ -1198,6 +1266,29 @@ class SettingsPage {
 				$sanitized['avatar_expiration_days'] = intval( $input['avatar_expiration_days'] );
 				$sanitized['avatar_expiration_days'] = max( 1, min( 3650, $sanitized['avatar_expiration_days'] ) );
 			}
+
+			// Sanitize cleanup settings.
+			$sanitized['cleanup_enabled'] = ! empty( $input['cleanup_enabled'] );
+
+			if ( isset( $input['cleanup_schedule'] ) ) {
+				$valid_schedules               = array( 'daily', 'weekly', 'monthly' );
+				$sanitized['cleanup_schedule'] = in_array( $input['cleanup_schedule'], $valid_schedules, true )
+					? $input['cleanup_schedule']
+					: 'weekly';
+			}
+
+			if ( isset( $input['cleanup_max_age_days'] ) ) {
+				$sanitized['cleanup_max_age_days'] = intval( $input['cleanup_max_age_days'] );
+				$sanitized['cleanup_max_age_days'] = max( 1, min( 3650, $sanitized['cleanup_max_age_days'] ) );
+			}
+
+			if ( isset( $input['cleanup_user_inactivity_days'] ) ) {
+				$sanitized['cleanup_user_inactivity_days'] = intval( $input['cleanup_user_inactivity_days'] );
+				$sanitized['cleanup_user_inactivity_days'] = max( 1, min( 3650, $sanitized['cleanup_user_inactivity_days'] ) );
+			}
+
+			$sanitized['cleanup_notify_users']  = ! empty( $input['cleanup_notify_users'] );
+			$sanitized['cleanup_notify_admins'] = ! empty( $input['cleanup_notify_admins'] );
 		}
 
 		// Note: Social integration credentials are stored separately for security.
@@ -1213,5 +1304,144 @@ class SettingsPage {
 	 */
 	public function get_option_name(): string {
 		return self::OPTION_NAME;
+	}
+
+	/**
+	 * Render cleanup section description.
+	 *
+	 * @return void
+	 */
+	public function render_cleanup_section(): void {
+		?>
+		<p><?php esc_html_e( 'Configure automatic cleanup of inactive avatars. The system will periodically identify and delete avatars based on age and user activity criteria.', 'avatar-steward' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * Render cleanup enabled field.
+	 *
+	 * @return void
+	 */
+	public function render_cleanup_enabled_field(): void {
+		$options = $this->get_settings();
+		$value   = isset( $options['cleanup_enabled'] ) ? $options['cleanup_enabled'] : false;
+		?>
+		<label>
+			<input type="checkbox" 
+					name="<?php echo esc_attr( self::OPTION_NAME ); ?>[cleanup_enabled]" 
+					value="1" 
+					<?php checked( $value, true ); ?> />
+			<?php esc_html_e( 'Enable automatic cleanup of inactive avatars', 'avatar-steward' ); ?>
+		</label>
+		<p class="description">
+			<?php esc_html_e( 'When enabled, avatars matching the criteria below will be automatically deleted on the scheduled interval.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render cleanup schedule field.
+	 *
+	 * @return void
+	 */
+	public function render_cleanup_schedule_field(): void {
+		$options = $this->get_settings();
+		$value   = isset( $options['cleanup_schedule'] ) ? $options['cleanup_schedule'] : 'weekly';
+		?>
+		<select name="<?php echo esc_attr( self::OPTION_NAME ); ?>[cleanup_schedule]">
+			<option value="daily" <?php selected( $value, 'daily' ); ?>><?php esc_html_e( 'Daily', 'avatar-steward' ); ?></option>
+			<option value="weekly" <?php selected( $value, 'weekly' ); ?>><?php esc_html_e( 'Weekly', 'avatar-steward' ); ?></option>
+			<option value="monthly" <?php selected( $value, 'monthly' ); ?>><?php esc_html_e( 'Monthly', 'avatar-steward' ); ?></option>
+		</select>
+		<p class="description">
+			<?php esc_html_e( 'How often the cleanup task should run.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render cleanup max age days field.
+	 *
+	 * @return void
+	 */
+	public function render_cleanup_max_age_days_field(): void {
+		$options = $this->get_settings();
+		$value   = isset( $options['cleanup_max_age_days'] ) ? $options['cleanup_max_age_days'] : 365;
+		?>
+		<input type="number" 
+				name="<?php echo esc_attr( self::OPTION_NAME ); ?>[cleanup_max_age_days]" 
+				value="<?php echo esc_attr( $value ); ?>" 
+				min="1" 
+				step="1" 
+				class="small-text" />
+		<p class="description">
+			<?php esc_html_e( 'Delete avatars older than this many days.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render cleanup user inactivity days field.
+	 *
+	 * @return void
+	 */
+	public function render_cleanup_user_inactivity_days_field(): void {
+		$options = $this->get_settings();
+		$value   = isset( $options['cleanup_user_inactivity_days'] ) ? $options['cleanup_user_inactivity_days'] : 180;
+		?>
+		<input type="number" 
+				name="<?php echo esc_attr( self::OPTION_NAME ); ?>[cleanup_user_inactivity_days]" 
+				value="<?php echo esc_attr( $value ); ?>" 
+				min="1" 
+				step="1" 
+				class="small-text" />
+		<p class="description">
+			<?php esc_html_e( 'Consider users inactive after this many days without login. Avatars of inactive users will be deleted.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render cleanup notify users field.
+	 *
+	 * @return void
+	 */
+	public function render_cleanup_notify_users_field(): void {
+		$options = $this->get_settings();
+		$value   = isset( $options['cleanup_notify_users'] ) ? $options['cleanup_notify_users'] : true;
+		?>
+		<label>
+			<input type="checkbox" 
+					name="<?php echo esc_attr( self::OPTION_NAME ); ?>[cleanup_notify_users]" 
+					value="1" 
+					<?php checked( $value, true ); ?> />
+			<?php esc_html_e( 'Send email notification to users before deleting their avatar', 'avatar-steward' ); ?>
+		</label>
+		<p class="description">
+			<?php esc_html_e( 'Users will receive an email warning before their avatar is deleted.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render cleanup notify admins field.
+	 *
+	 * @return void
+	 */
+	public function render_cleanup_notify_admins_field(): void {
+		$options = $this->get_settings();
+		$value   = isset( $options['cleanup_notify_admins'] ) ? $options['cleanup_notify_admins'] : true;
+		?>
+		<label>
+			<input type="checkbox" 
+					name="<?php echo esc_attr( self::OPTION_NAME ); ?>[cleanup_notify_admins]" 
+					value="1" 
+					<?php checked( $value, true ); ?> />
+			<?php esc_html_e( 'Send cleanup report to site administrators', 'avatar-steward' ); ?>
+		</label>
+		<p class="description">
+			<?php esc_html_e( 'Administrators will receive a report after each cleanup run.', 'avatar-steward' ); ?>
+		</p>
+		<?php
 	}
 }
