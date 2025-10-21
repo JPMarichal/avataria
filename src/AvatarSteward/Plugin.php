@@ -41,6 +41,25 @@ final class Plugin {
 	private ?Admin\MigrationPage $migration_page = null;
 
 	/**
+	 * Moderation page instance.
+	 *
+	 * @var Admin\ModerationPage|null
+	 */
+	private ?Admin\ModerationPage $moderation_page = null;
+
+	/**
+	 * Moderation queue instance.
+	 *
+	 * @var Domain\Moderation\ModerationQueue|null
+	 */
+	private ?Domain\Moderation\ModerationQueue $moderation_queue = null;
+
+	/**
+	 * Avatar handler instance.
+	 *
+	 * @var Core\AvatarHandler|null
+	 */
+	private ?Core\AvatarHandler $avatar_handler = null;
 	 * License page instance.
 	 *
 	 * @var Admin\LicensePage|null
@@ -82,14 +101,28 @@ final class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
-		$this->init_license_manager();
+		$this->init_avatar_handler();
 		$this->init_settings_page();
 		$this->init_migration_page();
-		$this->init_license_page();
+		$this->init_moderation();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
 		}
+	}
+
+	/**
+	 * Initialize the avatar handler.
+	 *
+	 * @return void
+	 */
+	private function init_avatar_handler(): void {
+		if ( ! class_exists( Core\AvatarHandler::class ) ) {
+			require_once __DIR__ . '/Core/AvatarHandler.php';
+		}
+
+		$this->avatar_handler = new Core\AvatarHandler();
+		$this->avatar_handler->init();
 	}
 
 	/**
@@ -126,6 +159,40 @@ final class Plugin {
 	}
 
 	/**
+	 * Initialize the moderation system.
+	 *
+	 * @return void
+	 */
+	private function init_moderation(): void {
+		if ( ! class_exists( Domain\Moderation\ModerationQueue::class ) ) {
+			require_once __DIR__ . '/Domain/Moderation/ModerationQueue.php';
+		}
+
+		if ( ! class_exists( Domain\Moderation\DecisionService::class ) ) {
+			require_once __DIR__ . '/Domain/Moderation/DecisionService.php';
+		}
+
+		if ( ! class_exists( Admin\ModerationPage::class ) ) {
+			require_once __DIR__ . '/Admin/ModerationPage.php';
+		}
+
+		// Initialize moderation queue.
+		$this->moderation_queue = new Domain\Moderation\ModerationQueue();
+
+		// Set moderation queue in avatar handler if available.
+		if ( $this->avatar_handler ) {
+			$this->avatar_handler->set_moderation_queue( $this->moderation_queue );
+		}
+
+		// Initialize decision service.
+		$decision_service = new Domain\Moderation\DecisionService( $this->moderation_queue );
+
+		// Initialize moderation page.
+		$this->moderation_page = new Admin\ModerationPage( $this->moderation_queue, $decision_service );
+		$this->moderation_page->init();
+	}
+
+	/**
 	 * Get the settings page instance.
 	 *
 	 * @return Admin\SettingsPage|null Settings page instance.
@@ -144,49 +211,20 @@ final class Plugin {
 	}
 
 	/**
-	 * Initialize the license manager.
+	 * Get the moderation page instance.
 	 *
-	 * @return void
+	 * @return Admin\ModerationPage|null Moderation page instance.
 	 */
-	private function init_license_manager(): void {
-		if ( ! class_exists( Domain\Licensing\LicenseManager::class ) ) {
-			require_once __DIR__ . '/Domain/Licensing/LicenseManager.php';
-		}
-
-		$this->license_manager = new Domain\Licensing\LicenseManager();
+	public function get_moderation_page(): ?Admin\ModerationPage {
+		return $this->moderation_page;
 	}
 
 	/**
-	 * Initialize the license page.
+	 * Get the moderation queue instance.
 	 *
-	 * @return void
+	 * @return Domain\Moderation\ModerationQueue|null Moderation queue instance.
 	 */
-	private function init_license_page(): void {
-		if ( ! class_exists( Admin\LicensePage::class ) ) {
-			require_once __DIR__ . '/Admin/LicensePage.php';
-		}
-
-		if ( $this->license_manager !== null ) {
-			$this->license_page = new Admin\LicensePage( $this->license_manager );
-			$this->license_page->init();
-		}
-	}
-
-	/**
-	 * Get the license manager instance.
-	 *
-	 * @return LicenseManager|null License manager instance.
-	 */
-	public function get_license_manager(): ?LicenseManager {
-		return $this->license_manager;
-	}
-
-	/**
-	 * Get the license page instance.
-	 *
-	 * @return Admin\LicensePage|null License page instance.
-	 */
-	public function get_license_page(): ?Admin\LicensePage {
-		return $this->license_page;
+	public function get_moderation_queue(): ?Domain\Moderation\ModerationQueue {
+		return $this->moderation_queue;
 	}
 }

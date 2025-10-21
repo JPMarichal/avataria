@@ -7,30 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed - Avatar Removal
-- **No More Broken Images**: Fixed issue where removing avatar resulted in broken image display
-- **Proper Fallback**: Avatar removal now correctly displays initials-based SVG fallback instead of broken image
-- **Orphaned Meta Cleanup**: Automatically cleans up user meta when attachment no longer exists
-- **Attachment Validation**: Added verification that attachment exists before attempting to display it
-
-### Added - Avatar Removal
-- **Delete Attachment on Remove Setting**: New configurable option to automatically delete avatar attachments from Media Library when users remove their avatars
-  - Location: Settings > Avatar Steward > Roles & Permissions
-  - Default: Disabled (maintains backward compatibility)
-  - Smart deletion: Only deletes if attachment is not used by other users
-- **Enhanced Logging**: Comprehensive logging of avatar removal operations
-- **Test Coverage**: Added tests for avatar removal with and without attachment deletion
-
-### Added - Profile UI Improvements
-- **Enhanced Avatar Section Positioning**: Avatar upload section now appears immediately after "About Yourself" section in user profiles
-- **Visual Enhancement**: Avatar section features distinctive styling with light gray background (#f3f4f6), rounded borders, and subtle shadow
-- **Improved User Experience**: Avatar section is more prominently positioned and visually distinct from other profile sections
-- **Smart Repositioning**: JavaScript automatically moves the avatar section to optimal position regardless of WordPress theme or language
-
-### Fixed
-- **Plugin Structure**: Created proper WordPress plugin structure with main file in root directory
-- **Asset Loading**: Fixed CSS and JS asset URLs to work correctly with WordPress plugin system
-- **Version Management**: Added proper plugin constants for version and path management
+### Added - Pro Features
+- **Avatar Moderation Panel**: Comprehensive moderation system (RF-P03)
+  - Dedicated admin menu page for moderating avatar uploads
+  - Status management: pending, approved, rejected
+  - Bulk actions: approve or reject multiple avatars at once
+  - Individual actions: approve or reject single avatars with one click
+  - Filtering and search: find avatars by user, status, or role
+  - Pagination: handle large moderation queues efficiently
+  - Badge counter: menu badge shows pending avatar count
+  - Previous avatar backup: automatically restore previous avatar on rejection
+  - Smart display: only show approved avatars when moderation is enabled
+- **Moderation History Tracking**:
+  - Complete audit trail of all moderation decisions
+  - Records action, moderator ID, timestamp, and optional comments
+  - Per-user history accessible via API
+  - GDPR-compliant data storage in user meta
+- **Moderation Domain Services**:
+  - `ModerationQueue`: Manages queue retrieval, filtering, and status tracking
+  - `DecisionService`: Processes approve/reject decisions with rollback support
+  - Extensibility hooks: `avatarsteward/avatar_approved`, `avatarsteward/avatar_rejected`
+- **Upload Integration with Moderation**:
+  - Automatic pending status when "Require Approval" is enabled
+  - Previous avatar automatically stored for potential restoration
+  - Seamless integration with existing upload workflow
+- **Avatar Display Integration**:
+  - AvatarHandler respects moderation status
+  - Pending/rejected avatars are never displayed publicly
+  - Approved avatars show immediately after moderation
 
 ### Added - MVP Core Features
 - **Settings Page**: Comprehensive admin settings page at Settings > Avatar Steward

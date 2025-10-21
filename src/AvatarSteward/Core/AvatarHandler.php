@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace AvatarSteward\Core;
 
 use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
-use AvatarSteward\Domain\Initials\Generator;
-use AvatarSteward\Domain\Uploads\UploadService;
+use AvatarSteward\Domain\Moderation\ModerationQueue;
 
 /**
  * AvatarHandler class for managing avatar display.
@@ -43,20 +42,11 @@ class AvatarHandler {
 	private ?BandwidthOptimizer $optimizer = null;
 
 	/**
-	 * Initials generator instance.
+	 * Moderation queue instance.
 	 *
-	 * @var Generator|null
+	 * @var ModerationQueue|null
 	 */
-	private ?Generator $generator = null;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param UploadService $upload_service Upload service instance.
-	 */
-	public function __construct( UploadService $upload_service ) {
-		$this->upload_service = $upload_service;
-	}
+	private ?ModerationQueue $moderation_queue = null;
 
 	/**
 	 * Set the bandwidth optimizer.
@@ -69,13 +59,13 @@ class AvatarHandler {
 	}
 
 	/**
-	 * Set the initials generator.
+	 * Set the moderation queue.
 	 *
-	 * @param Generator $generator Initials generator instance.
+	 * @param ModerationQueue $moderation_queue Moderation queue instance.
 	 * @return void
 	 */
-	public function set_generator( Generator $generator ): void {
-		$this->generator = $generator;
+	public function set_moderation_queue( ModerationQueue $moderation_queue ): void {
+		$this->moderation_queue = $moderation_queue;
 	}
 
 	/**
@@ -265,13 +255,12 @@ class AvatarHandler {
 			return null;
 		}
 
-		// Verify the attachment still exists.
-		if ( ! function_exists( 'get_post' ) || ! get_post( (int) $avatar_id ) ) {
-			// Attachment no longer exists, clean up the user meta.
-			if ( function_exists( 'delete_user_meta' ) ) {
-				delete_user_meta( $user_id, self::META_KEY );
+		// Check moderation status - only show approved avatars.
+		if ( $this->moderation_queue ) {
+			$status = $this->moderation_queue->get_status( $user_id );
+			if ( ModerationQueue::STATUS_PENDING === $status || ModerationQueue::STATUS_REJECTED === $status ) {
+				return null;
 			}
-			return null;
 		}
 
 		// Check if low-bandwidth mode should be used.
