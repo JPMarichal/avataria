@@ -77,13 +77,24 @@ class UploadService {
 	/**
 	 * Validate an uploaded file.
 	 *
-	 * @param array<string, mixed> $file The $_FILES array element for the uploaded file.
+	 * @param array<string, mixed> $file    The $_FILES array element for the uploaded file.
+	 * @param int|null             $user_id Optional user ID to apply role-based restrictions.
 	 *
 	 * @return array{success: bool, message?: string} Validation result.
 	 */
-	public function validate_file( array $file ): array {
+	public function validate_file( array $file, ?int $user_id = null ): array {
 		if ( $this->logger ) {
 			$this->logger->debug( 'Starting file validation', array( 'file_name' => $file['name'] ?? 'unknown' ) );
+		}
+
+		// Apply role-based restrictions if user ID is provided.
+		$max_file_size      = $this->max_file_size;
+		$allowed_mime_types = $this->allowed_mime_types;
+
+		if ( null !== $user_id ) {
+			$role_restrictions  = $this->get_role_restrictions( $user_id );
+			$max_file_size      = $role_restrictions['max_file_size'];
+			$allowed_mime_types = $role_restrictions['allowed_mime_types'];
 		}
 
 		// Check if file was uploaded.
@@ -98,7 +109,7 @@ class UploadService {
 		}
 
 		// Check for upload errors.
-		if ( $file['error'] !== UPLOAD_ERR_OK ) {
+		if ( UPLOAD_ERR_OK !== $file['error'] ) {
 			if ( $this->logger ) {
 				$this->logger->error( 'File upload error', array( 'error_code' => $file['error'] ) );
 			}
@@ -109,13 +120,13 @@ class UploadService {
 		}
 
 		// Check file size.
-		if ( $file['size'] > $this->max_file_size ) {
+		if ( $file['size'] > $max_file_size ) {
 			if ( $this->logger ) {
 				$this->logger->warning(
 					'File size exceeds limit',
 					array(
 						'file_size'     => $file['size'],
-						'max_file_size' => $this->max_file_size,
+						'max_file_size' => $max_file_size,
 					)
 				);
 			}
@@ -124,7 +135,7 @@ class UploadService {
 				'message' => sprintf(
 					/* translators: %s: maximum file size in MB */
 					__( 'File size exceeds the maximum allowed size of %s MB.', 'avatar-steward' ),
-					number_format( $this->max_file_size / 1048576, 2 )
+					number_format( $max_file_size / 1048576, 2 )
 				),
 			);
 		}
@@ -134,13 +145,13 @@ class UploadService {
 		$mime_type = finfo_file( $finfo, $file['tmp_name'] );
 		finfo_close( $finfo );
 
-		if ( ! in_array( $mime_type, $this->allowed_mime_types, true ) ) {
+		if ( ! in_array( $mime_type, $allowed_mime_types, true ) ) {
 			if ( $this->logger ) {
 				$this->logger->warning(
 					'Invalid MIME type',
 					array(
 						'detected_mime' => $mime_type,
-						'allowed_types' => $this->allowed_mime_types,
+						'allowed_types' => $allowed_mime_types,
 					)
 				);
 			}
@@ -237,8 +248,16 @@ class UploadService {
 			$this->logger->info( 'Processing avatar upload', array( 'user_id' => $user_id ) );
 		}
 
-		// Validate the file first.
-		$validation = $this->validate_file( $file );
+		// Check if user is allowed to upload.
+		if ( ! $this->can_user_upload( $user_id ) ) {
+			return array(
+				'success' => false,
+				'message' => __( 'You do not have permission to upload avatars.', 'avatar-steward' ),
+			);
+		}
+
+		// Validate the file first (with role-based restrictions).
+		$validation = $this->validate_file( $file, $user_id );
 		if ( ! $validation['success'] ) {
 			return $validation;
 		}
@@ -456,5 +475,94 @@ class UploadService {
 		}
 
 		return $avatar_data[0];
+	}
+
+	/**
+	 * Get role-based restrictions for a user.
+	 *
+	 * @param int $user_id User ID.
+	 * @return array{max_file_size: int, allowed_mime_types: array<string>} Role restrictions.
+	 */
+	private function get_role_restrictions( int $user_id ): array {
+		// Default restrictions.
+		$restrictions = array(
+			'max_file_size'      => $this->max_file_size,
+			'allowed_mime_types' => $this->allowed_mime_types,
+		);
+
+		// Get plugin settings.
+		if ( ! function_exists( 'get_option' ) ) {
+			return $restrictions;
+		}
+
+		$settings = get_option( 'avatar_steward_options', array() );
+
+		// Get user object to determine role.
+		if ( ! function_exists( 'get_userdata' ) ) {
+			return $restrictions;
+		}
+
+		$user = get_userdata( $user_id );
+		if ( ! $user || empty( $user->roles ) ) {
+			return $restrictions;
+		}
+
+		// Get the primary role (first role in the array).
+		$user_role = $user->roles[0];
+
+		// Apply role-based file size limit if set.
+		if ( ! empty( $settings['role_file_size_limits'][ $user_role ] ) ) {
+			$role_size_mb                  = floatval( $settings['role_file_size_limits'][ $user_role ] );
+			$restrictions['max_file_size'] = (int) ( $role_size_mb * 1048576 ); // Convert MB to bytes.
+		}
+
+		// Apply role-based format restrictions if set.
+		if ( ! empty( $settings['role_format_restrictions'][ $user_role ] ) ) {
+			$role_formats = $settings['role_format_restrictions'][ $user_role ];
+			if ( is_array( $role_formats ) && ! empty( $role_formats ) ) {
+				$restrictions['allowed_mime_types'] = $role_formats;
+			}
+		}
+
+		return $restrictions;
+	}
+
+	/**
+	 * Check if user role is allowed to upload avatars.
+	 *
+	 * @param int $user_id User ID.
+	 * @return bool True if user can upload, false otherwise.
+	 */
+	public function can_user_upload( int $user_id ): bool {
+		// Get plugin settings.
+		if ( ! function_exists( 'get_option' ) ) {
+			return true; // Default to allowing uploads if settings not available.
+		}
+
+		$settings = get_option( 'avatar_steward_options', array() );
+
+		// If no allowed roles are set, allow all users.
+		if ( empty( $settings['allowed_roles'] ) ) {
+			return true;
+		}
+
+		// Get user object to determine role.
+		if ( ! function_exists( 'get_userdata' ) ) {
+			return true;
+		}
+
+		$user = get_userdata( $user_id );
+		if ( ! $user || empty( $user->roles ) ) {
+			return false;
+		}
+
+		// Check if any of the user's roles are in the allowed list.
+		foreach ( $user->roles as $role ) {
+			if ( in_array( $role, $settings['allowed_roles'], true ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

@@ -116,6 +116,19 @@ Welcome to the Avatar Steward documentation. This directory contains comprehensi
   - [Migration Documentation](migracion/)
   - [Migration Service](../src/AvatarSteward/Domain/Migration/)
 
+- **Moderation System**
+  - [Moderation Documentation](features/moderation.md)
+  - [Moderation Diagrams](features/moderation-diagrams.md)
+
+### Pro Features
+- **[Role-Based Restrictions](features/role-based-restrictions.md)** - Advanced permission control
+  - Role-based upload permissions
+  - Per-role file size limits
+  - Per-role format restrictions
+  - Automatic avatar expiration
+- **[Licensing System](licensing-system.md)** - Pro license management
+- **[Social Integrations](social-integrations.md)** - Twitter and Facebook avatar import
+
 ### Settings & Configuration
 - [Admin Settings](admin-settings-layout.md)
 - [Settings Page Code](../src/AvatarSteward/Admin/SettingsPage.php)
