@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added - Pro Features
+- **Automatic Avatar Cleanup**: Scheduled deletion of inactive avatars (Task 3.10)
+  - WP-Cron integration for periodic cleanup tasks
+  - Configurable criteria: avatar age and user inactivity periods
+  - Dry-run mode for safe preview before deletion
+  - Email notifications to users before deletion
+  - Summary reports to administrators after cleanup
+  - Configurable schedule: daily, weekly, or monthly
+  - Settings page integration with full configuration options
+  - CleanupService domain service with comprehensive unit tests
 - **Avatar Moderation Panel**: Comprehensive moderation system (RF-P03)
   - Dedicated admin menu page for moderating avatar uploads
   - Status management: pending, approved, rejected
