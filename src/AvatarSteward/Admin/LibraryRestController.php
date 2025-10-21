@@ -523,4 +523,3 @@ class LibraryRestController extends WP_REST_Controller {
 		return current_user_can( 'manage_options' );
 	}
 }
-
