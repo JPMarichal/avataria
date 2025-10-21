@@ -641,3 +641,25 @@ if ( ! function_exists( 'wp_kses_post' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_roles' ) ) {
+	/**
+	 * Mock wp_roles function.
+	 *
+	 * @return object Mock WP_Roles object.
+	 */
+	function wp_roles() {
+		static $roles = null;
+		if ( null === $roles ) {
+			$roles        = new stdClass();
+			$roles->roles = array(
+				'administrator' => array( 'name' => 'Administrator' ),
+				'editor'        => array( 'name' => 'Editor' ),
+				'author'        => array( 'name' => 'Author' ),
+				'contributor'   => array( 'name' => 'Contributor' ),
+				'subscriber'    => array( 'name' => 'Subscriber' ),
+			);
+		}
+		return $roles;
+	}
+}
+

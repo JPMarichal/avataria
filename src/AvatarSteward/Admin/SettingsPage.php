@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace AvatarSteward\Admin;
 
+use AvatarSteward\Domain\Licensing\LicenseManager;
+
 /**
  * Class SettingsPage
  *
@@ -31,6 +33,22 @@ class SettingsPage {
 	 * @var string
 	 */
 	private const OPTION_NAME = 'avatar_steward_options';
+
+	/**
+	 * License Manager instance.
+	 *
+	 * @var LicenseManager|null
+	 */
+	private ?LicenseManager $license_manager;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param LicenseManager|null $license_manager Optional License Manager instance.
+	 */
+	public function __construct( ?LicenseManager $license_manager = null ) {
+		$this->license_manager = $license_manager ?? new LicenseManager();
+	}
 
 	/**
 	 * Initialize the settings page.
@@ -237,6 +255,8 @@ class SettingsPage {
 			array( $this, 'render_facebook_app_secret_field' ),
 			'avatar-steward',
 			'avatar_steward_social_integrations'
+		);
+
 		// Delete attachment when removing avatar field.
 		add_settings_field(
 			'delete_attachment_on_remove',
@@ -245,6 +265,51 @@ class SettingsPage {
 			'avatar-steward',
 			'avatar_steward_roles_permissions'
 		);
+
+		// Pro Features Section (only if Pro is active).
+		if ( $this->license_manager->is_pro_active() ) {
+			add_settings_section(
+				'avatar_steward_pro_features',
+				__( 'Pro Features', 'avatar-steward' ),
+				array( $this, 'render_pro_features_section' ),
+				'avatar-steward'
+			);
+
+			// Role-based file size limits.
+			add_settings_field(
+				'role_file_size_limits',
+				__( 'Role-Based File Size Limits', 'avatar-steward' ),
+				array( $this, 'render_role_file_size_limits_field' ),
+				'avatar-steward',
+				'avatar_steward_pro_features'
+			);
+
+			// Role-based format restrictions.
+			add_settings_field(
+				'role_format_restrictions',
+				__( 'Role-Based Format Restrictions', 'avatar-steward' ),
+				array( $this, 'render_role_format_restrictions_field' ),
+				'avatar-steward',
+				'avatar_steward_pro_features'
+			);
+
+			// Avatar expiration settings.
+			add_settings_field(
+				'avatar_expiration_enabled',
+				__( 'Enable Avatar Expiration', 'avatar-steward' ),
+				array( $this, 'render_avatar_expiration_enabled_field' ),
+				'avatar-steward',
+				'avatar_steward_pro_features'
+			);
+
+			add_settings_field(
+				'avatar_expiration_days',
+				__( 'Avatar Expiration Days', 'avatar-steward' ),
+				array( $this, 'render_avatar_expiration_days_field' ),
+				'avatar-steward',
+				'avatar_steward_pro_features'
+			);
+		}
 	}
 
 	/**
@@ -574,6 +639,10 @@ class SettingsPage {
 			'allowed_roles'               => array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ),
 			'require_approval'            => false,
 			'delete_attachment_on_remove' => false,
+			'role_file_size_limits'       => array(),
+			'role_format_restrictions'    => array(),
+			'avatar_expiration_enabled'   => false,
+			'avatar_expiration_days'      => 365,
 		);
 	}
 
@@ -675,6 +744,160 @@ class SettingsPage {
 	}
 
 	/**
+	 * Render Pro features section description.
+	 *
+	 * @return void
+	 */
+	public function render_pro_features_section(): void {
+		?>
+		<p><?php esc_html_e( 'Advanced Pro features for role-based restrictions and avatar expiration.', 'avatar-steward' ); ?></p>
+		<p class="description">
+			<?php esc_html_e( 'These settings allow you to configure different upload restrictions for each user role and set automatic avatar expiration policies.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render role-based file size limits field.
+	 *
+	 * @return void
+	 */
+	public function render_role_file_size_limits_field(): void {
+		$options = $this->get_settings();
+		$limits  = isset( $options['role_file_size_limits'] ) ? $options['role_file_size_limits'] : array();
+
+		if ( ! function_exists( 'wp_roles' ) ) {
+			return;
+		}
+
+		$roles = wp_roles()->roles;
+
+		echo '<table class="form-table" style="margin-top: 0;">';
+		echo '<tbody>';
+		foreach ( $roles as $role_id => $role_data ) {
+			$value = isset( $limits[ $role_id ] ) ? $limits[ $role_id ] : 2.0;
+			?>
+			<tr>
+				<th scope="row"><?php echo esc_html( $role_data['name'] ); ?></th>
+				<td>
+					<input type="number" 
+							name="<?php echo esc_attr( self::OPTION_NAME . '[role_file_size_limits][' . $role_id . ']' ); ?>" 
+							value="<?php echo esc_attr( $value ); ?>" 
+							min="0.1" 
+							max="10" 
+							step="0.1" 
+							class="small-text" />
+					<span class="description"><?php esc_html_e( 'MB', 'avatar-steward' ); ?></span>
+				</td>
+			</tr>
+			<?php
+		}
+		echo '</tbody>';
+		echo '</table>';
+		?>
+		<p class="description">
+			<?php esc_html_e( 'Set maximum file size for each user role. Leave default (2 MB) if not specified.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render role-based format restrictions field.
+	 *
+	 * @return void
+	 */
+	public function render_role_format_restrictions_field(): void {
+		$options      = $this->get_settings();
+		$restrictions = isset( $options['role_format_restrictions'] ) ? $options['role_format_restrictions'] : array();
+
+		if ( ! function_exists( 'wp_roles' ) ) {
+			return;
+		}
+
+		$roles             = wp_roles()->roles;
+		$available_formats = array(
+			'image/jpeg' => 'JPEG',
+			'image/png'  => 'PNG',
+			'image/gif'  => 'GIF',
+			'image/webp' => 'WebP',
+		);
+
+		echo '<table class="form-table" style="margin-top: 0;">';
+		echo '<tbody>';
+		foreach ( $roles as $role_id => $role_data ) {
+			$role_formats = isset( $restrictions[ $role_id ] ) ? $restrictions[ $role_id ] : array( 'image/jpeg', 'image/png' );
+			?>
+			<tr>
+				<th scope="row"><?php echo esc_html( $role_data['name'] ); ?></th>
+				<td>
+					<?php foreach ( $available_formats as $mime => $label ) : ?>
+						<?php $checked = in_array( $mime, $role_formats, true ) ? 'checked' : ''; ?>
+						<label style="display: inline-block; margin-right: 15px;">
+							<input type="checkbox" 
+									name="<?php echo esc_attr( self::OPTION_NAME . '[role_format_restrictions][' . $role_id . '][]' ); ?>" 
+									value="<?php echo esc_attr( $mime ); ?>" 
+									<?php echo esc_attr( $checked ); ?> />
+							<?php echo esc_html( $label ); ?>
+						</label>
+					<?php endforeach; ?>
+				</td>
+			</tr>
+			<?php
+		}
+		echo '</tbody>';
+		echo '</table>';
+		?>
+		<p class="description">
+			<?php esc_html_e( 'Select which image formats each user role can upload. If no formats are selected for a role, the default allowed formats will be used.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render avatar expiration enabled field.
+	 *
+	 * @return void
+	 */
+	public function render_avatar_expiration_enabled_field(): void {
+		$options = $this->get_settings();
+		$checked = ! empty( $options['avatar_expiration_enabled'] ) ? 'checked' : '';
+		?>
+		<label>
+			<input type="checkbox" 
+					name="<?php echo esc_attr( self::OPTION_NAME . '[avatar_expiration_enabled]' ); ?>" 
+					value="1" 
+					<?php echo esc_attr( $checked ); ?> />
+			<?php esc_html_e( 'Automatically expire avatars after a set period', 'avatar-steward' ); ?>
+		</label>
+		<p class="description">
+			<?php esc_html_e( 'When enabled, avatars will be automatically removed after the specified number of days.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Render avatar expiration days field.
+	 *
+	 * @return void
+	 */
+	public function render_avatar_expiration_days_field(): void {
+		$options = $this->get_settings();
+		$value   = isset( $options['avatar_expiration_days'] ) ? $options['avatar_expiration_days'] : 365;
+		?>
+		<input type="number" 
+				name="<?php echo esc_attr( self::OPTION_NAME . '[avatar_expiration_days]' ); ?>" 
+				value="<?php echo esc_attr( $value ); ?>" 
+				min="1" 
+				max="3650" 
+				step="1" 
+				class="small-text" />
+		<p class="description">
+			<?php esc_html_e( 'Number of days after which avatars will expire. Default: 365 days (1 year).', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
 	 * Sanitize settings before saving.
 	 *
 	 * @param array $input Raw input from form.
@@ -735,6 +958,49 @@ class SettingsPage {
 
 		// Sanitize require approval.
 		$sanitized['require_approval'] = ! empty( $input['require_approval'] );
+
+		// Sanitize delete attachment on remove.
+		$sanitized['delete_attachment_on_remove'] = ! empty( $input['delete_attachment_on_remove'] );
+
+		// Sanitize Pro features (only if Pro is active).
+		if ( $this->license_manager->is_pro_active() ) {
+			// Sanitize role-based file size limits.
+			if ( isset( $input['role_file_size_limits'] ) && is_array( $input['role_file_size_limits'] ) ) {
+				$sanitized['role_file_size_limits'] = array();
+				if ( function_exists( 'wp_roles' ) ) {
+					$valid_roles = array_keys( wp_roles()->roles );
+					foreach ( $input['role_file_size_limits'] as $role => $size ) {
+						if ( in_array( $role, $valid_roles, true ) ) {
+							$sanitized_size                              = floatval( $size );
+							$sanitized_size                              = max( 0.1, min( 10.0, $sanitized_size ) );
+							$sanitized['role_file_size_limits'][ $role ] = $sanitized_size;
+						}
+					}
+				}
+			}
+
+			// Sanitize role-based format restrictions.
+			if ( isset( $input['role_format_restrictions'] ) && is_array( $input['role_format_restrictions'] ) ) {
+				$sanitized['role_format_restrictions'] = array();
+				$valid_formats                         = array( 'image/jpeg', 'image/png', 'image/gif', 'image/webp' );
+				if ( function_exists( 'wp_roles' ) ) {
+					$valid_roles = array_keys( wp_roles()->roles );
+					foreach ( $input['role_format_restrictions'] as $role => $formats ) {
+						if ( in_array( $role, $valid_roles, true ) && is_array( $formats ) ) {
+							$sanitized['role_format_restrictions'][ $role ] = array_intersect( $formats, $valid_formats );
+						}
+					}
+				}
+			}
+
+			// Sanitize avatar expiration settings.
+			$sanitized['avatar_expiration_enabled'] = ! empty( $input['avatar_expiration_enabled'] );
+
+			if ( isset( $input['avatar_expiration_days'] ) ) {
+				$sanitized['avatar_expiration_days'] = intval( $input['avatar_expiration_days'] );
+				$sanitized['avatar_expiration_days'] = max( 1, min( 3650, $sanitized['avatar_expiration_days'] ) );
+			}
+		}
 
 		// Note: Social integration credentials are stored separately for security.
 		// They are handled via update_option calls in the individual render methods.
