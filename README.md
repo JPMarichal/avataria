@@ -94,6 +94,26 @@ For detailed setup instructions, see the [Social Integrations Setup Guide](docs/
 
 For detailed API documentation and usage examples, see the [Visual Identity API Documentation](docs/api/visual-identity.md).
 
+### Automatic Avatar Cleanup (Pro Feature)
+- **Scheduled Deletion**: Automatically remove inactive avatars based on configurable criteria
+- **WP-Cron Integration**: Uses WordPress's built-in cron system for scheduled tasks
+- **Flexible Criteria**: Configure maximum avatar age and user inactivity periods
+- **Dry-Run Mode**: Preview which avatars would be deleted before actual cleanup
+- **Email Notifications**: Send warnings to users before deletion and reports to administrators
+- **Configurable Schedule**: Choose daily, weekly, or monthly cleanup frequency
+- **Safe Deletion**: Only removes avatars from inactive users based on login activity
+- **Settings Page Integration**: All options accessible from the WordPress admin settings
+
+**Configuration Options:**
+- Enable/disable automatic cleanup
+- Cleanup schedule (daily, weekly, monthly)
+- Maximum avatar age (days) - default: 365
+- User inactivity period (days) - default: 180
+- Notify users before deletion (optional)
+- Notify admins after cleanup (optional)
+
+For usage examples, see [examples/cleanup-demo.php](examples/cleanup-demo.php).
+
 ## System Requirements
 
 - **WordPress**: Version 5.8 or higher
