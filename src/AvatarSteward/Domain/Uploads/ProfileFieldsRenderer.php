@@ -40,6 +40,10 @@ class ProfileFieldsRenderer {
 		add_action( 'edit_user_profile', array( $this, 'render_upload_field' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_notices', array( $this, 'show_error_notice' ) );
+
+		// Ensure the form has the correct enctype.
+		add_action( 'admin_head-profile.php', array( $this, 'fix_form_enctype' ) );
+		add_action( 'admin_head-user-edit.php', array( $this, 'fix_form_enctype' ) );
 	}
 
 	/**
@@ -55,6 +59,50 @@ class ProfileFieldsRenderer {
 		}
 
 		wp_enqueue_media();
+
+		// Get plugin base URL with fallback.
+		if ( defined( 'AVATAR_STEWARD_PLUGIN_URL' ) ) {
+			$plugin_base_url = AVATAR_STEWARD_PLUGIN_URL;
+		} else {
+			// Fallback: calculate URL from this file's location.
+			$plugin_root     = dirname( dirname( dirname( __DIR__ ) ) ); // Go up to plugin root.
+			$plugin_base_url = plugin_dir_url( $plugin_root . '/avatar-steward.php' );
+		}
+
+		// Debug: Log the URLs being used.
+		error_log( 'Avatar Steward - Plugin Base URL: ' . $plugin_base_url );
+		error_log( 'Avatar Steward - CSS URL: ' . $plugin_base_url . 'assets/css/profile-avatar.css' );
+		error_log( 'Avatar Steward - JS URL: ' . $plugin_base_url . 'assets/js/profile-avatar.js' );
+
+		// Get plugin directory path for file existence checks.
+		$plugin_dir = defined( 'AVATAR_STEWARD_PLUGIN_DIR' ) ? AVATAR_STEWARD_PLUGIN_DIR : plugin_dir_path( dirname( dirname( dirname( __DIR__ ) ) ) . '/avatar-steward.php' );
+
+		// Enqueue CSS only if file exists.
+		$css_path = $plugin_dir . 'assets/css/profile-avatar.css';
+		if ( file_exists( $css_path ) ) {
+			wp_enqueue_style(
+				'avatar-steward-profile-css',
+				$plugin_base_url . 'assets/css/profile-avatar.css',
+				array(),
+				defined( 'AVATAR_STEWARD_VERSION' ) ? AVATAR_STEWARD_VERSION : '1.0.0'
+			);
+		} else {
+			error_log( 'Avatar Steward - CSS file not found: ' . $css_path );
+		}
+
+		// Enqueue JS only if file exists.
+		$js_path = $plugin_dir . 'assets/js/profile-avatar.js';
+		if ( file_exists( $js_path ) ) {
+			wp_enqueue_script(
+				'avatar-steward-profile-js',
+				$plugin_base_url . 'assets/js/profile-avatar.js',
+				array( 'jquery' ),
+				defined( 'AVATAR_STEWARD_VERSION' ) ? AVATAR_STEWARD_VERSION : '1.0.0',
+				true
+			);
+		} else {
+			error_log( 'Avatar Steward - JS file not found: ' . $js_path );
+		}
 	}
 
 	/**
@@ -97,57 +145,78 @@ class ProfileFieldsRenderer {
 		$has_avatar = false !== $avatar_url;
 
 		?>
-		<h2><?php esc_html_e( 'Avatar', 'avatar-steward' ); ?></h2>
-		<table class="form-table">
-			<tr>
-				<th>
-					<label for="avatar_steward_file"><?php esc_html_e( 'Upload Avatar', 'avatar-steward' ); ?></label>
-				</th>
-				<td>
-					<div id="avatar-steward-container">
-						<?php if ( $has_avatar ) : ?>
-							<div id="avatar-steward-preview" style="margin-bottom: 10px;">
-								<img src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php esc_attr_e( 'Current Avatar', 'avatar-steward' ); ?>" style="max-width: 96px; max-height: 96px; display: block; margin-bottom: 10px;" />
-							</div>
-						<?php endif; ?>
+		<div id="avatar-steward-section" class="avatarsteward-highlight">
+			<h2><?php esc_html_e( 'Avatar Steward', 'avatar-steward' ); ?></h2>
+			<table class="form-table">
+				<tr>
+					<th>
+						<label for="avatar_steward_file"><?php esc_html_e( 'Upload Avatar', 'avatar-steward' ); ?></label>
+					</th>
+					<td>
+						<div id="avatar-steward-container">
+							<?php if ( $has_avatar ) : ?>
+								<div id="avatar-steward-preview" style="margin-bottom: 10px;">
+									<img src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php esc_attr_e( 'Current Avatar', 'avatar-steward' ); ?>" style="max-width: 96px; max-height: 96px; display: block; margin-bottom: 10px;" />
+								</div>
+							<?php endif; ?>
 
-						<input 
-							type="file" 
-							name="avatar_steward_file" 
-							id="avatar_steward_file" 
-							accept="image/jpeg,image/png,image/gif,image/webp"
-						/>
+							<input 
+								type="file" 
+								name="avatar_steward_file" 
+								id="avatar_steward_file" 
+								accept="image/jpeg,image/png,image/gif,image/webp"
+							/>
 
-						<?php if ( $has_avatar ) : ?>
-							<div style="margin-top: 10px;">
-								<label>
-									<input 
-										type="checkbox" 
-										name="avatar_steward_remove" 
-										id="avatar_steward_remove" 
-										value="yes"
-									/>
-									<?php esc_html_e( 'Remove current avatar', 'avatar-steward' ); ?>
-								</label>
-							</div>
-						<?php endif; ?>
+							<?php if ( $has_avatar ) : ?>
+								<div style="margin-top: 10px;">
+									<label>
+										<input 
+											type="checkbox" 
+											name="avatar_steward_remove" 
+											id="avatar_steward_remove" 
+											value="yes"
+										/>
+										<?php esc_html_e( 'Remove current avatar', 'avatar-steward' ); ?>
+									</label>
+								</div>
+							<?php endif; ?>
 
-						<?php wp_nonce_field( 'avatar_steward_update', 'avatar_steward_nonce' ); ?>
+							<?php wp_nonce_field( 'avatar_steward_update', 'avatar_steward_nonce' ); ?>
 
-						<p class="description">
-							<?php
-							printf(
-								/* translators: 1: file types, 2: max file size */
-								esc_html__( 'Allowed file types: %1$s. Maximum file size: %2$s MB. Maximum dimensions: 2000x2000 pixels.', 'avatar-steward' ),
-								'JPEG, PNG, GIF, WebP',
-								'2'
-							);
-							?>
-						</p>
-					</div>
-				</td>
-			</tr>
-		</table>
+							<p class="description">
+								<?php
+								printf(
+									/* translators: 1: file types, 2: max file size */
+									esc_html__( 'Allowed file types: %1$s. Maximum file size: %2$s MB. Maximum dimensions: 2000x2000 pixels.', 'avatar-steward' ),
+									'JPEG, PNG, GIF, WebP',
+									'2'
+								);
+								?>
+							</p>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Fix form enctype to support file uploads.
+	 *
+	 * @return void
+	 */
+	public function fix_form_enctype(): void {
+		?>
+		<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			const form = document.querySelector('form#your-profile');
+			if (form && form.getAttribute('enctype') !== 'multipart/form-data') {
+				form.setAttribute('enctype', 'multipart/form-data');
+				console.log('Avatar Steward: Fixed form enctype to multipart/form-data');
+			}
+		});
+		</script>
 		<?php
 	}
 }

@@ -12,6 +12,7 @@ namespace AvatarSteward;
 use AvatarSteward\Core\AvatarHandler;
 use AvatarSteward\Domain\Initials\Generator;
 use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
+use AvatarSteward\Domain\Licensing\LicenseManager;
 
 /**
  * Plugin singleton class.
@@ -59,6 +60,18 @@ final class Plugin {
 	 * @var Core\AvatarHandler|null
 	 */
 	private ?Core\AvatarHandler $avatar_handler = null;
+	 * License page instance.
+	 *
+	 * @var Admin\LicensePage|null
+	 */
+	private ?Admin\LicensePage $license_page = null;
+
+	/**
+	 * License manager instance.
+	 *
+	 * @var LicenseManager|null
+	 */
+	private ?LicenseManager $license_manager = null;
 
 	/**
 	 * Private constructor to prevent direct instantiation.

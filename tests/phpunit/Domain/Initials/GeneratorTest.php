@@ -171,7 +171,7 @@ final class GeneratorTest extends TestCase {
 		$color = $this->generator->get_color_for_name( 'John Doe' );
 
 		$this->assertIsString( $color );
-		$this->assertMatchesRegularExpression( '/^#[0-9a-f]{6}$/i', $color );
+		$this->assertRegExp( '/^#[0-9a-f]{6}$/i', $color );
 	}
 
 	/**

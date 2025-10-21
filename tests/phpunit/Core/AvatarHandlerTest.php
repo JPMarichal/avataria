@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use AvatarSteward\Core\AvatarHandler;
+use AvatarSteward\Domain\Uploads\UploadService;
 
 /**
  * Test case for AvatarHandler class.
@@ -27,7 +28,8 @@ final class AvatarHandlerTest extends TestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->handler = new AvatarHandler();
+		$upload_service = new UploadService();
+		$this->handler = new AvatarHandler( $upload_service );
 	}
 
 	/**
@@ -41,7 +43,8 @@ final class AvatarHandlerTest extends TestCase {
 	 * Test that AvatarHandler can be instantiated.
 	 */
 	public function test_avatar_handler_can_be_instantiated() {
-		$handler = new AvatarHandler();
+		$upload_service = new UploadService();
+		$handler = new AvatarHandler( $upload_service );
 		$this->assertInstanceOf( AvatarHandler::class, $handler );
 	}
 
