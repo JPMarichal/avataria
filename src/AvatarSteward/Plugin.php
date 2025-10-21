@@ -69,12 +69,39 @@ final class Plugin {
 	private ?Infrastructure\REST\VisualIdentityController $visual_identity_controller = null;
 
 	/**
+	 * Cleanup service instance.
+	 *
+	 * @var Domain\Cleanup\CleanupService|null
+	 */
+	private ?Domain\Cleanup\CleanupService $cleanup_service = null;
+	 * Audit service instance.
+	 *
+	 * @var Domain\Audit\AuditService|null
+	 */
+	private ?Domain\Audit\AuditService $audit_service = null;
+
+	/**
+	 * Audit page instance.
+	 *
+	 * @var Admin\AuditPage|null
+	 */
+	private ?Admin\AuditPage $audit_page = null;
+
+	/**
+	 * Audit REST controller instance.
+	 *
+	 * @var Infrastructure\REST\AuditController|null
+	 */
+	private ?Infrastructure\REST\AuditController $audit_controller = null;
+
+	/**
 	 * Private constructor to prevent direct instantiation.
 	 */
 	private function __construct() {
 		if ( function_exists( 'add_action' ) ) {
 			add_action( 'plugins_loaded', array( $this, 'boot' ) );
 			add_action( 'rest_api_init', array( $this, 'init_rest_api' ) );
+			add_action( 'avatarsteward_cleanup_inactive_avatars', array( $this, 'run_cleanup' ) );
 		}
 	}
 
@@ -96,12 +123,14 @@ final class Plugin {
 	 *
 	 * @return void
 	 */
-	public function boot(): void {
-		$this->init_avatar_handler();
-		$this->init_settings_page();
-		$this->init_migration_page();
-		$this->init_integration_service();
-		$this->init_library_page();
+public function boot(): void {
+	$this->init_avatar_handler();
+	$this->init_settings_page();
+	$this->init_migration_page();
+	$this->init_integration_service();
+	$this->init_library_page();
+	$this->init_audit_service();
+  $this->init_cleanup_service();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -320,6 +349,11 @@ final class Plugin {
 
 		$this->visual_identity_controller = new Infrastructure\REST\VisualIdentityController();
 		$this->visual_identity_controller->register_routes();
+
+		// Register audit REST controller.
+		if ( $this->audit_controller ) {
+			$this->audit_controller->register_routes();
+		}
 	}
 
 	/**
@@ -329,5 +363,178 @@ final class Plugin {
 	 */
 	public function get_visual_identity_controller(): ?Infrastructure\REST\VisualIdentityController {
 		return $this->visual_identity_controller;
+	}
+
+	/**
+	 * Initialize the cleanup service.
+	 *
+	 * @return void
+	 */
+	private function init_cleanup_service(): void {
+		if ( ! class_exists( Domain\Cleanup\CleanupService::class ) ) {
+			require_once __DIR__ . '/Domain/Cleanup/CleanupService.php';
+		}
+
+		$this->cleanup_service = new Domain\Cleanup\CleanupService();
+
+		// Schedule or unschedule cleanup based on settings.
+		if ( $this->settings_page ) {
+			$settings = $this->settings_page->get_settings();
+
+			if ( ! empty( $settings['cleanup_enabled'] ) ) {
+				$schedule = isset( $settings['cleanup_schedule'] ) ? $settings['cleanup_schedule'] : 'weekly';
+				$this->cleanup_service->schedule_cleanup( $schedule );
+			} else {
+				$this->cleanup_service->unschedule_cleanup();
+			}
+		}
+	}
+
+	/**
+	 * Get the cleanup service instance.
+	 *
+	 * @return Domain\Cleanup\CleanupService|null Cleanup service instance.
+	 */
+	public function get_cleanup_service(): ?Domain\Cleanup\CleanupService {
+		return $this->cleanup_service;
+	}
+
+	/**
+	 * Run the cleanup task (triggered by WP-Cron).
+	 *
+	 * @return void
+	 */
+	public function run_cleanup(): void {
+		if ( ! $this->cleanup_service ) {
+			return;
+		}
+
+		if ( ! $this->settings_page ) {
+			return;
+		}
+
+		$settings = $this->settings_page->get_settings();
+
+		// Only run if cleanup is enabled.
+		if ( empty( $settings['cleanup_enabled'] ) ) {
+			return;
+		}
+
+		// Find inactive avatars.
+		$criteria = array(
+			'max_age_days'         => isset( $settings['cleanup_max_age_days'] ) ? (int) $settings['cleanup_max_age_days'] : 365,
+			'exclude_active_users' => true,
+			'user_inactivity_days' => isset( $settings['cleanup_user_inactivity_days'] ) ? (int) $settings['cleanup_user_inactivity_days'] : 180,
+		);
+
+		$inactive_avatars = $this->cleanup_service->find_inactive_avatars( $criteria );
+
+		// Delete inactive avatars.
+		$options = array(
+			'dry_run'       => false,
+			'notify_users'  => ! empty( $settings['cleanup_notify_users'] ),
+			'notify_admins' => ! empty( $settings['cleanup_notify_admins'] ),
+		);
+
+		$this->cleanup_service->delete_inactive_avatars( $inactive_avatars, $options );
+	 * Initialize the audit service.
+	 *
+	 * @return void
+	 */
+	private function init_audit_service(): void {
+		if ( ! class_exists( Domain\Audit\AuditRepository::class ) ) {
+			require_once __DIR__ . '/Domain/Audit/AuditRepository.php';
+		}
+
+		if ( ! class_exists( Domain\Audit\AuditService::class ) ) {
+			require_once __DIR__ . '/Domain/Audit/AuditService.php';
+		}
+
+		if ( ! class_exists( Infrastructure\Logger::class ) ) {
+			require_once __DIR__ . '/Infrastructure/LoggerInterface.php';
+			require_once __DIR__ . '/Infrastructure/Logger.php';
+		}
+
+		// Initialize repository and service.
+		$repository         = new Domain\Audit\AuditRepository();
+		$logger             = new Infrastructure\Logger();
+		$this->audit_service = new Domain\Audit\AuditService( $repository, $logger );
+
+		// Create audit table on plugin activation.
+		register_activation_hook( dirname( __DIR__, 2 ) . '/avatar-steward.php', array( $repository, 'create_table' ) );
+
+		// Initialize audit page if in admin.
+		if ( is_admin() ) {
+			$this->init_audit_page();
+		}
+
+		// Initialize REST controller.
+		if ( ! class_exists( Infrastructure\REST\AuditController::class ) ) {
+			require_once __DIR__ . '/Infrastructure/REST/AuditController.php';
+		}
+
+		$this->audit_controller = new Infrastructure\REST\AuditController(
+			$this->audit_service,
+			$this->get_license_manager()
+		);
+
+		// Schedule daily log purge cron.
+		$this->schedule_log_purge();
+	}
+
+	/**
+	 * Initialize the audit page.
+	 *
+	 * @return void
+	 */
+	private function init_audit_page(): void {
+		if ( ! class_exists( Admin\AuditPage::class ) ) {
+			require_once __DIR__ . '/Admin/AuditPage.php';
+		}
+
+		$this->audit_page = new Admin\AuditPage(
+			$this->audit_service,
+			$this->get_license_manager()
+		);
+		$this->audit_page->init();
+	}
+
+	/**
+	 * Schedule daily log purge cron job.
+	 *
+	 * @return void
+	 */
+	private function schedule_log_purge(): void {
+		if ( ! wp_next_scheduled( 'avatarsteward_purge_audit_logs' ) ) {
+			wp_schedule_event( time(), 'daily', 'avatarsteward_purge_audit_logs' );
+		}
+
+		add_action(
+			'avatarsteward_purge_audit_logs',
+			function () {
+				if ( $this->audit_service ) {
+					$retention_days = get_option( 'avatar_steward_audit_retention_days', 90 );
+					$this->audit_service->purge_old_logs( $retention_days );
+				}
+			}
+		);
+	}
+
+	/**
+	 * Get the audit service instance.
+	 *
+	 * @return Domain\Audit\AuditService|null Audit service instance.
+	 */
+	public function get_audit_service(): ?Domain\Audit\AuditService {
+		return $this->audit_service;
+	}
+
+	/**
+	 * Get the audit page instance.
+	 *
+	 * @return Admin\AuditPage|null Audit page instance.
+	 */
+	public function get_audit_page(): ?Admin\AuditPage {
+		return $this->audit_page;
 	}
 }
