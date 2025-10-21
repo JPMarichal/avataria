@@ -12,6 +12,7 @@ namespace AvatarSteward;
 use AvatarSteward\Core\AvatarHandler;
 use AvatarSteward\Domain\Initials\Generator;
 use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
+use AvatarSteward\Domain\Licensing\LicenseManager;
 
 /**
  * Plugin singleton class.
@@ -74,6 +75,7 @@ final class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
+		$this->init_avatar_handler();
 		$this->init_settings_page();
 		$this->init_migration_page();
 		$this->init_integration_service();
@@ -81,6 +83,20 @@ final class Plugin {
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
 		}
+	}
+
+	/**
+	 * Initialize the avatar handler.
+	 *
+	 * @return void
+	 */
+	private function init_avatar_handler(): void {
+		if ( ! class_exists( Core\AvatarHandler::class ) ) {
+			require_once __DIR__ . '/Core/AvatarHandler.php';
+		}
+
+		$this->avatar_handler = new Core\AvatarHandler();
+		$this->avatar_handler->init();
 	}
 
 	/**
@@ -114,6 +130,40 @@ final class Plugin {
 		$migration_service    = new Domain\Migration\MigrationService();
 		$this->migration_page = new Admin\MigrationPage( $migration_service );
 		$this->migration_page->init();
+	}
+
+	/**
+	 * Initialize the moderation system.
+	 *
+	 * @return void
+	 */
+	private function init_moderation(): void {
+		if ( ! class_exists( Domain\Moderation\ModerationQueue::class ) ) {
+			require_once __DIR__ . '/Domain/Moderation/ModerationQueue.php';
+		}
+
+		if ( ! class_exists( Domain\Moderation\DecisionService::class ) ) {
+			require_once __DIR__ . '/Domain/Moderation/DecisionService.php';
+		}
+
+		if ( ! class_exists( Admin\ModerationPage::class ) ) {
+			require_once __DIR__ . '/Admin/ModerationPage.php';
+		}
+
+		// Initialize moderation queue.
+		$this->moderation_queue = new Domain\Moderation\ModerationQueue();
+
+		// Set moderation queue in avatar handler if available.
+		if ( $this->avatar_handler ) {
+			$this->avatar_handler->set_moderation_queue( $this->moderation_queue );
+		}
+
+		// Initialize decision service.
+		$decision_service = new Domain\Moderation\DecisionService( $this->moderation_queue );
+
+		// Initialize moderation page.
+		$this->moderation_page = new Admin\ModerationPage( $this->moderation_queue, $decision_service );
+		$this->moderation_page->init();
 	}
 
 	/**

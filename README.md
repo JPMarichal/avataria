@@ -24,6 +24,16 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Easy Removal**: Users can remove their avatar and revert to default at any time
 - **Error Handling**: Clear, user-friendly error messages for invalid uploads
 
+#### Avatar Moderation (Pro Feature)
+- **Moderation Queue**: Optional approval workflow for uploaded avatars
+- **Status Management**: Track avatars as pending, approved, or rejected
+- **Bulk Actions**: Approve or reject multiple avatars simultaneously
+- **History Tracking**: Complete audit trail of moderation decisions
+- **Previous Avatar Backup**: Automatically restore previous avatar on rejection
+- **Smart Display**: Only show approved avatars when moderation is enabled
+- **Admin Panel**: Dedicated moderation interface with filtering and search
+- **Badge Counter**: Menu badge shows pending avatar count
+
 #### Advanced Settings Page
 - **Upload Restrictions**: Configure max file size (0.1-10 MB), allowed formats, and maximum dimensions (100-5000px)
 - **Format Options**: Select which image formats are allowed (JPEG, PNG, GIF, WebP)
@@ -70,6 +80,25 @@ For detailed setup instructions, see the [Social Integrations Setup Guide](docs/
 - **Permissions**: Write access to `wp-content/uploads/` for uploading avatars
 
 ## Installation
+
+### Pro License Activation
+
+Avatar Steward Pro requires a valid license key to unlock advanced features.
+
+**To activate your license:**
+
+1. After installing and activating the plugin, go to **Settings > Avatar Steward License**
+2. Enter your license key in the format: `XXXX-XXXX-XXXX-XXXX`
+3. Click **"Activate License"**
+4. Verify the status shows as **"Active"** with a green badge
+5. Pro features are now available throughout the plugin
+
+**License Management:**
+- View activation details including date, domain, and masked license key
+- Deactivate license if moving to a different site
+- Each license is tied to one production domain
+
+For detailed licensing documentation, see [docs/licensing-system.md](docs/licensing-system.md).
 
 ### Option 1: WordPress Admin Installation
 1. Download the plugin ZIP file from your purchase location.
@@ -309,6 +338,80 @@ If you're switching from another avatar plugin or want to import Gravatars:
 
 For detailed migration instructions, see [docs/migracion/migration-guide.md](docs/migracion/migration-guide.md)
 
+## Avatar Moderation
+
+If you've enabled "Require Approval" in the plugin settings, uploaded avatars will be held in a moderation queue for administrator review.
+
+### Accessing the Moderation Panel
+
+1. Go to **Avatar Moderation** in the admin menu (appears as a top-level menu item)
+2. The menu badge shows the number of pending avatars awaiting review
+3. Requires the `moderate_comments` capability (typically Editors and Administrators)
+
+### Moderation Interface
+
+The moderation panel provides several features:
+
+#### Status Tabs
+- **Pending**: Avatars awaiting approval (default view)
+- **Approved**: Previously approved avatars
+- **Rejected**: Previously rejected avatars
+
+Each tab displays a count of avatars in that status.
+
+#### Filtering and Search
+- **Search**: Find avatars by username, email, or display name
+- **Status Filter**: Switch between pending, approved, and rejected avatars
+- **Role Filter**: Filter avatars by user role
+
+#### Avatar Table Columns
+- **Avatar**: Thumbnail preview (64x64px)
+- **User**: Display name and email address
+- **Role**: User's primary role
+- **Uploaded**: Time since upload (e.g., "2 hours ago")
+- **Status**: Current moderation status (color-coded badge)
+- **Actions**: Approve or Reject buttons (for pending avatars)
+
+#### Individual Actions
+For pending avatars, you can:
+- **Approve**: Makes the avatar visible immediately. Previous avatar backup is cleared.
+- **Reject**: Removes the avatar and restores the previous avatar (if any). The rejected file is permanently deleted.
+
+#### Bulk Actions
+Select multiple avatars using checkboxes and apply actions in bulk:
+1. Check the avatars you want to moderate
+2. Select "Approve" or "Reject" from the dropdown
+3. Click "Apply"
+4. Review the success message showing how many were processed
+
+### Moderation Workflow
+
+1. **User uploads avatar**: If "Require Approval" is enabled, the avatar status is set to "pending"
+2. **Avatar is hidden**: Users with pending avatars see their previous avatar (or default) until approved
+3. **Moderator reviews**: Administrator accesses the moderation panel
+4. **Decision made**:
+   - **Approved**: Avatar becomes visible to all users
+   - **Rejected**: Avatar is removed, previous avatar restored
+5. **History tracked**: All moderation actions are logged with moderator ID, timestamp, and optional comments
+
+### Moderation History
+
+Each avatar maintains a history of moderation decisions:
+- Action performed (approved/rejected)
+- Moderator who made the decision
+- Timestamp of the action
+- Optional moderator comment
+
+This history can be used for audit purposes and GDPR compliance.
+
+### Integration with Avatar Display
+
+Avatars are only shown publicly when:
+- Moderation is disabled (default), OR
+- Moderation is enabled AND status is "approved"
+
+Pending or rejected avatars are never displayed, ensuring content quality and safety.
+
 ## Basic Usage
 
 #### Convert to WebP
@@ -331,6 +434,12 @@ Control who can upload avatars and whether moderation is required:
 - **Default**: Disabled
 - **Purpose**: Enable moderation queue where avatars must be approved before display
 - **Note**: When enabled, new uploads are held for review by administrators
+
+#### Delete Attachment on Remove
+- **Type**: Checkbox (enabled/disabled)
+- **Default**: Disabled
+- **Purpose**: Automatically delete avatar attachment from Media Library when user removes their avatar
+- **Note**: When enabled, the attachment file is permanently deleted only if it's not used by other users. When disabled, the attachment remains in the Media Library after avatar removal.
 
 ### Saving Settings
 
@@ -430,13 +539,14 @@ All settings have sensible defaults:
 
 ```php
 array(
-    'max_file_size'    => 2.0,                     // 2 MB
-    'allowed_formats'  => ['image/jpeg', 'image/png'],
-    'max_width'        => 2048,                    // pixels
-    'max_height'       => 2048,                    // pixels
-    'convert_to_webp'  => false,
-    'allowed_roles'    => ['administrator', 'editor', 'author', 'contributor', 'subscriber'],
-    'require_approval' => false,
+    'max_file_size'                => 2.0,                     // 2 MB
+    'allowed_formats'              => ['image/jpeg', 'image/png'],
+    'max_width'                    => 2048,                    // pixels
+    'max_height'                   => 2048,                    // pixels
+    'convert_to_webp'              => false,
+    'allowed_roles'                => ['administrator', 'editor', 'author', 'contributor', 'subscriber'],
+    'require_approval'             => false,
+    'delete_attachment_on_remove'  => false,
 )
 ```
 

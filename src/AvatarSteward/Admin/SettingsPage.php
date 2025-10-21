@@ -237,6 +237,13 @@ class SettingsPage {
 			array( $this, 'render_facebook_app_secret_field' ),
 			'avatar-steward',
 			'avatar_steward_social_integrations'
+		// Delete attachment when removing avatar field.
+		add_settings_field(
+			'delete_attachment_on_remove',
+			__( 'Delete Attachment on Remove', 'avatar-steward' ),
+			array( $this, 'render_delete_attachment_on_remove_field' ),
+			'avatar-steward',
+			'avatar_steward_roles_permissions'
 		);
 	}
 
@@ -514,6 +521,28 @@ class SettingsPage {
 	}
 
 	/**
+	 * Render delete attachment on remove field.
+	 *
+	 * @return void
+	 */
+	public function render_delete_attachment_on_remove_field(): void {
+		$options = $this->get_settings();
+		$checked = ! empty( $options['delete_attachment_on_remove'] ) ? 'checked' : '';
+		?>
+		<label>
+			<input type="checkbox" 
+					name="<?php echo esc_attr( self::OPTION_NAME . '[delete_attachment_on_remove]' ); ?>" 
+					value="1" 
+					<?php echo esc_attr( $checked ); ?> />
+			<?php esc_html_e( 'Delete attachment from Media Library when removing avatar', 'avatar-steward' ); ?>
+		</label>
+		<p class="description">
+			<?php esc_html_e( 'When enabled, the avatar attachment will be permanently deleted from the Media Library when a user removes their avatar. The attachment will only be deleted if it is not used by other content.', 'avatar-steward' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
 	 * Get current settings.
 	 *
 	 * @return array Current settings.
@@ -535,15 +564,16 @@ class SettingsPage {
 	 */
 	public function get_default_settings(): array {
 		return array(
-			'max_file_size'       => 2.0,
-			'allowed_formats'     => array( 'image/jpeg', 'image/png' ),
-			'max_width'           => 2048,
-			'max_height'          => 2048,
-			'convert_to_webp'     => false,
-			'low_bandwidth_mode'  => false,
-			'bandwidth_threshold' => 100,
-			'allowed_roles'       => array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ),
-			'require_approval'    => false,
+			'max_file_size'               => 2.0,
+			'allowed_formats'             => array( 'image/jpeg', 'image/png' ),
+			'max_width'                   => 2048,
+			'max_height'                  => 2048,
+			'convert_to_webp'             => false,
+			'low_bandwidth_mode'          => false,
+			'bandwidth_threshold'         => 100,
+			'allowed_roles'               => array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ),
+			'require_approval'            => false,
+			'delete_attachment_on_remove' => false,
 		);
 	}
 

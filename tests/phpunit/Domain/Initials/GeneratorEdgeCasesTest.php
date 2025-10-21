@@ -97,7 +97,7 @@ class GeneratorEdgeCasesTest extends TestCase {
 
 		// Should extract initials ignoring emoji.
 		$this->assertNotEmpty( $initials );
-		$this->assertMatchesRegularExpression( '/^[A-Z]{1,2}$/', $initials );
+		$this->assertRegExp( '/^[A-Z]{1,2}$/', $initials );
 	}
 
 	/**
@@ -280,8 +280,8 @@ class GeneratorEdgeCasesTest extends TestCase {
 		// Different names might produce different colors (not guaranteed).
 		$this->assertNotEmpty( $color1 );
 		$this->assertNotEmpty( $color2 );
-		$this->assertMatchesRegularExpression( '/^#[0-9A-F]{6}$/i', $color1 );
-		$this->assertMatchesRegularExpression( '/^#[0-9A-F]{6}$/i', $color2 );
+		$this->assertRegExp( '/^#[0-9A-F]{6}$/i', $color1 );
+		$this->assertRegExp( '/^#[0-9A-F]{6}$/i', $color2 );
 	}
 
 	/**
@@ -292,7 +292,7 @@ class GeneratorEdgeCasesTest extends TestCase {
 		$color     = $generator->get_color_for_name( '' );
 
 		$this->assertNotEmpty( $color );
-		$this->assertMatchesRegularExpression( '/^#[0-9A-F]{6}$/i', $color );
+		$this->assertRegExp( '/^#[0-9A-F]{6}$/i', $color );
 	}
 
 	/**
