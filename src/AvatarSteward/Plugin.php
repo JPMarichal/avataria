@@ -48,6 +48,13 @@ final class Plugin {
 	private ?Domain\Integrations\IntegrationService $integration_service = null;
 
 	/**
+	 * License manager instance.
+	 *
+	 * @var LicenseManager|null
+	 */
+	private ?LicenseManager $license_manager = null;
+
+	/**
 	 * Private constructor to prevent direct instantiation.
 	 */
 	private function __construct() {
@@ -62,7 +69,7 @@ final class Plugin {
 	 * @return self The singleton instance.
 	 */
 	public static function instance(): self {
-		if ( self::$instance === null ) {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 
@@ -109,7 +116,12 @@ final class Plugin {
 			require_once __DIR__ . '/Admin/SettingsPage.php';
 		}
 
-		$this->settings_page = new Admin\SettingsPage();
+		// Initialize license manager if not already initialized.
+		if ( null === $this->license_manager ) {
+			$this->license_manager = new LicenseManager();
+		}
+
+		$this->settings_page = new Admin\SettingsPage( $this->license_manager );
 		$this->settings_page->init();
 	}
 
@@ -182,6 +194,18 @@ final class Plugin {
 	 */
 	public function get_migration_page(): ?Admin\MigrationPage {
 		return $this->migration_page;
+	}
+
+	/**
+	 * Get the license manager instance.
+	 *
+	 * @return LicenseManager|null License manager instance.
+	 */
+	public function get_license_manager(): ?LicenseManager {
+		if ( null === $this->license_manager ) {
+			$this->license_manager = new LicenseManager();
+		}
+		return $this->license_manager;
 	}
 
 	/**
