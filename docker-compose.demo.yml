@@ -1,5 +1,3 @@
-version: "3.9"
-
 # Avatar Steward - Demo Environment for Reviewers
 # This Docker Compose configuration provides a clean WordPress installation
 # with Avatar Steward plugin pre-installed for testing and review purposes.
