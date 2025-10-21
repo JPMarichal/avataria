@@ -12,6 +12,7 @@ namespace AvatarSteward;
 use AvatarSteward\Core\AvatarHandler;
 use AvatarSteward\Domain\Initials\Generator;
 use AvatarSteward\Domain\LowBandwidth\BandwidthOptimizer;
+use AvatarSteward\Domain\Licensing\LicenseManager;
 
 /**
  * Plugin singleton class.
@@ -40,39 +41,18 @@ final class Plugin {
 	private ?Admin\MigrationPage $migration_page = null;
 
 	/**
-	 * Profile fields renderer instance.
+	 * License page instance.
 	 *
-	 * @var Domain\Uploads\ProfileFieldsRenderer|null
+	 * @var Admin\LicensePage|null
 	 */
-	private ?Domain\Uploads\ProfileFieldsRenderer $profile_fields_renderer = null;
+	private ?Admin\LicensePage $license_page = null;
 
 	/**
-	 * Upload handler instance.
+	 * License manager instance.
 	 *
-	 * @var Domain\Uploads\UploadHandler|null
+	 * @var LicenseManager|null
 	 */
-	private ?Domain\Uploads\UploadHandler $upload_handler = null;
-
-	/**
-	 * Avatar handler instance.
-	 *
-	 * @var Core\AvatarHandler|null
-	 */
-	private ?Core\AvatarHandler $avatar_handler = null;
-
-	/**
-	 * Initials generator instance.
-	 *
-	 * @var Domain\Initials\Generator|null
-	 */
-	private ?Domain\Initials\Generator $initials_generator = null;
-
-	/**
-	 * Bandwidth optimizer instance.
-	 *
-	 * @var Domain\LowBandwidth\BandwidthOptimizer|null
-	 */
-	private ?Domain\LowBandwidth\BandwidthOptimizer $bandwidth_optimizer = null;
+	private ?LicenseManager $license_manager = null;
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -102,12 +82,10 @@ final class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
+		$this->init_license_manager();
 		$this->init_settings_page();
 		$this->init_migration_page();
-		$this->init_upload_services();
-		$this->init_initials_generator();
-		$this->init_bandwidth_optimizer();
-		$this->init_avatar_handler();
+		$this->init_license_page();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -166,147 +144,49 @@ final class Plugin {
 	}
 
 	/**
-	 * Initialize upload services.
+	 * Initialize the license manager.
 	 *
 	 * @return void
 	 */
-	private function init_upload_services(): void {
-		if ( ! class_exists( Domain\Uploads\UploadService::class ) ) {
-			require_once __DIR__ . '/Domain/Uploads/UploadService.php';
+	private function init_license_manager(): void {
+		if ( ! class_exists( Domain\Licensing\LicenseManager::class ) ) {
+			require_once __DIR__ . '/Domain/Licensing/LicenseManager.php';
 		}
 
-		if ( ! class_exists( Domain\Uploads\ProfileFieldsRenderer::class ) ) {
-			require_once __DIR__ . '/Domain/Uploads/ProfileFieldsRenderer.php';
-		}
-
-		if ( ! class_exists( Domain\Uploads\UploadHandler::class ) ) {
-			require_once __DIR__ . '/Domain/Uploads/UploadHandler.php';
-		}
-
-		// Create upload service instance.
-		$upload_service = new Domain\Uploads\UploadService();
-
-		// Create and register profile fields renderer.
-		$this->profile_fields_renderer = new Domain\Uploads\ProfileFieldsRenderer( $upload_service );
-		$this->profile_fields_renderer->register_hooks();
-
-		// Create and register upload handler.
-		$this->upload_handler = new Domain\Uploads\UploadHandler( $upload_service );
-		$this->upload_handler->register_hooks();
+		$this->license_manager = new Domain\Licensing\LicenseManager();
 	}
 
 	/**
-	 * Initialize initials generator.
+	 * Initialize the license page.
 	 *
 	 * @return void
 	 */
-	private function init_initials_generator(): void {
-		// Load Generator class.
-		if ( ! class_exists( Domain\Initials\Generator::class ) ) {
-			require_once __DIR__ . '/Domain/Initials/Generator.php';
+	private function init_license_page(): void {
+		if ( ! class_exists( Admin\LicensePage::class ) ) {
+			require_once __DIR__ . '/Admin/LicensePage.php';
 		}
 
-		// Create initials generator instance.
-		$this->initials_generator = new Domain\Initials\Generator();
+		if ( $this->license_manager !== null ) {
+			$this->license_page = new Admin\LicensePage( $this->license_manager );
+			$this->license_page->init();
+		}
 	}
 
 	/**
-	 * Initialize bandwidth optimizer.
+	 * Get the license manager instance.
 	 *
-	 * @return void
+	 * @return LicenseManager|null License manager instance.
 	 */
-	private function init_bandwidth_optimizer(): void {
-		// Load BandwidthOptimizer class.
-		if ( ! class_exists( Domain\LowBandwidth\BandwidthOptimizer::class ) ) {
-			require_once __DIR__ . '/Domain/LowBandwidth/BandwidthOptimizer.php';
-		}
-
-		// Ensure initials generator is available.
-		if ( ! $this->initials_generator ) {
-			$this->init_initials_generator();
-		}
-
-		// Create bandwidth optimizer instance.
-		$this->bandwidth_optimizer = new Domain\LowBandwidth\BandwidthOptimizer( $this->initials_generator );
+	public function get_license_manager(): ?LicenseManager {
+		return $this->license_manager;
 	}
 
 	/**
-	 * Initialize avatar handler.
+	 * Get the license page instance.
 	 *
-	 * @return void
+	 * @return Admin\LicensePage|null License page instance.
 	 */
-	private function init_avatar_handler(): void {
-		// Load AvatarHandler class.
-		if ( ! class_exists( Core\AvatarHandler::class ) ) {
-			require_once __DIR__ . '/Core/AvatarHandler.php';
-		}
-
-		// Load UploadService if not already loaded.
-		if ( ! class_exists( Domain\Uploads\UploadService::class ) ) {
-			require_once __DIR__ . '/Domain/Uploads/UploadService.php';
-		}
-
-		// Create upload service instance for avatar handler.
-		$upload_service = new Domain\Uploads\UploadService();
-
-		// Create and initialize avatar handler with services.
-		$this->avatar_handler = new Core\AvatarHandler( $upload_service );
-
-		// Set bandwidth optimizer if available.
-		if ( $this->bandwidth_optimizer ) {
-			$this->avatar_handler->set_optimizer( $this->bandwidth_optimizer );
-		}
-
-		// Set initials generator if available.
-		if ( $this->initials_generator ) {
-			$this->avatar_handler->set_generator( $this->initials_generator );
-		}
-
-		$this->avatar_handler->init();
-	}
-
-	/**
-	 * Get the profile fields renderer instance.
-	 *
-	 * @return Domain\Uploads\ProfileFieldsRenderer|null Profile fields renderer instance.
-	 */
-	public function get_profile_fields_renderer(): ?Domain\Uploads\ProfileFieldsRenderer {
-		return $this->profile_fields_renderer;
-	}
-
-	/**
-	 * Get the upload handler instance.
-	 *
-	 * @return Domain\Uploads\UploadHandler|null Upload handler instance.
-	 */
-	public function get_upload_handler(): ?Domain\Uploads\UploadHandler {
-		return $this->upload_handler;
-	}
-
-	/**
-	 * Get the avatar handler instance.
-	 *
-	 * @return Core\AvatarHandler|null Avatar handler instance.
-	 */
-	public function get_avatar_handler(): ?Core\AvatarHandler {
-		return $this->avatar_handler;
-	}
-
-	/**
-	 * Get the initials generator instance.
-	 *
-	 * @return Domain\Initials\Generator|null Initials generator instance.
-	 */
-	public function get_initials_generator(): ?Domain\Initials\Generator {
-		return $this->initials_generator;
-	}
-
-	/**
-	 * Get the bandwidth optimizer instance.
-	 *
-	 * @return Domain\LowBandwidth\BandwidthOptimizer|null Bandwidth optimizer instance.
-	 */
-	public function get_bandwidth_optimizer(): ?Domain\LowBandwidth\BandwidthOptimizer {
-		return $this->bandwidth_optimizer;
+	public function get_license_page(): ?Admin\LicensePage {
+		return $this->license_page;
 	}
 }

@@ -49,6 +49,64 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Safe Migration**: Skip users who already have avatars, no data loss
 - **Statistics Dashboard**: View migration status and available avatars
 
+### Pro Features (License Required)
+
+Activate your Pro license to unlock these advanced features:
+
+#### Avatar Library
+- **Predefined Avatars**: Create a gallery of pre-approved avatars for users to choose from
+- **Custom Collections**: Organize avatars by category, theme, or user group
+- **Easy Selection**: Users can pick from library without uploading their own image
+- **Admin Management**: Upload, organize, and remove library avatars from admin panel
+
+#### Social Media Integration
+- **Twitter Integration**: Import profile pictures directly from Twitter accounts
+- **Facebook Integration**: Use Facebook profile pictures as avatars
+- **OAuth Flow**: Secure authentication with user consent
+- **Automatic Updates**: Option to sync avatar changes from social media
+
+#### Moderation Panel
+- **Review Queue**: See all recently uploaded avatars in one place
+- **Approve/Reject**: Quick approval or rejection with one click
+- **User Notifications**: Automatic notifications when avatars are reviewed
+- **Audit Trail**: Track who approved/rejected each avatar and when
+- **Bulk Actions**: Process multiple avatars at once
+
+#### Multiple Avatars per User
+- **Avatar Slots**: Users can upload up to 5 different avatars
+- **Quick Switching**: Change active avatar with one click
+- **Context-Based**: Use different avatars for different purposes
+- **History Management**: Keep track of previously used avatars
+
+#### Advanced Upload Restrictions
+- **Fine-grained Controls**: Set different limits per user role
+- **Custom File Sizes**: Configure size limits from 0.1 MB to 10 MB
+- **Dimension Controls**: Set minimum and maximum dimensions per role
+- **Format Restrictions**: Allow/deny specific formats by role
+
+#### Role-based Permissions
+- **Granular Access**: Control exactly which roles can upload avatars
+- **Feature Toggles**: Enable/disable specific features per role
+- **Admin Overrides**: Administrators bypass all restrictions
+- **Guest Controls**: Manage avatar display for non-registered users
+
+#### Auto-deletion of Inactive Avatars
+- **Inactivity Detection**: Identify avatars not used for 6+ months
+- **Advance Warnings**: Email users before deletion
+- **Configurable Thresholds**: Set custom inactivity periods
+- **Audit Logging**: Track all automatic deletions
+- **Manual Override**: Exclude specific users from auto-deletion
+
+#### Audit Logs & Compliance
+- **Access Logs**: Record every avatar view and download
+- **Modification History**: Track changes, uploads, and deletions
+- **Export Reports**: Generate CSV/PDF reports for compliance
+- **GDPR Tools**: Built-in data export and deletion workflows
+- **Retention Policies**: Configure how long to keep audit data
+- **Search & Filter**: Find specific events quickly
+
+For complete Pro feature documentation and licensing details, see [docs/licensing-system.md](docs/licensing-system.md).
+
 ## System Requirements
 
 - **WordPress**: Version 5.8 or higher
@@ -59,6 +117,25 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Permissions**: Write access to `wp-content/uploads/` for uploading avatars
 
 ## Installation
+
+### Pro License Activation
+
+Avatar Steward Pro requires a valid license key to unlock advanced features.
+
+**To activate your license:**
+
+1. After installing and activating the plugin, go to **Settings > Avatar Steward License**
+2. Enter your license key in the format: `XXXX-XXXX-XXXX-XXXX`
+3. Click **"Activate License"**
+4. Verify the status shows as **"Active"** with a green badge
+5. Pro features are now available throughout the plugin
+
+**License Management:**
+- View activation details including date, domain, and masked license key
+- Deactivate license if moving to a different site
+- Each license is tied to one production domain
+
+For detailed licensing documentation, see [docs/licensing-system.md](docs/licensing-system.md).
 
 ### Option 1: WordPress Admin Installation
 1. Download the plugin ZIP file from your purchase location.

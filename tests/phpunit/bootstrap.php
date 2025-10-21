@@ -359,88 +359,175 @@ if ( ! function_exists( 'number_format_i18n' ) ) {
 	}
 }
 
-if ( ! function_exists( 'get_userdata' ) ) {
+if ( ! function_exists( 'get_option' ) ) {
 	/**
-	 * Mock get_userdata function.
+	 * Mock get_option function.
 	 *
-	 * @param int $user_id User ID.
-	 * @return object|false User object or false.
+	 * @param string $option  Option name.
+	 * @param mixed  $default Default value.
+	 * @return mixed Option value.
 	 */
-	function get_userdata( $user_id ) {
-		if ( $user_id <= 0 ) {
-			return false;
+	function get_option( $option, $default = false ) {
+		global $wp_test_options;
+		if ( ! isset( $wp_test_options ) ) {
+			$wp_test_options = array();
 		}
-
-		// Return a mock user object.
-		$user = new stdClass();
-		$user->ID = $user_id;
-		$user->user_login = 'testuser' . $user_id;
-		$user->user_email = 'user' . $user_id . '@example.com';
-		$user->display_name = 'Test User ' . $user_id;
-		$user->first_name = 'Test';
-		$user->last_name = 'User';
-
-		return $user;
+		return $wp_test_options[ $option ] ?? $default;
 	}
 }
 
-if ( ! function_exists( 'get_user_by' ) ) {
+if ( ! function_exists( 'update_option' ) ) {
 	/**
-	 * Mock get_user_by function.
+	 * Mock update_option function.
 	 *
-	 * @param string $field Field name.
-	 * @param mixed  $value Field value.
-	 * @return object|false User object or false.
+	 * @param string $option   Option name.
+	 * @param mixed  $value    Option value.
+	 * @param bool   $autoload Whether to autoload.
+	 * @return bool True on success.
 	 */
-	function get_user_by( $field, $value ) {
-		// Simple mock: return a user object for any email.
-		if ( 'email' === $field && ! empty( $value ) ) {
-			$user = new stdClass();
-			$user->ID = 1;
-			$user->user_login = 'testuser';
-			$user->user_email = $value;
-			$user->display_name = 'Test User';
-			return $user;
+	function update_option( $option, $value, $autoload = null ) {
+		global $wp_test_options;
+		if ( ! isset( $wp_test_options ) ) {
+			$wp_test_options = array();
 		}
-
-		return false;
+		$wp_test_options[ $option ] = $value;
+		return true;
 	}
 }
 
-if ( ! function_exists( 'get_post' ) ) {
+if ( ! function_exists( 'delete_option' ) ) {
 	/**
-	 * Mock get_post function.
+	 * Mock delete_option function.
 	 *
-	 * @param int $post_id Post ID.
-	 * @return object|null Post object or null.
+	 * @param string $option Option name.
+	 * @return bool True on success.
 	 */
-	function get_post( $post_id ) {
-		if ( $post_id <= 0 ) {
-			return null;
+	function delete_option( $option ) {
+		global $wp_test_options;
+		if ( ! isset( $wp_test_options ) ) {
+			$wp_test_options = array();
 		}
-
-		$post = new stdClass();
-		$post->ID = $post_id;
-		$post->post_title = 'Test Post';
-		$post->post_author = 1;
-
-		return $post;
+		unset( $wp_test_options[ $option ] );
+		return true;
 	}
 }
 
-if ( ! function_exists( 'wp_get_attachment_image_url' ) ) {
+if ( ! function_exists( 'site_url' ) ) {
 	/**
-	 * Mock wp_get_attachment_image_url function.
+	 * Mock site_url function.
 	 *
-	 * @param int          $attachment_id Attachment ID.
-	 * @param string|array $size          Image size.
-	 * @return string|false Image URL or false.
+	 * @param string $path   Optional path.
+	 * @param string $scheme Optional scheme.
+	 * @return string Site URL.
 	 */
-	function wp_get_attachment_image_url( $attachment_id, $size = 'thumbnail' ) {
-		if ( $attachment_id <= 0 ) {
-			return false;
-		}
+	function site_url( $path = '', $scheme = null ) {
+		return 'https://example.com' . ( $path ? '/' . ltrim( $path, '/' ) : '' );
+	}
+}
 
-		return 'http://example.com/wp-content/uploads/avatar-' . $attachment_id . '.jpg';
+if ( ! function_exists( 'admin_url' ) ) {
+	/**
+	 * Mock admin_url function.
+	 *
+	 * @param string $path   Optional path.
+	 * @param string $scheme Optional scheme.
+	 * @return string Admin URL.
+	 */
+	function admin_url( $path = '', $scheme = 'admin' ) {
+		return 'https://example.com/wp-admin/' . ltrim( $path, '/' );
+	}
+}
+
+if ( ! function_exists( 'esc_js' ) ) {
+	/**
+	 * Mock esc_js function.
+	 *
+	 * @param string $text Text to escape.
+	 * @return string Escaped text.
+	 */
+	function esc_js( $text ) {
+		return addslashes( $text );
+	}
+}
+
+if ( ! function_exists( 'add_query_arg' ) ) {
+	/**
+	 * Mock add_query_arg function.
+	 *
+	 * @param array  $args Query arguments.
+	 * @param string $url  Base URL.
+	 * @return string URL with query arguments.
+	 */
+	function add_query_arg( $args, $url ) {
+		$separator = strpos( $url, '?' ) !== false ? '&' : '?';
+		return $url . $separator . http_build_query( $args );
+	}
+}
+
+if ( ! function_exists( 'add_submenu_page' ) ) {
+	/**
+	 * Mock add_submenu_page function.
+	 *
+	 * @param string   $parent_slug  Parent slug.
+	 * @param string   $page_title   Page title.
+	 * @param string   $menu_title   Menu title.
+	 * @param string   $capability   Capability.
+	 * @param string   $menu_slug    Menu slug.
+	 * @param callable $callback     Callback function.
+	 * @return string Hook suffix.
+	 */
+	function add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $callback = '' ) {
+		return 'settings_page_' . $menu_slug;
+	}
+}
+
+if ( ! function_exists( 'wp_die' ) ) {
+	/**
+	 * Mock wp_die function.
+	 *
+	 * @param string $message Error message.
+	 */
+	function wp_die( $message = '' ) {
+		throw new Exception( $message );
+	}
+}
+
+if ( ! function_exists( 'check_admin_referer' ) ) {
+	/**
+	 * Mock check_admin_referer function.
+	 *
+	 * @param string $action Action name.
+	 * @param string $query_arg Query arg name.
+	 * @return bool True on success.
+	 */
+	function check_admin_referer( $action = '', $query_arg = '_wpnonce' ) {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_safe_redirect' ) ) {
+	/**
+	 * Mock wp_safe_redirect function.
+	 *
+	 * @param string $location Redirect location.
+	 * @param int    $status   HTTP status code.
+	 * @return bool True on success.
+	 */
+	function wp_safe_redirect( $location, $status = 302 ) {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'apply_filters' ) ) {
+	/**
+	 * Mock apply_filters function.
+	 *
+	 * @param string $hook_name Filter hook name.
+	 * @param mixed  $value     Value to filter.
+	 * @param mixed  ...$args   Additional arguments.
+	 * @return mixed Filtered value.
+	 */
+	function apply_filters( $hook_name, $value, ...$args ) {
+		return $value;
 	}
 }
