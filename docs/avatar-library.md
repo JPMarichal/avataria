@@ -14,21 +14,38 @@ The Avatar Library is a feature that allows administrators and users to manage a
    - Search and filter avatars
    - Pagination support for large libraries
 
-2. **Admin Interface**
+2. **Verification Badges** (Pro Feature)
+   - Assign verification badges to library avatars
+   - Badge types: Verified, Moderator, Author, Premium, Custom
+   - Manual and automatic badge assignment
+   - Visual badge display next to avatars
+   - Simple digital signatures to prevent forgery
+
+3. **Sectoral Templates** (Pro Feature)
+   - Pre-configured templates for industry sectors
+   - Available sectors: eLearning, eCommerce, Forums, Membership, Corporate, Healthcare
+   - Each template includes sector-specific settings
+   - Quick apply functionality with preview
+   - Bulk import avatars with sectoral metadata
+
+4. **Admin Interface**
    - Accessible from Settings > Avatar Steward > Library
    - Upload avatars directly to the library
    - Import sectoral templates in bulk
    - View and manage all library avatars
+   - Assign/remove verification badges
    - Remove avatars from the library
 
-3. **Profile Integration**
+5. **Profile Integration**
    - "Select from Library" button on user profile pages
    - Modal popup with avatar grid
    - Easy selection and preview
+   - Badge display on selected avatars
    - Works alongside direct upload functionality
 
-4. **REST API**
+6. **REST API**
    - RESTful endpoints for all library operations
+   - Badge management endpoints
    - Supports GET, POST, DELETE methods
    - Built-in authentication and authorization
    - Suitable for future integrations
@@ -41,11 +58,13 @@ The avatar library follows the Domain-Driven Design pattern with these key compo
 src/AvatarSteward/
 ├── Domain/
 │   └── Library/
-│       └── LibraryService.php      # Core business logic
+│       ├── LibraryService.php              # Core business logic
+│       ├── BadgeService.php                # Badge management
+│       └── SectoralTemplateService.php     # Template configurations
 ├── Admin/
-│   ├── LibraryPage.php             # Admin UI
-│   └── LibraryRestController.php   # REST API
-└── Plugin.php                       # Initialization
+│   ├── LibraryPage.php                     # Admin UI
+│   └── LibraryRestController.php           # REST API
+└── Plugin.php                               # Initialization
 ```
 
 ## Usage
@@ -76,10 +95,56 @@ src/AvatarSteward/
 4. Click **"Import Templates"**
 5. The system will import all selected images with the sector metadata
 
+#### Managing Verification Badges (Pro Feature)
+
+1. In the library grid, each avatar shows a "Badge" button
+2. Click the **"Assign Badge"** button on any avatar
+3. Select badge type:
+   - **Verified**: For verified content/users
+   - **Moderator**: For moderators
+   - **Author**: For content authors
+   - **Premium**: For premium members
+   - **Custom**: Create your own badge with custom icon and color
+4. For custom badges, provide:
+   - Name
+   - Description
+   - Icon class (e.g., dashicons-star-filled)
+   - Color (hex code, e.g., #0073aa)
+5. Click **"Assign"**
+6. The badge will appear next to the avatar
+7. To remove a badge, click the **"Remove Badge"** button
+
+#### Managing Sectoral Templates (Pro Feature)
+
+Sectoral templates provide pre-configured settings for industry-specific use cases:
+
+**Available Templates:**
+- **eLearning**: Educational platforms, online courses
+- **eCommerce**: Online stores, marketplaces
+- **Community Forum**: Discussion boards, community sites
+- **Membership Site**: Subscription platforms
+- **Corporate**: Business websites, intranets
+- **Healthcare**: Medical platforms, health portals
+
+**To Apply a Template:**
+1. Navigate to Settings > Avatar Steward > Library
+2. Click the **"Templates"** tab
+3. Browse available templates
+4. Click **"Preview"** to see template settings
+5. Click **"Apply Template"** to use the configuration
+6. The template's settings will be applied to the plugin
+
+**Template Settings Include:**
+- Moderation requirements
+- Allowed user roles
+- Maximum file size limits
+- Sector-specific tags
+
 #### Managing Library Avatars
 
 - **Search**: Use the search box to find avatars by title
 - **Filter**: Select sector or license from dropdowns
+- **Badge**: Assign or remove verification badges
 - **Remove**: Click the "Remove" button on any avatar to remove it from the library
 - **Select**: Click "Select" to use an avatar (for future features)
 
@@ -226,6 +291,90 @@ GET /avatar-steward/v1/library/licenses
 **Response:**
 ```json
 ["GPL", "MIT", "CC-BY"]
+```
+
+#### Assign Badge to Avatar (Pro)
+
+```
+POST /avatar-steward/v1/library/{id}/badge
+```
+
+**Request Body:**
+```json
+{
+  "badge_type": "verified",
+  "custom_data": {
+    "name": "Custom Badge",
+    "description": "Custom badge description",
+    "icon": "dashicons-star-filled",
+    "color": "#f0b849"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Badge assigned successfully."
+}
+```
+
+**Badge Types:**
+- `verified`: Verified content badge (blue checkmark)
+- `moderator`: Moderator badge (red shield)
+- `author`: Author badge (green edit icon)
+- `premium`: Premium member badge (gold star)
+- `custom`: Custom badge (requires custom_data)
+
+#### Remove Badge from Avatar (Pro)
+
+```
+DELETE /avatar-steward/v1/library/{id}/badge
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Badge removed successfully."
+}
+```
+
+#### Get Available Badge Types (Pro)
+
+```
+GET /avatar-steward/v1/library/badge-types
+```
+
+**Response:**
+```json
+{
+  "verified": {
+    "name": "Verified",
+    "description": "Verified user or content",
+    "icon": "dashicons-yes-alt",
+    "color": "#0073aa"
+  },
+  "moderator": {
+    "name": "Moderator",
+    "description": "Site moderator",
+    "icon": "dashicons-shield",
+    "color": "#d63638"
+  },
+  "author": {
+    "name": "Author",
+    "description": "Content author",
+    "icon": "dashicons-edit",
+    "color": "#00a32a"
+  },
+  "premium": {
+    "name": "Premium",
+    "description": "Premium member",
+    "icon": "dashicons-star-filled",
+    "color": "#f0b849"
+  }
+}
 ```
 
 ## Performance

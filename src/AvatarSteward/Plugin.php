@@ -286,6 +286,14 @@ public function boot(): void {
 	 * @return void
 	 */
 	private function init_library_page(): void {
+		if ( ! class_exists( Domain\Library\BadgeService::class ) ) {
+			require_once __DIR__ . '/Domain/Library/BadgeService.php';
+		}
+
+		if ( ! class_exists( Domain\Library\SectoralTemplateService::class ) ) {
+			require_once __DIR__ . '/Domain/Library/SectoralTemplateService.php';
+		}
+
 		if ( ! class_exists( Domain\Library\LibraryService::class ) ) {
 			require_once __DIR__ . '/Domain/Library/LibraryService.php';
 		}
@@ -302,7 +310,8 @@ public function boot(): void {
 			require_once __DIR__ . '/Domain/Uploads/UploadService.php';
 		}
 
-		$library_service = new Domain\Library\LibraryService();
+		$badge_service   = new Domain\Library\BadgeService();
+		$library_service = new Domain\Library\LibraryService( null, $badge_service );
 		$upload_service  = new Domain\Uploads\UploadService();
 
 		$this->library_page = new Admin\LibraryPage( $library_service, $upload_service );
