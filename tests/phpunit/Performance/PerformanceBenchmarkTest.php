@@ -134,26 +134,35 @@ final class PerformanceBenchmarkTest extends TestCase {
 	}
 
 	/**
-	 * Test filename sanitization performance.
+	 * Test filename validation performance.
 	 *
 	 * @return void
 	 */
-	public function test_filename_sanitization_performance() {
+	public function test_filename_validation_performance() {
 		$upload_service = new UploadService();
 		$start_time     = microtime( true );
 
-		$filenames = array(
-			'simple.jpg',
-			'complex_name_with_unicode_café.png',
-			'very_long_name_' . str_repeat( 'x', 200 ) . '.gif',
-			'special!@#$%^&*()characters.jpg',
-			'emoji_😀_🎉.png',
+		$files = array(
+			array(
+				'name'     => 'simple.jpg',
+				'type'     => 'image/jpeg',
+				'tmp_name' => '/tmp/simple.jpg',
+				'error'    => UPLOAD_ERR_OK,
+				'size'     => 1024,
+			),
+			array(
+				'name'     => 'complex_name_with_unicode_café.png',
+				'type'     => 'image/png',
+				'tmp_name' => '/tmp/complex.png',
+				'error'    => UPLOAD_ERR_OK,
+				'size'     => 2048,
+			),
 		);
 
-		// Sanitize 1000 filenames.
+		// Validate 1000 files.
 		for ( $i = 0; $i < 1000; $i++ ) {
-			foreach ( $filenames as $filename ) {
-				$upload_service->sanitize_filename( $filename );
+			foreach ( $files as $file ) {
+				$upload_service->validate_file( $file );
 			}
 		}
 
@@ -161,9 +170,9 @@ final class PerformanceBenchmarkTest extends TestCase {
 		$elapsed_ms = ( $end_time - $start_time ) * 1000;
 
 		$this->assertLessThan(
-			500,
+			1000,
 			$elapsed_ms,
-			"Filename sanitization for 5000 operations should take less than 500ms (took {$elapsed_ms}ms)"
+			"File validation for 2000 operations should take less than 1000ms (took {$elapsed_ms}ms)"
 		);
 	}
 

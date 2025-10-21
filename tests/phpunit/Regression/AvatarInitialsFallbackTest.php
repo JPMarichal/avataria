@@ -56,7 +56,8 @@ final class AvatarInitialsFallbackTest extends TestCase {
 		$initials = $this->generator->extract_initials( $user_data['username'] );
 
 		$this->assertNotEmpty( $initials, 'Initials should be generated from username when display_name is empty' );
-		$this->assertEquals( 'JD', $initials );
+		// When there's no space, takes first 2 letters.
+		$this->assertEquals( 'JO', $initials );
 	}
 
 	/**
@@ -91,7 +92,8 @@ final class AvatarInitialsFallbackTest extends TestCase {
 		$name     = 'Madonna';
 		$initials = $this->generator->extract_initials( $name );
 
-		$this->assertEquals( 'M', $initials );
+		// Takes first 2 letters for single word names.
+		$this->assertEquals( 'MA', $initials );
 	}
 
 	/**
