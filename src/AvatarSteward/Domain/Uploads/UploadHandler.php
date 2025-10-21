@@ -87,6 +87,30 @@ class UploadHandler {
 			return;
 		}
 
+		// Handle library avatar selection.
+		if ( isset( $_POST['avatar_steward_library_id'] ) && ! empty( $_POST['avatar_steward_library_id'] ) ) {
+			$library_id = absint( $_POST['avatar_steward_library_id'] );
+			if ( $library_id > 0 ) {
+				// Check if moderation is required.
+				$require_approval = $this->is_moderation_required();
+
+				if ( $require_approval && $this->moderation_queue ) {
+					// Store previous avatar for potential revert.
+					$previous_avatar = get_user_meta( $user_id, 'avatar_steward_avatar', true );
+					if ( $previous_avatar ) {
+						$this->moderation_queue->store_previous_avatar( $user_id, (int) $previous_avatar );
+					}
+
+					// Set status to pending moderation.
+					$this->moderation_queue->set_status( $user_id, ModerationQueue::STATUS_PENDING );
+				}
+
+				// Store the library attachment ID in user meta.
+				update_user_meta( $user_id, 'avatar_steward_avatar', $library_id );
+				return;
+			}
+		}
+
 		// Check if file was uploaded.
 		$has_files    = ! empty( $_FILES['avatar_steward_file'] );
 		$has_tmp_name = ! empty( $_FILES['avatar_steward_file']['tmp_name'] );

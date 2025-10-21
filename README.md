@@ -59,6 +59,18 @@ Avatar Steward is an advanced WordPress plugin that allows managing user avatars
 - **Safe Migration**: Skip users who already have avatars, no data loss
 - **Statistics Dashboard**: View migration status and available avatars
 
+### Avatar Library (Pro Feature)
+- **Centralized Library**: Manage a collection of avatars available for all users
+- **Metadata Support**: Organize avatars by author, license, sector, and tags
+- **Profile Integration**: Users can select avatars from the library on their profile page
+- **Search and Filter**: Find avatars quickly with search and filter options
+- **Sectoral Templates**: Import avatar templates organized by industry sectors
+- **REST API**: Full REST API support for programmatic access and integrations
+- **Bulk Import**: Upload multiple avatars at once with sectoral categorization
+- **Performance Optimized**: Transient caching for fast library queries
+
+For detailed information, see the [Avatar Library Documentation](docs/avatar-library.md).
+
 ### Social Media Integrations (Pro Feature)
 - **Twitter / X Integration**: Users can import their Twitter profile picture as their avatar
 - **Facebook Integration**: Users can import their Facebook profile picture as their avatar

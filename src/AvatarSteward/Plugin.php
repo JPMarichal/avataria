@@ -48,6 +48,11 @@ final class Plugin {
 	private ?Domain\Integrations\IntegrationService $integration_service = null;
 
 	/**
+	 * Library page instance.
+	 *
+	 * @var Admin\LibraryPage|null
+	 */
+	private ?Admin\LibraryPage $library_page = null;
 	 * Visual identity REST controller instance.
 	 *
 	 * @var Infrastructure\REST\VisualIdentityController|null
@@ -87,6 +92,7 @@ final class Plugin {
 		$this->init_settings_page();
 		$this->init_migration_page();
 		$this->init_integration_service();
+		$this->init_library_page();
 
 		if ( function_exists( 'do_action' ) ) {
 			do_action( 'avatarsteward_booted' );
@@ -220,6 +226,50 @@ final class Plugin {
 	}
 
 	/**
+	 * Initialize the library page.
+	 *
+	 * @return void
+	 */
+	private function init_library_page(): void {
+		if ( ! class_exists( Domain\Library\LibraryService::class ) ) {
+			require_once __DIR__ . '/Domain/Library/LibraryService.php';
+		}
+
+		if ( ! class_exists( Admin\LibraryPage::class ) ) {
+			require_once __DIR__ . '/Admin/LibraryPage.php';
+		}
+
+		if ( ! class_exists( Admin\LibraryRestController::class ) ) {
+			require_once __DIR__ . '/Admin/LibraryRestController.php';
+		}
+
+		if ( ! class_exists( Domain\Uploads\UploadService::class ) ) {
+			require_once __DIR__ . '/Domain/Uploads/UploadService.php';
+		}
+
+		$library_service = new Domain\Library\LibraryService();
+		$upload_service  = new Domain\Uploads\UploadService();
+
+		$this->library_page = new Admin\LibraryPage( $library_service, $upload_service );
+		$this->library_page->init();
+
+		// Register REST API routes.
+		add_action(
+			'rest_api_init',
+			function () use ( $library_service ) {
+				$rest_controller = new Admin\LibraryRestController( $library_service );
+				$rest_controller->register_routes();
+			}
+		);
+	}
+
+	/**
+	 * Get the library page instance.
+	 *
+	 * @return Admin\LibraryPage|null Library page instance.
+	 */
+	public function get_library_page(): ?Admin\LibraryPage {
+		return $this->library_page;
 	 * Initialize REST API endpoints.
 	 *
 	 * @return void

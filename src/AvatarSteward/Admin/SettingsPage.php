@@ -237,6 +237,8 @@ class SettingsPage {
 			array( $this, 'render_facebook_app_secret_field' ),
 			'avatar-steward',
 			'avatar_steward_social_integrations'
+		);
+
 		// Delete attachment when removing avatar field.
 		add_settings_field(
 			'delete_attachment_on_remove',
