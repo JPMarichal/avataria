@@ -81,19 +81,19 @@ Este documento integra el cronograma macro y la checklist de entregables para as
 
 ## Fase 3: Desarrollo de la Versión Pro (4 Semanas)
 
-- [ ] Tarea 3.1: Implementar el sistema de licenciamiento y activación de la versión Pro.
-- [ ] Tarea 3.2: Desarrollar el panel de moderación de avatares.
-- [ ] Tarea 3.3: Integrar las APIs sociales para la importación de avatares.
-- [ ] Tarea 3.4: Desarrollar la funcionalidad de la biblioteca de avatares.
-- [ ] Tarea 3.5: Añadir las opciones avanzadas (restricciones por rol, tamaño, etc.).
-- [ ] Tarea 3.6: Realizar pruebas de integración de todas las funciones Pro.
-- [ ] Tarea 3.7: Consolidar la política de soporte (duración, canales, SLA) y documentarla en `docs/`.
-- [ ] Tarea 3.8: Documentar licencias de fuentes, iconos, imágenes y librerías incluidas en el paquete Pro.
-- [ ] Tarea 3.9: Preparar el pipeline de empaquetado (`zip` limpio sin dependencias dev) y validar demo reproducible (`docker-compose.demo.yml`).
-- [ ] Tarea 3.10: Implementar auto-borrado de avatares inactivos con notificaciones configurables.
-- [ ] Tarea 3.11: Desarrollar módulo de auditoría exportable (logs de acceso/modificación).
-- [ ] Tarea 3.12: Configurar sellos de verificación y plantillas sectoriales para la biblioteca.
-- [ ] Tarea 3.13: Añadir API de identidad visual (paletas, estilos) y documentarla en `docs/api/`.
+- [x] Tarea 3.1: Implementar el sistema de licenciamiento y activación de la versión Pro.
+- [x] Tarea 3.2: Desarrollar el panel de moderación de avatares.
+- [x] Tarea 3.3: Integrar las APIs sociales para la importación de avatares.
+- [x] Tarea 3.4: Desarrollar la funcionalidad de la biblioteca de avatares.
+- [x] Tarea 3.5: Añadir las opciones avanzadas (restricciones por rol, tamaño, etc.).
+- [x] Tarea 3.6: Realizar pruebas de integración de todas las funciones Pro.
+- [x] Tarea 3.7: Consolidar la política de soporte (duración, canales, SLA) y documentarla en `docs/`.
+- [x] Tarea 3.8: Documentar licencias de fuentes, iconos, imágenes y librerías incluidas en el paquete Pro.
+- [x] Tarea 3.9: Preparar el pipeline de empaquetado (`zip` limpio sin dependencias dev) y validar demo reproducible (`docker-compose.demo.yml`).
+- [x] Tarea 3.10: Implementar auto-borrado de avatares inactivos con notificaciones configurables.
+- [x] Tarea 3.11: Desarrollar módulo de auditoría exportable (logs de acceso/modificación).
+- [x] Tarea 3.12: Configurar sellos de verificación y plantillas sectoriales para la biblioteca.
+- [x] Tarea 3.13: Añadir API de identidad visual (paletas, estilos) y documentarla en `docs/api/`.
 
 ### Entregables
 
