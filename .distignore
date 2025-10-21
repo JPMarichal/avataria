@@ -1,0 +1,107 @@
+# Development and CI files
+.git
+.github
+.gitignore
+.gitattributes
+.distignore
+.env
+.env.example
+.eslintrc.json
+.windsurf
+
+# Docker development
+docker
+docker-compose.dev.yml
+docker-compose.override.yml
+docker_logs
+.docker
+
+# Documentation (project-specific, not user-facing)
+documentacion
+
+# Development dependencies
+node_modules
+vendor
+
+# Test files and directories
+tests
+phpunit.xml.dist
+.phpunit.result.cache
+
+# Build and distribution
+dist
+build
+
+# Linting and code quality config
+phpcs.xml
+.phpcs.xml.dist
+
+# IDE and OS files
+.idea
+.vscode
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# Temporary and log files
+*.log
+*.tmp
+*.bak
+tmp
+storage
+
+# Development scripts and tools (exclude entire scripts directory)
+scripts
+
+# Legacy reference code
+simple-local-avatars
+
+# Benchmarking and examples (for development only)
+benchmarking
+examples
+
+# WordPress development files
+wp-content
+wp-config.php
+
+# Build artifacts
+*.zip
+avatar-steward-*.zip
+
+# Test and report artifacts
+docs/reports/tests/coverage-html
+docs/reports/tests/junit.xml
+docs/reports/linting/*.txt
+docs/reports/linting/*.json
+
+# Design files (source files, not final assets)
+design
+
+# Task summaries (project management, not user-facing)
+TASK-*.md
+PULL_REQUEST_SUMMARY.md
+
+# Development-only docs (keep user-facing docs)
+docs/PACKAGING.md
+docs/PROJECT_STRUCTURE.md
+docs/QUALITY_TOOLS.md
+docs/admin-settings-layout.md
+docs/avatar-removal-fix.md
+docs/demo-script.md
+docs/examples.md
+docs/implementation-avatar-override.md
+docs/integration-guide-avatar-upload.md
+docs/licensing-system.md
+docs/optimization-guide.md
+docs/performance.md
+docs/social-integrations.md
+docs/api
+docs/benchmarking
+docs/development
+docs/features
+docs/fixes
+docs/legal/diffs
+docs/migracion
+docs/project-documentation
+docs/reports
+docs/testing

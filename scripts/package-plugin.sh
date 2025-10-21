@@ -1,88 +1,116 @@
 #!/bin/bash
 
 # Avatar Steward - Plugin Package Generator
-# Creates a clean ZIP file for WordPress.org submission and testing
+# Creates a clean ZIP file for WordPress.org/CodeCanyon submission and testing
 
 echo "🎯 Avatar Steward - Plugin Package Generator"
 echo "=========================================="
 echo ""
 
+# Parse arguments
+VERSION=""
+NO_DEV=false
+PRO_VERSION=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --version)
+            VERSION="$2"
+            shift 2
+            ;;
+        --no-dev)
+            NO_DEV=true
+            shift
+            ;;
+        --pro)
+            PRO_VERSION=true
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [--version VERSION] [--no-dev] [--pro]"
+            exit 1
+            ;;
+    esac
+done
+
+# Auto-detect version from plugin file if not provided
+if [ -z "$VERSION" ]; then
+    VERSION=$(grep "Version:" avatar-steward.php | head -1 | sed 's/.*Version: *\([0-9.]*\).*/\1/')
+fi
+
 # Configuration
 PLUGIN_NAME="avatar-steward"
-VERSION="0.1.0"
 OUTPUT_DIR="dist"
+TEMP_DIR="$OUTPUT_DIR/$PLUGIN_NAME"
 ZIP_NAME="${PLUGIN_NAME}-${VERSION}.zip"
+
+if [ "$PRO_VERSION" = true ]; then
+    ZIP_NAME="${PLUGIN_NAME}-pro-${VERSION}.zip"
+fi
 
 # Clean previous builds
 echo "🧹 Cleaning previous builds..."
 rm -rf "$OUTPUT_DIR"
 rm -f "$ZIP_NAME"
 
-# Create output directory
-mkdir -p "$OUTPUT_DIR"
+# Create output directory structure
+mkdir -p "$TEMP_DIR"
 
-# Copy plugin files (excluding development files)
 echo "📦 Copying plugin files..."
 
-# Core plugin files
-cp -r avatar-steward.php "$OUTPUT_DIR/"
-cp -r src/ "$OUTPUT_DIR/"
-cp -r assets/ "$OUTPUT_DIR/"
-cp -r languages/ "$OUTPUT_DIR/" 2>/dev/null || true
-cp -r templates/ "$OUTPUT_DIR/" 2>/dev/null || true
+# Copy all files first
+rsync -av --progress \
+    --exclude-from=.distignore \
+    --exclude=.distignore \
+    --exclude="$OUTPUT_DIR" \
+    . "$TEMP_DIR/"
 
-# Documentation (only essential files)
-mkdir -p "$OUTPUT_DIR/docs"
-cp README.md "$OUTPUT_DIR/"
-cp CHANGELOG.md "$OUTPUT_DIR/"
-cp LICENSE.txt "$OUTPUT_DIR/"
+# Handle Composer dependencies
+if [ "$NO_DEV" = true ]; then
+    echo "📦 Installing production dependencies only..."
+    cd "$TEMP_DIR"
+    if [ -f "composer.json" ]; then
+        composer install --no-dev --optimize-autoloader --no-interaction --quiet
+        if [ $? -eq 0 ]; then
+            echo "✅ Production dependencies installed"
+        else
+            echo "⚠️  Warning: composer install failed, but continuing..."
+        fi
+    fi
+    cd ../..
+else
+    echo "ℹ️  Including vendor directory as-is (dev dependencies included)"
+fi
 
-# Exclude development files
-echo "🚫 Excluding development files..."
-cd "$OUTPUT_DIR"
+# Copy essential user documentation
+echo "📄 Preparing user documentation..."
+cd "$TEMP_DIR"
+mkdir -p docs
+[ -f "../../docs/user-manual.md" ] && cp "../../docs/user-manual.md" docs/ 2>/dev/null || true
+[ -f "../../docs/faq.md" ] && cp "../../docs/faq.md" docs/ 2>/dev/null || true
+[ -f "../../docs/support.md" ] && cp "../../docs/support.md" docs/ 2>/dev/null || true
+if [ "$PRO_VERSION" = true ]; then
+    [ -f "../../docs/licensing.md" ] && cp "../../docs/licensing.md" docs/ 2>/dev/null || true
+    [ -f "../../docs/licenses-pro.md" ] && cp "../../docs/licenses-pro.md" docs/ 2>/dev/null || true
+fi
 
-# Remove development directories
-rm -rf vendor/
-rm -rf node_modules/
-rm -rf tests/
-rm -rf .git/
-rm -rf .github/
-rm -rf docker/
-rm -rf docker_logs/
-rm -rf design/
-rm -rf examples/
-rm -rf scripts/
-rm -rf simple-local-avatars/
-rm -rf wp-config.php/
-
-# Remove development files
-find . -name "*.log" -delete
+# Clean up any remaining development artifacts
 find . -name ".DS_Store" -delete
 find . -name "Thumbs.db" -delete
-find . -name "*.tmp" -delete
-find . -name "*.bak" -delete
-find . -name "composer.*" -delete
-find . -name "package*.json" -delete
-find . -name "phpunit*.xml*" -delete
-find . -name "phpcs.xml*" -delete
-find . -name "webpack.config.js" -delete
-find . -name "test-generator.php" -delete
-find . -name "*.md" -not -name "README.md" -not -name "CHANGELOG.md" -delete
+find . -name "*.log" -delete
 
-# Remove docs directory (keep only essential docs)
-rm -rf docs/
-
-cd ..
+cd ../..
 
 # Create ZIP file
 echo "📦 Creating ZIP package..."
 if command -v zip >/dev/null 2>&1; then
     cd "$OUTPUT_DIR"
-    zip -r "../$ZIP_NAME" ./*
+    zip -rq "../$ZIP_NAME" "$PLUGIN_NAME"
     cd ..
 else
     echo "⚠️  zip command not found. Creating tar.gz instead..."
-    tar -czf "$ZIP_NAME" -C "$OUTPUT_DIR" .
+    tar -czf "$ZIP_NAME" -C "$OUTPUT_DIR" "$PLUGIN_NAME"
 fi
 
 # Verify package
@@ -92,11 +120,17 @@ if [ -f "$ZIP_NAME" ]; then
     echo "📊 Package created: $ZIP_NAME ($SIZE)"
 
     # List contents
-    echo "📋 Package contents:"
+    echo "📋 Package contents (first 30 files):"
     if command -v unzip >/dev/null 2>&1; then
-        unzip -l "$ZIP_NAME" | head -20
+        unzip -l "$ZIP_NAME" | head -35
     elif command -v tar >/dev/null 2>&1; then
-        tar -tzf "$ZIP_NAME" | head -20
+        tar -tzf "$ZIP_NAME" | head -30
+    fi
+    
+    # Count files
+    if command -v unzip >/dev/null 2>&1; then
+        FILE_COUNT=$(unzip -l "$ZIP_NAME" | tail -1 | awk '{print $2}')
+        echo "📁 Total files: $FILE_COUNT"
     fi
 else
     echo "❌ Failed to create package"
@@ -107,10 +141,18 @@ echo ""
 echo "🎉 Package generation complete!"
 echo "📁 Location: $(pwd)/$ZIP_NAME"
 echo ""
-echo "📝 Next steps:"
-echo "1. Test the ZIP in WordPress Playground: https://playground.wordpress.net/"
-echo "2. Upload to WordPress.org when ready for submission"
-echo "3. Keep this ZIP for CodeCanyon submission (Pro version)"
+
+if [ "$PRO_VERSION" = true ]; then
+    echo "📝 Next steps for Pro version:"
+    echo "1. Test the ZIP in a clean WordPress installation"
+    echo "2. Verify licensing system works correctly"
+    echo "3. Run CodeCanyon validation: ./scripts/validate-codecanyon.sh"
+    echo "4. Upload to CodeCanyon when ready"
+else
+    echo "📝 Next steps:"
+    echo "1. Test the ZIP in WordPress Playground: https://playground.wordpress.net/"
+    echo "2. Upload to WordPress.org when ready for submission"
+fi
 
 # Clean up
 echo ""

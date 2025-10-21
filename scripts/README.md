@@ -4,6 +4,94 @@ Este directorio contiene scripts de utilidad para desarrollo, testing y verifica
 
 ## 📜 Scripts Disponibles
 
+### `package-plugin.sh` / `package-plugin.ps1`
+
+**Propósito:** Generar un paquete ZIP limpio del plugin para distribución (WordPress.org o CodeCanyon).
+
+**Uso:**
+```bash
+# Linux/Mac
+./scripts/package-plugin.sh [--version VERSION] [--no-dev] [--pro]
+
+# Windows PowerShell
+.\scripts\package-plugin.ps1 [-Version VERSION] [-NoDev] [-Pro]
+```
+
+**Opciones:**
+- `--version VERSION` / `-Version VERSION`: Especifica la versión del paquete (auto-detectada si se omite)
+- `--no-dev` / `-NoDev`: Instala solo dependencias de producción con `composer install --no-dev`
+- `--pro` / `-Pro`: Genera el paquete Pro (incluye documentación de licencias)
+
+**Características:**
+- Usa `.distignore` para excluir archivos de desarrollo
+- Opcionalmente instala dependencias de producción
+- Incluye documentación esencial para usuarios
+- Crea estructura de directorios correcta para WordPress
+- Verifica el contenido del paquete generado
+
+**Ejemplos:**
+```bash
+# Generar paquete básico
+./scripts/package-plugin.sh
+
+# Generar paquete Pro para CodeCanyon sin dependencias dev
+./scripts/package-plugin.sh --no-dev --pro --version 1.0.0
+
+# PowerShell equivalente
+.\scripts\package-plugin.ps1 -NoDev -Pro -Version "1.0.0"
+```
+
+**Output:** `avatar-steward-{version}.zip` o `avatar-steward-pro-{version}.zip`
+
+**Relacionado con:** Tarea 3.9 - Pipeline de empaquetado
+
+### `validate-codecanyon.sh` / `validate-codecanyon.ps1`
+
+**Propósito:** Validar que el plugin cumple con los requisitos de calidad de CodeCanyon antes de empaquetar.
+
+**Uso:**
+```bash
+# Linux/Mac
+./scripts/validate-codecanyon.sh
+
+# Windows PowerShell
+.\scripts\validate-codecanyon.ps1
+```
+
+**Verificaciones realizadas:**
+1. ✓ Documentación requerida (README, CHANGELOG, LICENSE, manual, FAQ, soporte)
+2. ✓ Configuración de calidad de código (phpcs.xml, phpunit.xml.dist, ESLint)
+3. ✓ Assets y capturas de pantalla
+4. ✓ Documentación de licencias
+5. ✓ Infraestructura de testing
+6. ✓ Entorno de demo reproducible
+7. ✓ Estructura del paquete
+8. ✓ Cumplimiento de estándares WordPress
+9. ✓ Metadata del plugin
+10. ✓ Mejores prácticas de seguridad
+
+**Output:**
+- ✅ Verde: Verificación exitosa
+- ⚠️  Amarillo: Advertencias (no críticas)
+- ❌ Rojo: Fallos críticos
+
+**Exit codes:**
+- `0`: Validación exitosa, listo para empaquetar
+- `1`: Problemas críticos encontrados
+
+**Ejemplo de flujo:**
+```bash
+# 1. Validar requisitos
+./scripts/validate-codecanyon.sh
+
+# 2. Si pasa, generar paquete
+./scripts/package-plugin.sh --no-dev --pro
+```
+
+**Relacionado con:** 
+- `documentacion/08_CodeCanyon_Checklist.md`
+- Tarea 3.9 - Pipeline de empaquetado
+
 ### `demo-avatar-initials-fix.php`
 
 **Propósito:** Demostración interactiva del fix de avatar por defecto con iniciales.
@@ -119,7 +207,7 @@ Cuando agregues un nuevo script:
 
 ## 📚 Scripts Planificados
 
-- `build-release.sh` - Generar ZIP del plugin para distribución
+- ~~`build-release.sh`~~ → ✅ Implementado como `package-plugin.sh`
 - `run-lint.sh` - Ejecutar linters con configuración específica
 - `setup-dev.sh` - Configurar entorno de desarrollo completo
 - `db-reset.sh` - Resetear base de datos de desarrollo

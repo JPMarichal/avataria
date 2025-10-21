@@ -302,6 +302,54 @@ Before committing code, ensure:
 4. ✅ Code is properly documented
 5. ✅ New features have corresponding tests
 
+### Demo Environment for Reviewers
+
+A reproducible demo environment is available for testing the plugin:
+
+**Start the demo:**
+```bash
+docker compose -f docker-compose.demo.yml up -d
+```
+
+**Access:**
+- WordPress: http://localhost:8080
+- PHPMyAdmin: http://localhost:8081
+
+For complete setup instructions and testing guide, see [Demo Environment Documentation](docs/demo/README.md).
+
+### Creating Plugin Package
+
+To create a clean distribution package for WordPress.org or CodeCanyon:
+
+**Validate before packaging:**
+```bash
+# Check CodeCanyon requirements
+./scripts/validate-codecanyon.sh
+```
+
+**Generate package:**
+```bash
+# Basic package (includes dev dependencies)
+./scripts/package-plugin.sh
+
+# Production package (no dev dependencies)
+./scripts/package-plugin.sh --no-dev
+
+# Pro version package
+./scripts/package-plugin.sh --no-dev --pro --version 1.0.0
+```
+
+**PowerShell (Windows):**
+```powershell
+.\scripts\package-plugin.ps1 -NoDev -Pro -Version "1.0.0"
+```
+
+The packaging script:
+- Excludes development files using `.distignore`
+- Optionally installs production dependencies only
+- Includes essential user documentation
+- Creates a properly structured ZIP file
+
 ## Configuration
 
 After activating the plugin, configure Avatar Steward to match your site's requirements:
