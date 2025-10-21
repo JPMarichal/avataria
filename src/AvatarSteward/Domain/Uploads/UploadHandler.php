@@ -33,12 +33,12 @@ class UploadHandler {
 	/**
 	 * Constructor.
 	 *
-	 * @param UploadService         $upload_service    Upload service instance.
-	 * @param ModerationQueue|null  $moderation_queue  Optional moderation queue instance.
+	 * @param UploadService        $upload_service    Upload service instance.
+	 * @param ModerationQueue|null $moderation_queue  Optional moderation queue instance.
 	 */
 	public function __construct( UploadService $upload_service, ?ModerationQueue $moderation_queue = null ) {
-		$this->upload_service    = $upload_service;
-		$this->moderation_queue  = $moderation_queue;
+		$this->upload_service   = $upload_service;
+		$this->moderation_queue = $moderation_queue;
 	}
 
 	/**

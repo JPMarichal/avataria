@@ -476,6 +476,193 @@ Pro version includes:
 - **Version control**: Use Git for all changes
 - **Docker for development**: Use provided Docker environment
 
+## Pro Version Support
+
+### What's the difference between Free and Pro support?
+
+**Free Version:**
+- Community support via GitHub and WordPress.org forums
+- Best-effort response (typically 3-7 business days)
+- No guaranteed SLA
+- Security updates for recent versions
+- Documentation and self-service resources
+
+**Pro Version:**
+- Direct email support (support@avatarsteward.com)
+- Guaranteed response times (4-72 hours based on priority)
+- Private support portal with ticket tracking
+- Live chat during business hours (Mon-Fri, 9 AM-5 PM UTC)
+- 12 months of support from purchase
+- Priority bug fixes and feature updates
+- Up to 10 support tickets per month
+
+See [Support Policy](support-policy.md) for complete details.
+
+### How long is Pro support valid?
+
+Pro licenses include **12 months of support** from the date of purchase. After 12 months:
+- You can continue using the plugin
+- You'll receive critical security updates
+- No bug fixes or feature updates
+- No access to support channels
+
+**Support Renewal:** Available for 50% of original price, extends support for another 12 months.
+
+### What response times can I expect with Pro support?
+
+| Priority | First Response | Resolution Target |
+|----------|----------------|-------------------|
+| **Critical** (site down, security issue) | 4 hours | 24 hours |
+| **High** (major feature broken) | 24 hours | 48 hours |
+| **Medium** (minor bugs with workarounds) | 48 hours | 5 business days |
+| **Low** (questions, cosmetic issues) | 72 hours | 10 business days |
+
+**Note:** Times are in business hours (Mon-Fri, 9 AM-5 PM UTC, excluding holidays).
+
+### What's included in Pro support?
+
+✅ **Included:**
+- Installation and configuration help
+- Bug resolution in plugin code
+- WordPress/PHP compatibility (supported versions)
+- Settings optimization guidance
+- Feature usage questions
+- Security updates and patches
+- Migration assistance from other plugins
+
+❌ **Not Included:**
+- Custom feature development
+- Theme or third-party plugin conflicts (guidance only)
+- Server/hosting configuration issues
+- Unsupported WordPress/PHP versions
+- Data recovery from user errors
+- Training or consulting (available as paid service)
+
+### How do I contact Pro support?
+
+**Primary Channels:**
+1. **Email**: support@avatarsteward.com (recommended for most issues)
+2. **Support Portal**: https://support.avatarsteward.com (ticket tracking)
+3. **Live Chat**: Available Mon-Fri, 9 AM-5 PM UTC (quick questions)
+
+**For Critical Issues:**
+- Email: critical@avatarsteward.com
+- Include "[CRITICAL]" in subject line
+- Response within 2-4 hours
+
+**Required Information:**
+- Your license key
+- WordPress and PHP versions
+- Plugin version
+- Clear description of the issue
+- Steps to reproduce
+- Error messages (if any)
+
+### What if I exceed my monthly support limit?
+
+Pro licenses include **10 support tickets per month**. If you exceed this:
+- Additional tickets available at $25 each
+- Security and critical bug reports don't count toward limit
+- Tickets don't roll over to next month
+
+**Enterprise licenses** (25+ sites) have unlimited support tickets.
+
+### Can I get a refund if I'm not satisfied with support?
+
+**30-Day Money-Back Guarantee:**
+- Full refund within 30 days of purchase
+- No questions asked
+- Contact: refunds@avatarsteward.com
+
+**After 30 Days:**
+- Refunds considered case-by-case
+- Available if we fail to meet stated SLAs
+- Requires documentation of support failure
+
+### How do I escalate a support issue?
+
+**Automatic Escalation:** Issues escalate automatically when:
+- Marked as Critical priority
+- SLA response time exceeded by 25%
+- Unresolved after 3 exchanges
+- Customer requests escalation (Pro only)
+
+**Manual Escalation:**
+1. Reply to your ticket requesting escalation
+2. Email: complaints@avatarsteward.com
+3. Escalation to manager within 24 hours
+4. Resolution plan within 48 hours
+
+### Do you offer support in other languages?
+
+Currently, **all support is provided in English only**. However:
+- The plugin UI supports multiple languages via translation files
+- Documentation can be translated (community contributions welcome)
+- Google Translate can help with basic communication
+
+### What about emergency or after-hours support?
+
+**Pro Version:**
+- Business hours: Mon-Fri, 9 AM-5 PM UTC
+- Critical tickets monitored 24/7
+- Response within 4 hours outside business hours
+
+**Enterprise Version:**
+- Phone support by appointment
+- 2-hour response for critical issues (24/7)
+- Dedicated account manager
+
+### How do I report a security vulnerability?
+
+**Security issues are treated with highest priority:**
+1. **Email**: security@avatarsteward.com
+2. **Don't** disclose publicly until patch is available
+3. **Response**: Within 24 hours
+4. **Fix Target**: 7 days for critical vulnerabilities
+5. **Recognition**: Credit in changelog (if desired)
+
+We appreciate responsible disclosure and work quickly to address security issues.
+
+### Can you help with custom development or integrations?
+
+**Basic Integration Guidance:** Included in Pro support
+- How to use hooks and filters
+- API documentation
+- Best practices
+
+**Custom Development:** Available as paid service
+- Custom feature implementation
+- Third-party system integration
+- White-label customization
+- Contact: sales@avatarsteward.com for quotes
+
+### What happens when my support period expires?
+
+When your 12-month support period ends:
+- ✅ Plugin continues to work normally
+- ✅ Critical security updates still provided
+- ❌ No bug fixes or feature updates
+- ❌ No access to support channels
+- ❌ No downloads of new versions (except security patches)
+
+**To Renew:**
+- 50% discount (half of original license price)
+- Email: billing@avatarsteward.com
+- Extends support for another 12 months
+- Can renew at any time (no gap required)
+
+### How do I provide feedback on support quality?
+
+We value your feedback:
+- **After Each Ticket**: Rate the support interaction
+- **Email**: feedback@avatarsteward.com
+- **Annual Survey**: Sent to all Pro customers
+- **Complaints**: complaints@avatarsteward.com
+
+Your feedback helps us improve support quality for everyone.
+
+---
+
 ## Additional Information
 
 ### Changelog
@@ -494,6 +681,12 @@ Avatar Steward does not collect or transmit any user data externally. All avatar
 
 Avatar Steward is evolved from Simple Local Avatars with extensive refactoring and new features. See `docs/legal/origen-gpl.md` for GPL compliance documentation.
 
+### Complete Support Policy
+
+For comprehensive support information including SLAs, escalation procedures, and detailed contact information, see [Support Policy](support-policy.md).
+
 ---
 
-**Still have questions?** Check the full documentation in the `docs/` folder or create an issue on GitHub.
+**Still have questions?** 
+- **Free Version**: Check the full documentation in `docs/` or create an issue on [GitHub](https://github.com/JPMarichal/avataria/issues)
+- **Pro Version**: Email support@avatarsteward.com with your license key

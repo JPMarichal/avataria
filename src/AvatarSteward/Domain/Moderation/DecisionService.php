@@ -142,8 +142,8 @@ class DecisionService {
 	/**
 	 * Bulk approve avatars.
 	 *
-	 * @param array $user_ids      Array of user IDs.
-	 * @param int   $moderator_id  Moderator user ID.
+	 * @param array  $user_ids      Array of user IDs.
+	 * @param int    $moderator_id  Moderator user ID.
 	 * @param string $comment      Optional comment.
 	 * @return array Result with counts.
 	 */
@@ -154,15 +154,15 @@ class DecisionService {
 		foreach ( $user_ids as $user_id ) {
 			$result = $this->approve( (int) $user_id, $moderator_id, $comment );
 			if ( $result['success'] ) {
-				$success_count++;
+				++$success_count;
 			} else {
-				$failed_count++;
+				++$failed_count;
 			}
 		}
 
 		return array(
-			'success' => true,
-			'message' => sprintf(
+			'success'  => true,
+			'message'  => sprintf(
 				/* translators: %1$d: number of approved avatars, %2$d: number of failed approvals */
 				__( '%1$d avatar(s) approved, %2$d failed.', 'avatar-steward' ),
 				$success_count,
@@ -188,15 +188,15 @@ class DecisionService {
 		foreach ( $user_ids as $user_id ) {
 			$result = $this->reject( (int) $user_id, $moderator_id, $comment );
 			if ( $result['success'] ) {
-				$success_count++;
+				++$success_count;
 			} else {
-				$failed_count++;
+				++$failed_count;
 			}
 		}
 
 		return array(
-			'success' => true,
-			'message' => sprintf(
+			'success'  => true,
+			'message'  => sprintf(
 				/* translators: %1$d: number of rejected avatars, %2$d: number of failed rejections */
 				__( '%1$d avatar(s) rejected, %2$d failed.', 'avatar-steward' ),
 				$success_count,

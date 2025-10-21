@@ -332,6 +332,204 @@ class SettingsPage {
 				submit_button( __( 'Save Settings', 'avatar-steward' ) );
 				?>
 			</form>
+			
+			<?php $this->render_support_info(); ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render support information box.
+	 *
+	 * @return void
+	 */
+	private function render_support_info(): void {
+		$is_pro = $this->license_manager->is_pro_active();
+		?>
+		<div class="avatar-steward-support-info" style="margin-top: 30px; padding: 20px; background: #fff; border: 1px solid #ccd0d4; border-left: 4px solid <?php echo esc_attr( $is_pro ? '#2271b1' : '#646970' ); ?>; box-shadow: 0 1px 1px rgba(0,0,0,.04);">
+			<h2 style="margin-top: 0;">
+				<?php
+				echo esc_html(
+					$is_pro
+						? __( 'Pro Support & Resources', 'avatar-steward' )
+						: __( 'Support & Resources', 'avatar-steward' )
+				);
+				?>
+			</h2>
+			
+			<?php if ( $is_pro ) : ?>
+				<!-- Pro Version Support -->
+				<div class="support-section">
+					<h3><?php esc_html_e( 'Priority Support Channels', 'avatar-steward' ); ?></h3>
+					<p><?php esc_html_e( 'Your Pro license includes priority support with guaranteed response times:', 'avatar-steward' ); ?></p>
+					<ul style="list-style: disc; margin-left: 20px;">
+						<li>
+							<strong><?php esc_html_e( 'Email Support:', 'avatar-steward' ); ?></strong> 
+							<a href="mailto:support@avatarsteward.com">support@avatarsteward.com</a>
+							<br>
+							<em><?php esc_html_e( 'Response within 4-72 hours based on priority', 'avatar-steward' ); ?></em>
+						</li>
+						<li>
+							<strong><?php esc_html_e( 'Support Portal:', 'avatar-steward' ); ?></strong> 
+							<a href="https://support.avatarsteward.com" target="_blank">support.avatarsteward.com</a>
+							<br>
+							<em><?php esc_html_e( 'Track tickets, access knowledge base', 'avatar-steward' ); ?></em>
+						</li>
+						<li>
+							<strong><?php esc_html_e( 'Live Chat:', 'avatar-steward' ); ?></strong> 
+							<?php esc_html_e( 'Mon-Fri, 9:00 AM - 5:00 PM UTC', 'avatar-steward' ); ?>
+						</li>
+						<li>
+							<strong><?php esc_html_e( 'Critical Issues:', 'avatar-steward' ); ?></strong> 
+							<a href="mailto:critical@avatarsteward.com">critical@avatarsteward.com</a>
+							<br>
+							<em><?php esc_html_e( 'For site-down or security issues - 4 hour response', 'avatar-steward' ); ?></em>
+						</li>
+					</ul>
+				</div>
+
+				<div class="support-section" style="margin-top: 20px;">
+					<h3><?php esc_html_e( 'Service Level Agreement (SLA)', 'avatar-steward' ); ?></h3>
+					<table class="widefat" style="max-width: 600px;">
+						<thead>
+							<tr>
+								<th><?php esc_html_e( 'Priority', 'avatar-steward' ); ?></th>
+								<th><?php esc_html_e( 'First Response', 'avatar-steward' ); ?></th>
+								<th><?php esc_html_e( 'Resolution Target', 'avatar-steward' ); ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><strong><?php esc_html_e( 'Critical', 'avatar-steward' ); ?></strong></td>
+								<td><?php esc_html_e( '4 hours', 'avatar-steward' ); ?></td>
+								<td><?php esc_html_e( '24 hours', 'avatar-steward' ); ?></td>
+							</tr>
+							<tr class="alternate">
+								<td><strong><?php esc_html_e( 'High', 'avatar-steward' ); ?></strong></td>
+								<td><?php esc_html_e( '24 hours', 'avatar-steward' ); ?></td>
+								<td><?php esc_html_e( '48 hours', 'avatar-steward' ); ?></td>
+							</tr>
+							<tr>
+								<td><strong><?php esc_html_e( 'Medium', 'avatar-steward' ); ?></strong></td>
+								<td><?php esc_html_e( '48 hours', 'avatar-steward' ); ?></td>
+								<td><?php esc_html_e( '5 business days', 'avatar-steward' ); ?></td>
+							</tr>
+							<tr class="alternate">
+								<td><strong><?php esc_html_e( 'Low', 'avatar-steward' ); ?></strong></td>
+								<td><?php esc_html_e( '72 hours', 'avatar-steward' ); ?></td>
+								<td><?php esc_html_e( '10 business days', 'avatar-steward' ); ?></td>
+							</tr>
+						</tbody>
+					</table>
+					<p style="margin-top: 10px;">
+						<em><?php esc_html_e( 'Times are in business hours (Mon-Fri, 9 AM-5 PM UTC, excluding holidays)', 'avatar-steward' ); ?></em>
+					</p>
+				</div>
+
+				<div class="support-section" style="margin-top: 20px;">
+					<h3><?php esc_html_e( 'Support Duration & Limits', 'avatar-steward' ); ?></h3>
+					<ul style="list-style: disc; margin-left: 20px;">
+						<li><?php esc_html_e( 'Support Period: 12 months from purchase', 'avatar-steward' ); ?></li>
+						<li><?php esc_html_e( 'Monthly Limit: 10 support tickets per license', 'avatar-steward' ); ?></li>
+						<li><?php esc_html_e( 'Security & critical bugs do not count toward limit', 'avatar-steward' ); ?></li>
+						<li>
+							<?php esc_html_e( 'Renewal: Available at 50% of original price', 'avatar-steward' ); ?>
+							(<a href="mailto:billing@avatarsteward.com">billing@avatarsteward.com</a>)
+						</li>
+					</ul>
+				</div>
+			<?php else : ?>
+				<!-- Free Version Support -->
+				<div class="support-section">
+					<h3><?php esc_html_e( 'Community Support Channels', 'avatar-steward' ); ?></h3>
+					<ul style="list-style: disc; margin-left: 20px;">
+						<li>
+							<strong><?php esc_html_e( 'GitHub Issues:', 'avatar-steward' ); ?></strong> 
+							<a href="https://github.com/JPMarichal/avataria/issues" target="_blank">github.com/JPMarichal/avataria/issues</a>
+							<br>
+							<em><?php esc_html_e( 'Best effort support, typically 3-7 business days', 'avatar-steward' ); ?></em>
+						</li>
+						<li>
+							<strong><?php esc_html_e( 'WordPress.org Forum:', 'avatar-steward' ); ?></strong> 
+							<a href="https://wordpress.org/support/plugin/avatar-steward/" target="_blank">wordpress.org/support/plugin/avatar-steward/</a>
+							<br>
+							<em><?php esc_html_e( 'Community-driven support', 'avatar-steward' ); ?></em>
+						</li>
+						<li>
+							<strong><?php esc_html_e( 'Documentation:', 'avatar-steward' ); ?></strong> 
+							<?php esc_html_e( 'Complete documentation available in the plugin /docs/ directory', 'avatar-steward' ); ?>
+						</li>
+					</ul>
+				</div>
+
+				<div class="support-section" style="margin-top: 20px; padding: 15px; background: #f0f6fc; border-left: 4px solid #2271b1;">
+					<h3 style="margin-top: 0;"><?php esc_html_e( 'Upgrade to Pro for Priority Support', 'avatar-steward' ); ?></h3>
+					<p><?php esc_html_e( 'Get guaranteed response times, direct email support, and access to advanced features:', 'avatar-steward' ); ?></p>
+					<ul style="list-style: disc; margin-left: 20px;">
+						<li><?php esc_html_e( '4-72 hour response times based on priority', 'avatar-steward' ); ?></li>
+						<li><?php esc_html_e( 'Private support portal with ticket tracking', 'avatar-steward' ); ?></li>
+						<li><?php esc_html_e( 'Live chat during business hours', 'avatar-steward' ); ?></li>
+						<li><?php esc_html_e( 'Advanced features: Avatar library, social integrations, moderation dashboard', 'avatar-steward' ); ?></li>
+					</ul>
+					<p>
+						<a href="mailto:sales@avatarsteward.com" class="button button-primary">
+							<?php esc_html_e( 'Contact Sales', 'avatar-steward' ); ?>
+						</a>
+					</p>
+				</div>
+			<?php endif; ?>
+
+			<!-- Common Resources (both Free and Pro) -->
+			<div class="support-section" style="margin-top: 20px;">
+				<h3><?php esc_html_e( 'Documentation & Resources', 'avatar-steward' ); ?></h3>
+				<ul style="list-style: disc; margin-left: 20px;">
+					<li>
+						<strong><?php esc_html_e( 'User Manual:', 'avatar-steward' ); ?></strong> 
+						<code>docs/user-manual.md</code>
+					</li>
+					<li>
+						<strong><?php esc_html_e( 'FAQ:', 'avatar-steward' ); ?></strong> 
+						<code>docs/faq.md</code>
+					</li>
+					<li>
+						<strong><?php esc_html_e( 'Support Policy:', 'avatar-steward' ); ?></strong> 
+						<code>docs/support-policy.md</code>
+					</li>
+					<li>
+						<strong><?php esc_html_e( 'API Documentation:', 'avatar-steward' ); ?></strong> 
+						<code>docs/api/</code>
+					</li>
+				</ul>
+			</div>
+
+			<div class="support-section" style="margin-top: 20px;">
+				<h3><?php esc_html_e( 'Other Contacts', 'avatar-steward' ); ?></h3>
+				<ul style="list-style: disc; margin-left: 20px;">
+					<li>
+						<strong><?php esc_html_e( 'Security Issues:', 'avatar-steward' ); ?></strong> 
+						<a href="mailto:security@avatarsteward.com">security@avatarsteward.com</a>
+					</li>
+					<li>
+						<strong><?php esc_html_e( 'Sales Inquiries:', 'avatar-steward' ); ?></strong> 
+						<a href="mailto:sales@avatarsteward.com">sales@avatarsteward.com</a>
+					</li>
+					<li>
+						<strong><?php esc_html_e( 'Partnership Opportunities:', 'avatar-steward' ); ?></strong> 
+						<a href="mailto:partnerships@avatarsteward.com">partnerships@avatarsteward.com</a>
+					</li>
+					<li>
+						<strong><?php esc_html_e( 'General Inquiries:', 'avatar-steward' ); ?></strong> 
+						<a href="mailto:hello@avatarsteward.com">hello@avatarsteward.com</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="support-section" style="margin-top: 20px; padding: 10px; background: #fcf9e8; border-left: 4px solid #dba617;">
+				<p style="margin: 0;">
+					<strong><?php esc_html_e( 'Before contacting support:', 'avatar-steward' ); ?></strong>
+					<?php esc_html_e( 'Check the FAQ and documentation. Include your WordPress version, PHP version, and plugin version in your support request.', 'avatar-steward' ); ?>
+				</p>
+			</div>
 		</div>
 		<?php
 	}

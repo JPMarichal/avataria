@@ -145,7 +145,7 @@ class ModerationPage {
 			<ul class="subsubsub">
 				<li>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=avatar-steward-moderation&status=' . ModerationQueue::STATUS_PENDING ) ); ?>" 
-					   class="<?php echo $current_status === ModerationQueue::STATUS_PENDING ? 'current' : ''; ?>">
+						class="<?php echo $current_status === ModerationQueue::STATUS_PENDING ? 'current' : ''; ?>">
 						<?php
 						printf(
 							/* translators: %s: number of pending avatars */
@@ -157,7 +157,7 @@ class ModerationPage {
 				</li>
 				<li>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=avatar-steward-moderation&status=' . ModerationQueue::STATUS_APPROVED ) ); ?>" 
-					   class="<?php echo $current_status === ModerationQueue::STATUS_APPROVED ? 'current' : ''; ?>">
+						class="<?php echo $current_status === ModerationQueue::STATUS_APPROVED ? 'current' : ''; ?>">
 						<?php
 						printf(
 							/* translators: %s: number of approved avatars */
@@ -169,7 +169,7 @@ class ModerationPage {
 				</li>
 				<li>
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=avatar-steward-moderation&status=' . ModerationQueue::STATUS_REJECTED ) ); ?>" 
-					   class="<?php echo $current_status === ModerationQueue::STATUS_REJECTED ? 'current' : ''; ?>">
+						class="<?php echo $current_status === ModerationQueue::STATUS_REJECTED ? 'current' : ''; ?>">
 						<?php
 						printf(
 							/* translators: %s: number of rejected avatars */
@@ -240,8 +240,8 @@ class ModerationPage {
 									<td>
 										<?php if ( $avatar['avatar_url'] ) : ?>
 											<img src="<?php echo esc_url( $avatar['avatar_url'] ); ?>" 
-												 alt="<?php echo esc_attr( $avatar['display_name'] ); ?>" 
-												 width="64" height="64" style="border-radius: 50%;">
+												alt="<?php echo esc_attr( $avatar['display_name'] ); ?>" 
+												width="64" height="64" style="border-radius: 50%;">
 										<?php endif; ?>
 									</td>
 									<td>
@@ -323,7 +323,7 @@ class ModerationPage {
 										'href'  => array(),
 									),
 									'span' => array(
-										'class'      => array(),
+										'class'        => array(),
 										'aria-current' => array(),
 									),
 								)
@@ -346,7 +346,7 @@ class ModerationPage {
 	 */
 	public function handle_moderation_action(): void {
 		// Verify nonce.
-		if ( ! isset( $_POST['avatarsteward_moderate_nonce'] ) || 
+		if ( ! isset( $_POST['avatarsteward_moderate_nonce'] ) ||
 			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['avatarsteward_moderate_nonce'] ) ), 'avatarsteward_moderate_action' ) ) {
 			wp_die( esc_html__( 'Security check failed.', 'avatar-steward' ) );
 		}
@@ -365,10 +365,10 @@ class ModerationPage {
 			$user_ids    = array_map( 'intval', wp_unslash( $_POST['user_ids'] ) );
 
 			if ( 'approve' === $bulk_action ) {
-				$result = $this->decision_service->bulk_approve( $user_ids, $moderator_id );
+				$result       = $this->decision_service->bulk_approve( $user_ids, $moderator_id );
 				$redirect_url = add_query_arg( 'message', rawurlencode( $result['message'] ), $redirect_url );
 			} elseif ( 'reject' === $bulk_action ) {
-				$result = $this->decision_service->bulk_reject( $user_ids, $moderator_id );
+				$result       = $this->decision_service->bulk_reject( $user_ids, $moderator_id );
 				$redirect_url = add_query_arg( 'message', rawurlencode( $result['message'] ), $redirect_url );
 			}
 		}
@@ -381,10 +381,10 @@ class ModerationPage {
 				$user_id = (int) $action_parts[1];
 
 				if ( 'approve' === $action ) {
-					$result = $this->decision_service->approve( $user_id, $moderator_id );
+					$result       = $this->decision_service->approve( $user_id, $moderator_id );
 					$redirect_url = add_query_arg( 'message', rawurlencode( $result['message'] ), $redirect_url );
 				} elseif ( 'reject' === $action ) {
-					$result = $this->decision_service->reject( $user_id, $moderator_id );
+					$result       = $this->decision_service->reject( $user_id, $moderator_id );
 					$redirect_url = add_query_arg( 'message', rawurlencode( $result['message'] ), $redirect_url );
 				}
 			}
