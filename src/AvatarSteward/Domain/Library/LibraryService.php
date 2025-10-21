@@ -73,12 +73,21 @@ class LibraryService {
 	private ?LoggerInterface $logger;
 
 	/**
+	 * Badge service instance.
+	 *
+	 * @var BadgeService|null
+	 */
+	private ?BadgeService $badge_service = null;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param LoggerInterface|null $logger Optional logger instance.
+	 * @param LoggerInterface|null $logger        Optional logger instance.
+	 * @param BadgeService|null    $badge_service Optional badge service instance.
 	 */
-	public function __construct( ?LoggerInterface $logger = null ) {
-		$this->logger = $logger;
+	public function __construct( ?LoggerInterface $logger = null, ?BadgeService $badge_service = null ) {
+		$this->logger        = $logger;
+		$this->badge_service = $badge_service ?? new BadgeService( $logger );
 	}
 
 	/**
@@ -240,11 +249,14 @@ class LibraryService {
 				$query->the_post();
 				$attachment_id = get_the_ID();
 
+				$badge = $this->badge_service ? $this->badge_service->get_avatar_badge( $attachment_id ) : null;
+
 				$items[] = array(
 					'id'       => $attachment_id,
 					'title'    => get_the_title(),
 					'url'      => wp_get_attachment_url( $attachment_id ),
 					'thumb'    => wp_get_attachment_image_url( $attachment_id, 'thumbnail' ),
+					'badge'    => $badge,
 					'metadata' => array(
 						'author'  => get_post_meta( $attachment_id, 'avatar_author', true ),
 						'license' => get_post_meta( $attachment_id, 'avatar_license', true ),
@@ -299,11 +311,14 @@ class LibraryService {
 			return null;
 		}
 
+		$badge = $this->badge_service ? $this->badge_service->get_avatar_badge( $attachment_id ) : null;
+
 		return array(
 			'id'       => $attachment_id,
 			'title'    => $attachment->post_title,
 			'url'      => wp_get_attachment_url( $attachment_id ),
 			'thumb'    => wp_get_attachment_image_url( $attachment_id, 'thumbnail' ),
+			'badge'    => $badge,
 			'metadata' => array(
 				'author'  => get_post_meta( $attachment_id, 'avatar_author', true ),
 				'license' => get_post_meta( $attachment_id, 'avatar_license', true ),
@@ -449,6 +464,59 @@ class LibraryService {
 			'failed'  => $failed,
 			'errors'  => $errors,
 		);
+	}
+
+	/**
+	 * Assign badge to library avatar.
+	 *
+	 * @param int    $attachment_id The attachment ID.
+	 * @param string $badge_type    Badge type.
+	 * @param array  $custom_data   Optional custom badge data.
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public function assign_badge( int $attachment_id, string $badge_type, array $custom_data = array() ): bool {
+		if ( ! $this->badge_service ) {
+			return false;
+		}
+
+		$result = $this->badge_service->assign_badge_to_avatar( $attachment_id, $badge_type, $custom_data );
+
+		if ( $result ) {
+			$this->clear_cache();
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Remove badge from library avatar.
+	 *
+	 * @param int $attachment_id The attachment ID.
+	 *
+	 * @return bool True on success, false on failure.
+	 */
+	public function remove_badge( int $attachment_id ): bool {
+		if ( ! $this->badge_service ) {
+			return false;
+		}
+
+		$result = $this->badge_service->remove_badge_from_avatar( $attachment_id );
+
+		if ( $result ) {
+			$this->clear_cache();
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Get badge service instance.
+	 *
+	 * @return BadgeService|null Badge service instance.
+	 */
+	public function get_badge_service(): ?BadgeService {
+		return $this->badge_service;
 	}
 
 	/**

@@ -60,11 +60,13 @@ private ?Domain\Integrations\IntegrationService $integration_service = null;
 	 * @var Admin\LibraryPage|null
 	 */
 	private ?Admin\LibraryPage $library_page = null;
-	* Visual identity REST controller instance .
-	*
-	* @var Infrastructure\REST\VisualIdentityController | null
-	* /
-private ?Infrastructure\REST\VisualIdentityController $visual_identity_controller = null;
+
+	/**
+	 * Visual identity REST controller instance.
+	 *
+	 * @var Infrastructure\REST\VisualIdentityController|null
+	 */
+	private ?Infrastructure\REST\VisualIdentityController $visual_identity_controller = null;
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -255,6 +257,14 @@ public function get_integration_service(): ?Domain\Integrations\IntegrationServi
 	 * @return void
 	 */
 private function init_library_page(): void {
+	if ( ! class_exists( Domain\Library\BadgeService::class ) ) {
+		require_once __DIR__ . '/Domain/Library/BadgeService.php';
+	}
+
+	if ( ! class_exists( Domain\Library\SectoralTemplateService::class ) ) {
+		require_once __DIR__ . '/Domain/Library/SectoralTemplateService.php';
+	}
+
 	if ( ! class_exists( Domain\Library\LibraryService::class ) ) {
 		require_once __DIR__ . '/Domain/Library/LibraryService.php';
 	}
@@ -271,8 +281,9 @@ private function init_library_page(): void {
 		require_once __DIR__ . '/Domain/Uploads/UploadService.php';
 	}
 
-	$library_service = new Domain\Library\LibraryService();
-	$upload_service  = new Domain\Uploads\UploadService();
+	$badge_service    = new Domain\Library\BadgeService();
+	$library_service  = new Domain\Library\LibraryService( null, $badge_service );
+	$upload_service   = new Domain\Uploads\UploadService();
 
 	$this->library_page = new Admin\LibraryPage( $library_service, $upload_service );
 	$this->library_page->init();
@@ -294,10 +305,13 @@ private function init_library_page(): void {
 	 */
 public function get_library_page(): ?Admin\LibraryPage {
 	return $this->library_page;
-	* Initialize REST API endpoints .
-	*
-	* @return void
-	* /
+}
+
+	/**
+	 * Initialize REST API endpoints.
+	 *
+	 * @return void
+	 */
 	public function init_rest_api(): void {
 		if ( ! class_exists( Infrastructure\REST\VisualIdentityController::class ) ) {
 			require_once __DIR__ . '/Domain/VisualIdentity/VisualIdentityService.php';

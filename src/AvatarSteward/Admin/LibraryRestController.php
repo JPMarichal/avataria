@@ -114,6 +114,57 @@ class LibraryRestController extends WP_REST_Controller {
 				'permission_callback' => array( $this, 'get_items_permissions_check' ),
 			)
 		);
+
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/(?P<id>[\d]+)/badge',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'assign_badge' ),
+					'permission_callback' => array( $this, 'manage_badge_permissions_check' ),
+					'args'                => array(
+						'id'          => array(
+							'description' => __( 'Avatar attachment ID.', 'avatar-steward' ),
+							'type'        => 'integer',
+							'required'    => true,
+						),
+						'badge_type'  => array(
+							'description' => __( 'Badge type.', 'avatar-steward' ),
+							'type'        => 'string',
+							'required'    => true,
+						),
+						'custom_data' => array(
+							'description' => __( 'Custom badge data.', 'avatar-steward' ),
+							'type'        => 'object',
+							'required'    => false,
+						),
+					),
+				),
+				array(
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => array( $this, 'remove_badge' ),
+					'permission_callback' => array( $this, 'manage_badge_permissions_check' ),
+					'args'                => array(
+						'id' => array(
+							'description' => __( 'Avatar attachment ID.', 'avatar-steward' ),
+							'type'        => 'integer',
+							'required'    => true,
+						),
+					),
+				),
+			)
+		);
+
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->rest_base . '/badge-types',
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_badge_types' ),
+				'permission_callback' => array( $this, 'get_items_permissions_check' ),
+			)
+		);
 	}
 
 	/**
@@ -382,4 +433,94 @@ class LibraryRestController extends WP_REST_Controller {
 			),
 		);
 	}
+
+	/**
+	 * Assign badge to avatar.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response|WP_Error Response object or error.
+	 */
+	public function assign_badge( $request ) {
+		$id          = $request->get_param( 'id' );
+		$badge_type  = $request->get_param( 'badge_type' );
+		$custom_data = $request->get_param( 'custom_data' ) ?? array();
+
+		$result = $this->library_service->assign_badge( $id, $badge_type, $custom_data );
+
+		if ( ! $result ) {
+			return new WP_Error(
+				'badge_assignment_failed',
+				__( 'Failed to assign badge.', 'avatar-steward' ),
+				array( 'status' => 500 )
+			);
+		}
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'message' => __( 'Badge assigned successfully.', 'avatar-steward' ),
+			),
+			200
+		);
+	}
+
+	/**
+	 * Remove badge from avatar.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response|WP_Error Response object or error.
+	 */
+	public function remove_badge( $request ) {
+		$id = $request->get_param( 'id' );
+
+		$result = $this->library_service->remove_badge( $id );
+
+		if ( ! $result ) {
+			return new WP_Error(
+				'badge_removal_failed',
+				__( 'Failed to remove badge.', 'avatar-steward' ),
+				array( 'status' => 500 )
+			);
+		}
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'message' => __( 'Badge removed successfully.', 'avatar-steward' ),
+			),
+			200
+		);
+	}
+
+	/**
+	 * Get available badge types.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response Response object.
+	 */
+	public function get_badge_types( $request ) {
+		$badge_service = $this->library_service->get_badge_service();
+		if ( ! $badge_service ) {
+			return new WP_REST_Response( array(), 200 );
+		}
+
+		$badge_types = $badge_service->get_badge_types();
+
+		return new WP_REST_Response( $badge_types, 200 );
+	}
+
+	/**
+	 * Check permissions for managing badges.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return bool|WP_Error True if user has permission, error otherwise.
+	 */
+	public function manage_badge_permissions_check( $request ) {
+		return current_user_can( 'manage_options' );
+	}
 }
+
