@@ -408,6 +408,9 @@ if ( ! function_exists( 'wp_generate_password' ) ) {
 	 */
 	function wp_generate_password( $length = 12, $special_chars = true, $extra_special_chars = false ) {
 		return str_repeat( 'a', $length );
+	}
+}
+
 if ( ! function_exists( 'delete_option' ) ) {
 	/**
 	 * Mock delete_option function.
@@ -517,6 +520,9 @@ if ( ! function_exists( 'add_query_arg' ) ) {
 		}
 		$separator = strpos( $url, '?' ) === false ? '?' : '&';
 		return $url . $separator . http_build_query( $args );
+	}
+}
+
 if ( ! function_exists( 'esc_js' ) ) {
 	/**
 	 * Mock esc_js function.
