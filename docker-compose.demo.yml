@@ -1,0 +1,82 @@
+version: "3.9"
+
+# Avatar Steward - Demo Environment for Reviewers
+# This Docker Compose configuration provides a clean WordPress installation
+# with Avatar Steward plugin pre-installed for testing and review purposes.
+
+services:
+  wordpress:
+    image: wordpress:6.8.3-php8.1
+    container_name: avatarsteward_demo
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: demo_db:3306
+      WORDPRESS_DB_NAME: avatarsteward_demo
+      WORDPRESS_DB_USER: demo_user
+      WORDPRESS_DB_PASSWORD: demo_pass_2024
+      WORDPRESS_TABLE_PREFIX: avs_
+      # Debug mode for development and review
+      WORDPRESS_DEBUG: "true"
+    volumes:
+      # Mount the plugin from the current directory
+      # This assumes you've already built the plugin package
+      - ./avatar-steward.php:/var/www/html/wp-content/plugins/avatar-steward/avatar-steward.php:ro
+      - ./src:/var/www/html/wp-content/plugins/avatar-steward/src:ro
+      - ./assets:/var/www/html/wp-content/plugins/avatar-steward/assets:ro
+      - ./README.md:/var/www/html/wp-content/plugins/avatar-steward/README.md:ro
+      - ./CHANGELOG.md:/var/www/html/wp-content/plugins/avatar-steward/CHANGELOG.md:ro
+      - ./LICENSE.txt:/var/www/html/wp-content/plugins/avatar-steward/LICENSE.txt:ro
+      # Persistent uploads for testing
+      - demo_uploads:/var/www/html/wp-content/uploads
+      # WordPress core files
+      - demo_wordpress:/var/www/html
+    depends_on:
+      - demo_db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  demo_db:
+    image: mysql:8.0
+    container_name: avatarsteward_demo_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: avatarsteward_demo
+      MYSQL_USER: demo_user
+      MYSQL_PASSWORD: demo_pass_2024
+      MYSQL_ROOT_PASSWORD: demo_root_pass_2024
+    volumes:
+      - demo_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Optional: PHPMyAdmin for database inspection
+  demo_phpmyadmin:
+    image: phpmyadmin:5
+    container_name: avatarsteward_demo_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: demo_db
+      PMA_PORT: 3306
+      PMA_USER: demo_user
+      PMA_PASSWORD: demo_pass_2024
+    depends_on:
+      - demo_db
+
+volumes:
+  demo_wordpress:
+    name: avatarsteward_demo_wordpress
+  demo_db_data:
+    name: avatarsteward_demo_db
+  demo_uploads:
+    name: avatarsteward_demo_uploads
