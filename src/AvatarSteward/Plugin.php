@@ -233,6 +233,10 @@ final class Plugin {
 			require_once __DIR__ . '/Admin/LibraryPage.php';
 		}
 
+		if ( ! class_exists( Admin\LibraryRestController::class ) ) {
+			require_once __DIR__ . '/Admin/LibraryRestController.php';
+		}
+
 		if ( ! class_exists( Domain\Uploads\UploadService::class ) ) {
 			require_once __DIR__ . '/Domain/Uploads/UploadService.php';
 		}
@@ -242,6 +246,15 @@ final class Plugin {
 
 		$this->library_page = new Admin\LibraryPage( $library_service, $upload_service );
 		$this->library_page->init();
+
+		// Register REST API routes.
+		add_action(
+			'rest_api_init',
+			function () use ( $library_service ) {
+				$rest_controller = new Admin\LibraryRestController( $library_service );
+				$rest_controller->register_routes();
+			}
+		);
 	}
 
 	/**

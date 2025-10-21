@@ -111,9 +111,9 @@ class LibraryPage {
 			'avatar-steward-library',
 			'avatarLibrary',
 			array(
-				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
-				'nonce'         => wp_create_nonce( 'avatar_library_nonce' ),
-				'strings'       => array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'nonce'   => wp_create_nonce( 'avatar_library_nonce' ),
+				'strings' => array(
 					'uploadTitle'   => __( 'Upload Avatar to Library', 'avatar-steward' ),
 					'uploadButton'  => __( 'Add to Library', 'avatar-steward' ),
 					'deleteConfirm' => __( 'Are you sure you want to remove this avatar from the library?', 'avatar-steward' ),
@@ -134,10 +134,10 @@ class LibraryPage {
 			$this->handle_import_submission();
 		}
 
-		$page     = isset( $_GET['paged'] ) ? max( 1, (int) $_GET['paged'] ) : 1;
-		$search   = isset( $_GET['s'] ) ? sanitize_text_field( $_GET['s'] ) : '';
-		$sector   = isset( $_GET['sector'] ) ? sanitize_text_field( $_GET['sector'] ) : '';
-		$license  = isset( $_GET['license'] ) ? sanitize_text_field( $_GET['license'] ) : '';
+		$page    = isset( $_GET['paged'] ) ? max( 1, (int) $_GET['paged'] ) : 1;
+		$search  = isset( $_GET['s'] ) ? sanitize_text_field( $_GET['s'] ) : '';
+		$sector  = isset( $_GET['sector'] ) ? sanitize_text_field( $_GET['sector'] ) : '';
+		$license = isset( $_GET['license'] ) ? sanitize_text_field( $_GET['license'] ) : '';
 
 		$results = $this->library_service->get_library_avatars(
 			array(
@@ -256,6 +256,7 @@ class LibraryPage {
 			<?php if ( $results['total_pages'] > 1 ) : ?>
 				<div class="avatar-library-pagination">
 					<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- paginate_links output is already escaped.
 					echo paginate_links(
 						array(
 							'base'      => add_query_arg( 'paged', '%#%' ),
@@ -306,7 +307,8 @@ class LibraryPage {
 			wp_die( esc_html__( 'You do not have permission to import templates.', 'avatar-steward' ) );
 		}
 
-		$sector = isset( $_POST['sector'] ) ? sanitize_text_field( $_POST['sector'] ) : '';
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verified in caller (render_page).
+		$sector = isset( $_POST['sector'] ) ? sanitize_text_field( wp_unslash( $_POST['sector'] ) ) : '';
 
 		if ( empty( $sector ) ) {
 			add_settings_error(
@@ -329,7 +331,7 @@ class LibraryPage {
 		}
 
 		// Handle multiple file upload.
-		$files = $_FILES['avatar_files'];
+		$files      = $_FILES['avatar_files'];
 		$file_paths = array();
 
 		foreach ( $files['name'] as $key => $value ) {
@@ -337,6 +339,7 @@ class LibraryPage {
 				$file_paths[] = $files['tmp_name'][ $key ];
 			}
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		$result = $this->library_service->import_sectoral_templates( $sector, $file_paths );
 
@@ -464,10 +467,10 @@ class LibraryPage {
 	public function handle_ajax_search(): void {
 		check_ajax_referer( 'avatar_library_nonce', 'nonce' );
 
-		$page     = isset( $_POST['page'] ) ? max( 1, (int) $_POST['page'] ) : 1;
-		$search   = isset( $_POST['search'] ) ? sanitize_text_field( $_POST['search'] ) : '';
-		$sector   = isset( $_POST['sector'] ) ? sanitize_text_field( $_POST['sector'] ) : '';
-		$license  = isset( $_POST['license'] ) ? sanitize_text_field( $_POST['license'] ) : '';
+		$page    = isset( $_POST['page'] ) ? max( 1, (int) $_POST['page'] ) : 1;
+		$search  = isset( $_POST['search'] ) ? sanitize_text_field( $_POST['search'] ) : '';
+		$sector  = isset( $_POST['sector'] ) ? sanitize_text_field( $_POST['sector'] ) : '';
+		$license = isset( $_POST['license'] ) ? sanitize_text_field( $_POST['license'] ) : '';
 
 		$results = $this->library_service->get_library_avatars(
 			array(
