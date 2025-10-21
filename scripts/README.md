@@ -94,6 +94,29 @@ Cuando agregues un nuevo script:
    NC='\033[0m'  # No Color
    ```
 
+### `licensing/` Directory
+
+**Propósito:** Scripts de automatización para extracción y documentación de licencias.
+
+**Ver:** `scripts/licensing/README.md` para documentación completa.
+
+**Scripts incluidos:**
+- `extract-php-licenses.sh` - Extrae licencias de dependencias de Composer
+- `extract-js-licenses.sh` - Extrae licencias de dependencias de NPM
+
+**Uso rápido:**
+```bash
+# PHP dependencies
+./scripts/licensing/extract-php-licenses.sh --output /tmp/php-licenses.md
+
+# JavaScript dependencies
+./scripts/licensing/extract-js-licenses.sh --output /tmp/js-licenses.md
+```
+
+**Relacionado con:** 
+- `docs/licenses-pro.md` - Registro completo de assets Pro
+- Tarea 3.8 - Documentar licencias de fuentes, iconos e imágenes
+
 ## 📚 Scripts Planificados
 
 - `build-release.sh` - Generar ZIP del plugin para distribución
@@ -103,4 +126,4 @@ Cuando agregues un nuevo script:
 
 ---
 
-**Última actualización:** 20 de octubre, 2025
+**Última actualización:** 21 de octubre, 2025
