@@ -65,11 +65,11 @@ class ModerationQueue {
 
 		// Build user query args.
 		$query_args = array(
-			'meta_key'     => self::STATUS_META_KEY,
-			'meta_value'   => $args['status'],
-			'number'       => $args['limit'],
-			'offset'       => $args['offset'],
-			'fields'       => 'all_with_meta',
+			'meta_key'   => self::STATUS_META_KEY,
+			'meta_value' => $args['status'],
+			'number'     => $args['limit'],
+			'offset'     => $args['offset'],
+			'fields'     => 'all_with_meta',
 		);
 
 		if ( ! empty( $args['role'] ) ) {

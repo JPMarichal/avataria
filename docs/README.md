@@ -10,6 +10,7 @@ Welcome to the Avatar Steward documentation. This directory contains comprehensi
 - **[User Manual](user-manual.md)** - Complete guide for end users
 - **[FAQ](faq.md)** - Frequently asked questions
 - **[Support](support.md)** - Getting help and reporting issues
+- **[Support Policy](support-policy.md)** - Complete support policy with SLAs and contact information
 
 ### Installation & Configuration
 - **[Installation Instructions](project-documentation/INSTRUCCIONES-INSTALACION.md)** - Detailed installation guide
