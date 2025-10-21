@@ -14,6 +14,11 @@
       "AvatarSteward\\": "src/AvatarSteward/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "AvatarSteward\\Tests\\": "tests/phpunit/"
+    }
+  },
   "scripts": {
     "lint": "phpcs",
     "test": "phpunit"
